@@ -38,6 +38,8 @@ const WorkDetail = () => {
           <img
             src={resolveImage(work.image)}
             alt={work.title}
+            loading="eager"
+            decoding="async"
             width={work.width}
             height={work.height}
             className="absolute inset-0 w-full h-full object-cover"
