@@ -6,26 +6,16 @@ import { resolve } from "path";
 
 const BASE_URL = "https://deyaanga.art";
 
-type Work = { slug: string; date?: string };
-type Portfolio = { works: Work[] };
-
 const sample = JSON.parse(
   readFileSync(resolve("public/portfolio.sample.json"), "utf-8"),
-) as Portfolio;
-
-interface SitemapEntry {
-  path: string;
-  lastmod?: string;
-  changefreq?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
-  priority?: string;
-}
+);
 
 const today = new Date().toISOString().slice(0, 10);
 
-const entries: SitemapEntry[] = [
+const entries = [
   { path: "/", changefreq: "weekly", priority: "1.0", lastmod: today },
   { path: "/about", changefreq: "monthly", priority: "0.6", lastmod: today },
-  ...sample.works.map<SitemapEntry>((w) => ({
+  ...sample.works.map((w) => ({
     path: `/work/${w.slug}`,
     changefreq: "monthly",
     priority: "0.8",
@@ -33,7 +23,7 @@ const entries: SitemapEntry[] = [
   })),
 ];
 
-function build(entries: SitemapEntry[]) {
+function build(entries) {
   const urls = entries.map((e) =>
     [
       `  <url>`,
