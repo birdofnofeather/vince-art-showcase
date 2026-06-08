@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,ital@9..144,300..700,0;9..144,400,1&family=Inter:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,37 +6,37 @@
 
 @layer base {
   :root {
-    --background: 40 33% 96%;
-    --foreground: 30 10% 15%;
+    --background: 60 18% 97%;
+    --foreground: 0 0% 8%;
 
-    --card: 40 25% 93%;
-    --card-foreground: 30 10% 15%;
+    --card: 60 18% 97%;
+    --card-foreground: 0 0% 8%;
 
-    --popover: 40 33% 96%;
-    --popover-foreground: 30 10% 15%;
+    --popover: 60 18% 97%;
+    --popover-foreground: 0 0% 8%;
 
-    --primary: 24 70% 45%;
-    --primary-foreground: 40 33% 96%;
+    --primary: 0 0% 8%;
+    --primary-foreground: 60 18% 97%;
 
-    --secondary: 210 25% 25%;
-    --secondary-foreground: 40 33% 96%;
+    --secondary: 48 12% 92%;
+    --secondary-foreground: 0 0% 8%;
 
-    --muted: 35 20% 90%;
-    --muted-foreground: 30 8% 50%;
+    --muted: 48 12% 92%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 24 70% 45%;
-    --accent-foreground: 40 33% 96%;
+    --accent: 48 12% 92%;
+    --accent-foreground: 0 0% 8%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 60 18% 97%;
 
-    --border: 35 15% 85%;
-    --input: 35 15% 85%;
-    --ring: 24 70% 45%;
+    --border: 45 14% 88%;
+    --input: 45 14% 88%;
+    --ring: 0 0% 8%;
 
-    --radius: 0.25rem;
+    --radius: 0;
 
-    --font-heading: 'Playfair Display', serif;
+    --font-display: 'Fraunces', serif;
     --font-body: 'Inter', sans-serif;
   }
 }
@@ -48,8 +48,23 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .font-display { font-family: var(--font-display); }
+  .sr-only-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 }

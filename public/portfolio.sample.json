@@ -1,0 +1,32 @@
+{
+  "artist": { "name": "Vince de Yaanga", "location": "Los Angeles" },
+  "works": [
+    {
+      "slug": "where-the-map-ends",
+      "title": "Where the Map Ends",
+      "headline": "Jailed couple's motorcycle becomes a roadside shrine",
+      "date": "2026-06-06",
+      "image": "https://placehold.co/1024x1280",
+      "width": 1024,
+      "height": 1280
+    },
+    {
+      "slug": "the-long-afternoon",
+      "title": "The Long Afternoon",
+      "headline": "A vigil forms on the corner of Alvarado and 7th",
+      "date": "2026-05-22",
+      "image": "https://placehold.co/1024x1280",
+      "width": 1024,
+      "height": 1280
+    },
+    {
+      "slug": "second-light",
+      "title": "Second Light",
+      "headline": "Returning home through the haze of a Tuesday",
+      "date": "2026-04-09",
+      "image": "https://placehold.co/1024x1280",
+      "width": 1024,
+      "height": 1280
+    }
+  ]
+}
