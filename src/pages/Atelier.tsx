@@ -154,11 +154,17 @@ const Atelier = () => {
 
       <div className="max-w-5xl mx-auto px-6">
         {loading && (
-          <p className="py-32 text-center text-sm text-[#8A8A8A] font-mono">loading…</p>
+          <div className="pt-24 space-y-6" aria-hidden="true">
+            <div className="h-3 w-24 bg-[#1a1a1a] animate-pulse" />
+            <div className="h-7 w-full bg-[#1a1a1a] animate-pulse" />
+            <div className="h-7 w-11/12 bg-[#1a1a1a] animate-pulse" />
+            <div className="h-7 w-3/4 bg-[#1a1a1a] animate-pulse" />
+            <div className="h-7 w-5/6 bg-[#1a1a1a] animate-pulse" />
+          </div>
         )}
         {error && !loading && (
           <p className="py-32 text-center text-sm text-[#8A8A8A] font-mono">
-            unable to load project data.
+            unable to load project data — please try again later.
           </p>
         )}
 
