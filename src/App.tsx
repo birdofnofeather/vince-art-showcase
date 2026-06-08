@@ -4,9 +4,11 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Layout from "./components/Layout";
+import ToggleGlyph from "./components/ToggleGlyph";
 import Work from "./pages/Work";
 import WorkDetail from "./pages/WorkDetail";
 import About from "./pages/About";
+import Atelier from "./pages/Atelier";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -18,6 +20,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          <Route path="/atelier" element={<Atelier />} />
           <Route element={<Layout />}>
             <Route path="/" element={<Work />} />
             <Route path="/work/:slug" element={<WorkDetail />} />
@@ -25,6 +28,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
+        <ToggleGlyph />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
