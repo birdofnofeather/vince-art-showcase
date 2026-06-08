@@ -41,13 +41,14 @@ const Work = () => {
             <Link
               key={w.slug}
               to={`/work/${w.slug}`}
-              className="group block"
+              className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 focus-visible:ring-offset-background"
             >
               <div className="relative w-full overflow-hidden bg-muted" style={{ aspectRatio: "4 / 5" }}>
                 <img
                   src={resolveImage(w.image)}
                   alt={w.title}
                   loading="lazy"
+                  decoding="async"
                   width={w.width}
                   height={w.height}
                   className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-90"
