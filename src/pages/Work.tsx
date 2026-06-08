@@ -10,7 +10,17 @@ const Work = () => {
       <h1 className="sr-only">Work</h1>
 
       {loading && (
-        <p className="text-sm text-muted-foreground text-center py-32">Loading…</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16 md:gap-x-14 md:gap-y-24" aria-hidden="true">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i}>
+              <div className="w-full bg-muted animate-pulse" style={{ aspectRatio: "4 / 5" }} />
+              <div className="pt-4 space-y-2">
+                <div className="h-5 w-2/3 bg-muted animate-pulse" />
+                <div className="h-3 w-1/2 bg-muted animate-pulse" />
+              </div>
+            </div>
+          ))}
+        </div>
       )}
 
       {error && !loading && (
