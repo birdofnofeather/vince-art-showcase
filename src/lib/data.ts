@@ -9,6 +9,7 @@ export type Work = {
   image: string;
   width?: number;
   height?: number;
+  selected?: boolean;
 };
 
 export type Portfolio = {
