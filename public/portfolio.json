@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "philippines-picks-pieces-stron",
+      "title": "Still Measuring the Loss",
+      "headline": "Philippines picks up the pieces after strongest earthquake in decades ",
+      "date": "2026-06-13",
+      "image": "artworks/philippines-picks-pieces-stron.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "electricity-gas-sleep-cubans",
       "title": "Hollow Hours, Still Warm",
       "headline": "No electricity, no gas, no sleep: Cubans on edge amid endless outages",
@@ -12,16 +22,6 @@
       "image": "artworks/electricity-gas-sleep-cubans.jpg",
       "width": 512,
       "height": 640,
-      "selected": true
-    },
-    {
-      "slug": "lebanons-president-refuses-mee",
-      "title": "Lebanons President Refuses Mee",
-      "headline": "Lebanon’s president refuses to meet Netanyahu until war ends – as it happened",
-      "date": "2026-06-09",
-      "image": "artworks/lebanons-president-refuses-mee.jpg",
-      "width": 1024,
-      "height": 1280,
       "selected": true
     },
     {
