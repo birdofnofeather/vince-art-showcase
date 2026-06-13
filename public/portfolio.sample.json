@@ -1,5 +1,8 @@
 {
-  "artist": { "name": "Vince de Yaanga", "location": "Los Angeles" },
+  "artist": {
+    "name": "Vince de Yaanga",
+    "location": "Los Angeles"
+  },
   "works": [
     {
       "slug": "where-the-map-ends",
@@ -8,7 +11,8 @@
       "date": "2026-06-06",
       "image": "https://placehold.co/1024x1280",
       "width": 1024,
-      "height": 1280
+      "height": 1280,
+      "selected": true
     },
     {
       "slug": "the-long-afternoon",
@@ -17,7 +21,8 @@
       "date": "2026-05-22",
       "image": "https://placehold.co/1024x1280",
       "width": 1024,
-      "height": 1280
+      "height": 1280,
+      "selected": true
     },
     {
       "slug": "second-light",
@@ -26,7 +31,8 @@
       "date": "2026-04-09",
       "image": "https://placehold.co/1024x1280",
       "width": 1024,
-      "height": 1280
+      "height": 1280,
+      "selected": true
     }
   ]
 }
