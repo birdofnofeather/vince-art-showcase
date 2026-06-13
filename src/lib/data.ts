@@ -9,6 +9,7 @@ export type Work = {
   image: string;
   width?: number;
   height?: number;
+  selected?: boolean;
 };
 
 export type Portfolio = {
@@ -27,7 +28,9 @@ export async function fetchPortfolio(): Promise<Portfolio> {
     : `/portfolio.sample.json`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to load portfolio (${res.status})`);
-  return res.json();
+  const data: Portfolio = await res.json();
+  data.works = (data.works || []).filter((w) => w.selected === true);
+  return data;
 }
 
 export function formatDate(iso: string): string {
