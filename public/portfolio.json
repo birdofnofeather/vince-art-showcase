@@ -1,0 +1,88 @@
+{
+  "artist": {
+    "name": "Vince de Yaanga",
+    "location": "Los Angeles"
+  },
+  "works": [
+    {
+      "slug": "electricity-gas-sleep-cubans",
+      "title": "Hollow Hours, Still Warm",
+      "headline": "No electricity, no gas, no sleep: Cubans on edge amid endless outages",
+      "date": "2026-06-09",
+      "image": "artworks/electricity-gas-sleep-cubans.jpg",
+      "width": 512,
+      "height": 640,
+      "selected": true
+    },
+    {
+      "slug": "lebanons-president-refuses-mee",
+      "title": "Lebanons President Refuses Mee",
+      "headline": "Lebanon’s president refuses to meet Netanyahu until war ends – as it happened",
+      "date": "2026-06-09",
+      "image": "artworks/lebanons-president-refuses-mee.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
+      "slug": "kuwait-bahrain-iran-exchange",
+      "title": "Neither Moved",
+      "headline": "Kuwait and Bahrain targeted by Iran after exchange of fire with US",
+      "date": "2026-06-08",
+      "image": "artworks/kuwait-bahrain-iran-exchange.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
+      "slug": "chornobyl-drone-nuclear-fuel",
+      "title": "The Light Is Still On",
+      "headline": "Russian drone hits building storing spent nuclear fuel near Chornobyl",
+      "date": "2026-06-08",
+      "image": "artworks/chornobyl-drone-nuclear-fuel.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
+      "slug": "palestinian-baby-shot-dead",
+      "title": "Still Above the Fence",
+      "headline": "Palestinian baby shot dead by Israeli troops in occupied West Bank",
+      "date": "2026-06-06",
+      "image": "artworks/palestinian-baby-shot-dead.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
+      "slug": "pope-leo-reject-polarisation",
+      "title": "The Watcher and the Watched",
+      "headline": "Pope Leo calls for leaders to reject polarisation as he begins Spanish tour",
+      "date": "2026-06-06",
+      "image": "artworks/pope-leo-reject-polarisation.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
+      "slug": "s3g04-world-map",
+      "title": "Where the Map Ends",
+      "headline": "British couple jailed in Iran have lost appeal against convictions, family say",
+      "date": "2026-06-02",
+      "image": "artworks/s3g04-world-map.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
+      "slug": "nbp_s3n04-ghost-handprints",
+      "title": "The Letter",
+      "headline": "British couple jailed in Iran have lost appeal against convictions, family say",
+      "date": "2026-06-02",
+      "image": "artworks/nbp_s3n04-ghost-handprints.jpg",
+      "width": 928,
+      "height": 1152,
+      "selected": true
+    }
+  ]
+}

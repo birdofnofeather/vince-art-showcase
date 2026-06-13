@@ -23,11 +23,22 @@ export function resolveImage(image: string): string {
 }
 
 export async function fetchPortfolio(): Promise<Portfolio> {
-  const url = DATA_BASE_URL
-    ? `${DATA_BASE_URL}/portfolio.json`
-    : `/portfolio.sample.json`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to load portfolio (${res.status})`);
+  // When VITE_DATA_BASE_URL is set, the manifest is hosted externally.
+  // Otherwise the publish step bakes a same-origin /portfolio.json into the
+  // build; we fall back to the bundled sample only if that file is absent
+  // (e.g. a fresh dev checkout before the first publish).
+  const candidates = DATA_BASE_URL
+    ? [`${DATA_BASE_URL}/portfolio.json`]
+    : [`/portfolio.json`, `/portfolio.sample.json`];
+
+  let res: Response | null = null;
+  for (const url of candidates) {
+    res = await fetch(url);
+    if (res.ok) break;
+  }
+  if (!res || !res.ok) {
+    throw new Error(`Failed to load portfolio (${res ? res.status : "no response"})`);
+  }
   const data: Portfolio = await res.json();
   data.works = (data.works || []).filter((w) => w.selected === true);
   return data;

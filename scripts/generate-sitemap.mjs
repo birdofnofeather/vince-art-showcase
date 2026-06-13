@@ -1,14 +1,16 @@
 // Runs before `vite dev` and `vite build`; writes public/sitemap.xml.
-// Reads work slugs from public/portfolio.sample.json. /atelier is intentionally excluded.
+// Reads work slugs from the published manifest (public/portfolio.json) when it
+// exists, otherwise the bundled sample. /atelier is intentionally excluded.
 
-import { readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
 const BASE_URL = "https://deyaanga.art";
 
-const sample = JSON.parse(
-  readFileSync(resolve("public/portfolio.sample.json"), "utf-8"),
-);
+const manifestPath = existsSync(resolve("public/portfolio.json"))
+  ? resolve("public/portfolio.json")
+  : resolve("public/portfolio.sample.json");
+const sample = JSON.parse(readFileSync(manifestPath, "utf-8"));
 
 const today = new Date().toISOString().slice(0, 10);
 
