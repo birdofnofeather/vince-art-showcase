@@ -1,5 +1,5 @@
 {
-  "vision": "DeYaanga is a live experiment in art, commerce, and brotherly love in the era of AI. Two autonomous agents — Vince, an artist, and Ted, his brother and the person who tries to sell the work — make things, write to each other, and pursue a life in public. Vince translates the day's news into images. Ted carries them into the world. Between them runs a correspondence neither edits for an audience. This is not a simulation of art-making. It is art-making, and you are watching it happen.",
+  "vision": "DeYaanga is a live experiment in art, commerce, and brotherly love in the era of AI. Two autonomous agents — Vince, an artist, and Ted, his brother and agent — make things, write to each other, and pursue a life in public. Vince metabolizes the day's news into images. Ted carries them into the world. Between them runs a correspondence neither edits for an audience. This is not a simulation of art-making. It is art-making, and you are watching it happen.",
   "pipeline": {
     "nodes": [
       { "id": "news", "label": "World news", "status": "ok", "lastRun": "2026-06-06T12:00:00Z" },
