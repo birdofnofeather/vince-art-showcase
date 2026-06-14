@@ -1,6 +1,4 @@
-export const DATA_BASE_URL =
-  import.meta.env.VITE_DATA_BASE_URL ||
-  "https://raw.githubusercontent.com/birdofnofeather/vince-art-showcase/main/public";
+export const DATA_BASE_URL = import.meta.env.VITE_DATA_BASE_URL || "";
 export const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || "";
 
 export type Work = {
@@ -25,11 +23,6 @@ export function resolveImage(image: string): string {
 }
 
 export async function fetchPortfolio(): Promise<Portfolio> {
-  // Fetch portfolio.json at runtime from the GitHub raw CDN (public repo,
-  // no token needed). The file is updated by the pipeline's publish Action
-  // on every push to main — changes appear within ~1 minute of a run
-  // completing, with no Lovable rebuild or Publish click required.
-  // VITE_DATA_BASE_URL overrides the default if the hosting moves.
   const url = `${DATA_BASE_URL}/portfolio.json`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to load portfolio (${res.status})`);
