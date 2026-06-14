@@ -1,4 +1,6 @@
-export const DATA_BASE_URL = import.meta.env.VITE_DATA_BASE_URL || "";
+export const DATA_BASE_URL =
+  import.meta.env.VITE_DATA_BASE_URL ||
+  "https://raw.githubusercontent.com/birdofnofeather/vince-art-showcase/main/public";
 export const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || "";
 
 export type Work = {
