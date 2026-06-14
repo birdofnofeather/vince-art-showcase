@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "growing-risk-thousands-buried",
+      "title": "What the Hands Remembered",
+      "headline": "Growing risk that thousands buried in Gaza’s rubble may never be identified, says Red Cross",
+      "date": "2026-06-14",
+      "image": "artworks/growing-risk-thousands-buried.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "philippines-picks-pieces-stron",
       "title": "Still Measuring the Loss",
       "headline": "Philippines picks up the pieces after strongest earthquake in decades ",
