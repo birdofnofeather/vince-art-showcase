@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { DATA_BASE_URL } from "@/lib/data";
 
 export type PipelineNode = {
   id: string;
@@ -34,8 +35,6 @@ export type ProjectData = {
   runLog: RunLogEntry[];
 };
 
-const DATA_BASE_URL = import.meta.env.VITE_DATA_BASE_URL || "";
-
 export function useProjectData() {
   const [data, setData] = useState<ProjectData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +42,7 @@ export function useProjectData() {
 
   useEffect(() => {
     let cancelled = false;
-    const url = DATA_BASE_URL ? `${DATA_BASE_URL}/project.json` : `/project.sample.json`;
+    const url = `${DATA_BASE_URL}/project.json`;
     fetch(url)
       .then((r) => {
         if (!r.ok) throw new Error(`Failed (${r.status})`);
