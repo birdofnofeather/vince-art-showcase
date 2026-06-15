@@ -8,20 +8,11 @@ const ToggleGlyph = () => {
   return (
     <button
       type="button"
-      aria-label="Toggle view"
+      aria-label={inAtelier ? "Exit atelier" : "Enter atelier"}
       onClick={() => navigate(inAtelier ? "/" : "/atelier")}
-      className="fixed bottom-3 right-3 z-[100] p-2 bg-transparent border-0 outline-none focus-visible:ring-1 focus-visible:ring-current rounded-full"
-      style={{ lineHeight: 0 }}
+      className="text-base leading-none bg-transparent border-0 outline-none focus-visible:ring-1 focus-visible:ring-current rounded"
     >
-      <span
-        aria-hidden="true"
-        className="block rounded-full"
-        style={{
-          width: 8,
-          height: 8,
-          backgroundColor: inAtelier ? "#EDEDED" : "#C9C7C0",
-        }}
-      />
+      <span aria-hidden="true">🤖</span>
     </button>
   );
 };
