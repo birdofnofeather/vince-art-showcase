@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { useProjectData, type DiaryEntry, type Letter } from "@/hooks/useProjectData";
+import { DATA_BASE_URL, resolveImage } from "@/lib/data";
 
 const SECTIONS = [
   { id: "vision", label: "Vision" },
@@ -28,6 +30,73 @@ const Paragraphs = ({ body }: { body: string }) => (
   </>
 );
 
+const DraftStrip = ({ images }: { images: string[] }) => (
+  <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
+    {images.map((src, i) => (
+      <img
+        key={i}
+        src={resolveImage(src)}
+        alt=""
+        loading="lazy"
+        className="h-28 w-auto flex-shrink-0 opacity-60 hover:opacity-90 transition-opacity"
+        style={{ aspectRatio: "4/5", objectFit: "cover" }}
+      />
+    ))}
+  </div>
+);
+
+const ProseWithAnchor = ({
+  body,
+  anchor,
+  slug,
+}: {
+  body: string;
+  anchor?: string;
+  slug?: string;
+}) => {
+  const paragraphs = toParagraphs(body);
+
+  if (!anchor || !slug) {
+    return <Paragraphs body={body} />;
+  }
+
+  // Find the last paragraph that contains the anchor text
+  let anchorParaIdx = -1;
+  for (let i = paragraphs.length - 1; i >= 0; i--) {
+    if (paragraphs[i].includes(anchor)) {
+      anchorParaIdx = i;
+      break;
+    }
+  }
+
+  return (
+    <>
+      {paragraphs.map((p, i) => {
+        if (i !== anchorParaIdx) {
+          return (
+            <p key={i} className="whitespace-pre-line leading-relaxed mb-4 last:mb-0">
+              {p}
+            </p>
+          );
+        }
+        const pos = p.lastIndexOf(anchor);
+        return (
+          <p key={i} className="whitespace-pre-line leading-relaxed mb-4 last:mb-0">
+            {p.slice(0, pos)}
+            <Link
+              to={`/work/${slug}`}
+              className="border-b border-[#EDEDED]/30 hover:border-[#EDEDED] transition-colors"
+            >
+              {anchor}
+            </Link>
+            {p.slice(pos + anchor.length)}
+          </p>
+        );
+      })}
+    </>
+  );
+};
+
 const DiaryList = ({ entries }: { entries: DiaryEntry[] }) => {
   const sorted = useMemo(
     () => [...entries].sort((a, b) => (a.date < b.date ? 1 : -1)),
@@ -39,8 +108,15 @@ const DiaryList = ({ entries }: { entries: DiaryEntry[] }) => {
       {sorted.map((e, i) => (
         <article key={i}>
           <div className="font-mono text-xs text-[#8A8A8A] mb-3">{fmtDate(e.date)}</div>
+          {e.draftImages && e.draftImages.length > 0 && (
+            <DraftStrip images={e.draftImages} />
+          )}
           <div className="text-[#EDEDED]/95 text-[15px]">
-            <Paragraphs body={e.body} />
+            <ProseWithAnchor
+              body={e.body}
+              anchor={e.selectedAnchor}
+              slug={e.selectedSlug}
+            />
           </div>
         </article>
       ))}
@@ -52,9 +128,9 @@ const LetterBlock = ({ letter }: { letter: Letter }) => {
   const fromVince = letter.from === "vince";
   return (
     <article
-      className={`border-l ${fromVince ? "border-[#EDEDED]/40" : "border-[#8A8A8A]/40"} pl-6 ${
-        fromVince ? "" : "md:ml-12"
-      }`}
+      className={`border-l ${
+        fromVince ? "border-[#EDEDED]/40" : "border-[#8A8A8A]/40"
+      } pl-6 ${fromVince ? "" : "md:ml-12"}`}
     >
       <div className="font-mono text-xs text-[#8A8A8A] mb-3 uppercase tracking-wider">
         {letter.from} → {letter.to} · {fmtDate(letter.date)}
@@ -275,7 +351,12 @@ const Atelier = () => {
                       {" · "}
                       <span
                         style={{
-                          color: r.status === "ok" ? "#9ED69E" : r.status === "error" ? "#D69E9E" : "#8A8A8A",
+                          color:
+                            r.status === "ok" || r.status === "success"
+                              ? "#9ED69E"
+                              : r.status === "error" || r.status === "failed"
+                              ? "#D69E9E"
+                              : "#8A8A8A",
                         }}
                       >
                         {r.status}

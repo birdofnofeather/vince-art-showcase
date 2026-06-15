@@ -10,7 +10,13 @@ export type PipelineNode = {
 
 export type PipelineEdge = { from: string; to: string };
 
-export type DiaryEntry = { date: string; body: string };
+export type DiaryEntry = {
+  date: string;
+  body: string;
+  draftImages?: string[];
+  selectedSlug?: string;
+  selectedAnchor?: string;
+};
 
 export type Letter = {
   date: string;
