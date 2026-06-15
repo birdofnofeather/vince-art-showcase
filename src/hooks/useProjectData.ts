@@ -10,10 +10,12 @@ export type PipelineNode = {
 
 export type PipelineEdge = { from: string; to: string };
 
+export type DraftImage = { path: string; anchor?: string };
+
 export type DiaryEntry = {
   date: string;
   body: string;
-  draftImages?: string[];
+  draftImages?: DraftImage[];
   selectedSlug?: string;
   selectedAnchor?: string;
 };

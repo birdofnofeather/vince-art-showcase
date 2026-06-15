@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { useProjectData, type DiaryEntry, type Letter } from "@/hooks/useProjectData";
-import { DATA_BASE_URL, resolveImage } from "@/lib/data";
+import { useProjectData, type DiaryEntry, type DraftImage, type Letter } from "@/hooks/useProjectData";
+import { resolveImage } from "@/lib/data";
 
 const SECTIONS = [
   { id: "vision", label: "Vision" },
@@ -23,77 +23,108 @@ const toParagraphs = (body: string) =>
 const Paragraphs = ({ body }: { body: string }) => (
   <>
     {toParagraphs(body).map((p, i) => (
-      <p key={i} className="whitespace-pre-line leading-relaxed mb-4 last:mb-0">
-        {p}
-      </p>
+      <p key={i} className="whitespace-pre-line leading-relaxed mb-4 last:mb-0">{p}</p>
     ))}
   </>
 );
 
-const DraftStrip = ({ images }: { images: string[] }) => (
-  <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
-    {images.map((src, i) => (
-      <img
-        key={i}
-        src={resolveImage(src)}
-        alt=""
-        loading="lazy"
-        className="h-28 w-auto flex-shrink-0 opacity-60 hover:opacity-90 transition-opacity"
-        style={{ aspectRatio: "4/5", objectFit: "cover" }}
-      />
-    ))}
-  </div>
-);
-
-const ProseWithAnchor = ({
+// Renders prose with draft images floating right at the paragraph where they're mentioned,
+// and the selected-image anchor text linked to the portfolio work page.
+const ProseWithSideImages = ({
   body,
-  anchor,
-  slug,
+  drafts = [],
+  selectedAnchor,
+  selectedSlug,
 }: {
   body: string;
-  anchor?: string;
-  slug?: string;
+  drafts?: DraftImage[];
+  selectedAnchor?: string;
+  selectedSlug?: string;
 }) => {
   const paragraphs = toParagraphs(body);
-
-  if (!anchor || !slug) {
-    return <Paragraphs body={body} />;
-  }
-
-  // Find the last paragraph that contains the anchor text
-  let anchorParaIdx = -1;
-  for (let i = paragraphs.length - 1; i >= 0; i--) {
-    if (paragraphs[i].includes(anchor)) {
-      anchorParaIdx = i;
-      break;
-    }
-  }
 
   return (
     <>
       {paragraphs.map((p, i) => {
-        if (i !== anchorParaIdx) {
+        const inlineDrafts = drafts.filter((d) => d.anchor && p.includes(d.anchor));
+        const hasSelectedAnchor = !!selectedAnchor && !!selectedSlug && p.includes(selectedAnchor);
+
+        const renderText = () => {
+          if (!hasSelectedAnchor || !selectedSlug || !selectedAnchor) return <>{p}</>;
+          const pos = p.lastIndexOf(selectedAnchor);
           return (
-            <p key={i} className="whitespace-pre-line leading-relaxed mb-4 last:mb-0">
-              {p}
-            </p>
+            <>
+              {p.slice(0, pos)}
+              <Link
+                to={`/work/${selectedSlug}`}
+                className="border-b border-[#EDEDED]/30 hover:border-[#EDEDED] transition-colors"
+              >
+                {selectedAnchor}
+              </Link>
+              {p.slice(pos + selectedAnchor.length)}
+            </>
           );
-        }
-        const pos = p.lastIndexOf(anchor);
+        };
+
         return (
-          <p key={i} className="whitespace-pre-line leading-relaxed mb-4 last:mb-0">
-            {p.slice(0, pos)}
-            <Link
-              to={`/work/${slug}`}
-              className="border-b border-[#EDEDED]/30 hover:border-[#EDEDED] transition-colors"
-            >
-              {anchor}
-            </Link>
-            {p.slice(pos + anchor.length)}
-          </p>
+          // overflow-hidden creates a block formatting context that contains the floats
+          <div key={i} className="overflow-hidden mb-4 last:mb-0">
+            {inlineDrafts.map((d, j) => (
+              <img
+                key={j}
+                src={resolveImage(d.path)}
+                alt=""
+                loading="lazy"
+                className="float-right ml-5 mb-3 opacity-55 hover:opacity-85 transition-opacity"
+                style={{ width: "72px", height: "auto" }}
+              />
+            ))}
+            <p className="whitespace-pre-line leading-relaxed">{renderText()}</p>
+          </div>
         );
       })}
     </>
+  );
+};
+
+const DiaryEntryItem = ({ entry }: { entry: DiaryEntry }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <article>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center gap-2 w-full text-left group"
+        aria-expanded={open}
+      >
+        <span
+          className="text-[#8A8A8A] transition-transform duration-200 text-[10px]"
+          style={{
+            display: "inline-block",
+            transform: open ? "rotate(90deg)" : "rotate(0deg)",
+            fontFamily: "'JetBrains Mono', ui-monospace, monospace",
+          }}
+        >
+          &#9654;
+        </span>
+        <span
+          className="font-mono text-xs text-[#8A8A8A] group-hover:text-[#EDEDED] transition-colors"
+          style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
+        >
+          {fmtDate(entry.date)}
+        </span>
+      </button>
+
+      {open && (
+        <div className="mt-5 text-[#EDEDED]/95 text-[15px] max-w-2xl">
+          <ProseWithSideImages
+            body={entry.body}
+            drafts={entry.draftImages}
+            selectedAnchor={entry.selectedAnchor}
+            selectedSlug={entry.selectedSlug}
+          />
+        </div>
+      )}
+    </article>
   );
 };
 
@@ -102,23 +133,11 @@ const DiaryList = ({ entries }: { entries: DiaryEntry[] }) => {
     () => [...entries].sort((a, b) => (a.date < b.date ? 1 : -1)),
     [entries],
   );
-  if (!sorted.length) return <p className="text-[#8A8A8A] text-sm">No entries.</p>;
+  if (!sorted.length) return <p className="text-[#8A8A8A] text-sm font-mono">No entries yet.</p>;
   return (
-    <div className="space-y-10">
+    <div className="space-y-5">
       {sorted.map((e, i) => (
-        <article key={i}>
-          <div className="font-mono text-xs text-[#8A8A8A] mb-3">{fmtDate(e.date)}</div>
-          {e.draftImages && e.draftImages.length > 0 && (
-            <DraftStrip images={e.draftImages} />
-          )}
-          <div className="text-[#EDEDED]/95 text-[15px]">
-            <ProseWithAnchor
-              body={e.body}
-              anchor={e.selectedAnchor}
-              slug={e.selectedSlug}
-            />
-          </div>
-        </article>
+        <DiaryEntryItem key={i} entry={e} />
       ))}
     </div>
   );
@@ -150,7 +169,6 @@ const Atelier = () => {
   const [activityOpen, setActivityOpen] = useState(false);
   const [active, setActive] = useState("vision");
 
-  // noindex meta
   useEffect(() => {
     const meta = document.createElement("meta");
     meta.name = "robots";
@@ -164,7 +182,6 @@ const Atelier = () => {
     };
   }, []);
 
-  // section scroll spy
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -194,13 +211,8 @@ const Atelier = () => {
   return (
     <div
       className="min-h-screen"
-      style={{
-        backgroundColor: "#0A0A0A",
-        color: "#EDEDED",
-        fontFamily: "'Inter', sans-serif",
-      }}
+      style={{ backgroundColor: "#0A0A0A", color: "#EDEDED", fontFamily: "'Inter', sans-serif" }}
     >
-      {/* Sticky in-page nav */}
       <nav
         className="sticky top-0 z-40 backdrop-blur-sm"
         style={{ backgroundColor: "rgba(10,10,10,0.85)", borderBottom: "1px solid #222" }}
@@ -225,13 +237,6 @@ const Atelier = () => {
               {s.label}
             </a>
           ))}
-          <Link
-            to="/"
-            aria-label="Back to portfolio"
-            className="ml-auto shrink-0 text-base leading-none focus-visible:ring-1 focus-visible:ring-current rounded"
-          >
-            <span aria-hidden="true">🎨</span>
-          </Link>
         </div>
       </nav>
 
@@ -242,7 +247,6 @@ const Atelier = () => {
             <div className="h-7 w-full bg-[#1a1a1a] animate-pulse" />
             <div className="h-7 w-11/12 bg-[#1a1a1a] animate-pulse" />
             <div className="h-7 w-3/4 bg-[#1a1a1a] animate-pulse" />
-            <div className="h-7 w-5/6 bg-[#1a1a1a] animate-pulse" />
           </div>
         )}
         {error && !loading && (
@@ -253,7 +257,6 @@ const Atelier = () => {
 
         {data && !loading && !error && (
           <>
-            {/* VISION */}
             <section id="vision" className="pt-24 pb-32 scroll-mt-24">
               <div
                 className="text-xs uppercase tracking-[0.25em] text-[#8A8A8A] mb-8"
@@ -268,7 +271,6 @@ const Atelier = () => {
 
             <hr style={{ borderColor: "#222" }} />
 
-            {/* PIPELINE */}
             <section id="pipeline" className="pt-24 pb-32 scroll-mt-24">
               <div
                 className="text-xs uppercase tracking-[0.25em] text-[#8A8A8A] mb-8"
@@ -281,7 +283,6 @@ const Atelier = () => {
 
             <hr style={{ borderColor: "#222" }} />
 
-            {/* DIARIES */}
             <section id="diaries" className="pt-24 pb-32 scroll-mt-24">
               <div
                 className="text-xs uppercase tracking-[0.25em] text-[#8A8A8A] mb-8"
@@ -289,7 +290,6 @@ const Atelier = () => {
               >
                 03 / Diaries
               </div>
-
               <div className="flex gap-6 mb-10" role="tablist">
                 {(["vince", "ted"] as const).map((who) => (
                   <button
@@ -308,15 +308,11 @@ const Atelier = () => {
                   </button>
                 ))}
               </div>
-
-              <div className="max-w-2xl">
-                <DiaryList entries={tab === "vince" ? data.diaries.vince : data.diaries.ted} />
-              </div>
+              <DiaryList entries={tab === "vince" ? data.diaries.vince : data.diaries.ted} />
             </section>
 
             <hr style={{ borderColor: "#222" }} />
 
-            {/* CORRESPONDENCE */}
             <section id="correspondence" className="pt-24 pb-32 scroll-mt-24">
               <div
                 className="text-xs uppercase tracking-[0.25em] text-[#8A8A8A] mb-8"
@@ -333,7 +329,6 @@ const Atelier = () => {
 
             <hr style={{ borderColor: "#222" }} />
 
-            {/* ACTIVITY */}
             <section id="activity" className="pt-24 pb-32 scroll-mt-24">
               <button
                 onClick={() => setActivityOpen((v) => !v)}
@@ -344,7 +339,6 @@ const Atelier = () => {
                 <span>05 / Activity</span>
                 <span>{activityOpen ? "[-]" : "[+]"}</span>
               </button>
-
               {activityOpen && (
                 <ul
                   className="mt-8 space-y-2 text-xs"
@@ -359,11 +353,9 @@ const Atelier = () => {
                       <span
                         style={{
                           color:
-                            r.status === "ok" || r.status === "success"
-                              ? "#9ED69E"
-                              : r.status === "error" || r.status === "failed"
-                              ? "#D69E9E"
-                              : "#8A8A8A",
+                            r.status === "ok" || r.status === "success" ? "#9ED69E"
+                            : r.status === "error" || r.status === "failed" ? "#D69E9E"
+                            : "#8A8A8A",
                         }}
                       >
                         {r.status}
@@ -376,7 +368,6 @@ const Atelier = () => {
             </section>
           </>
         )}
-
         <div className="h-20" />
       </div>
     </div>
