@@ -225,6 +225,13 @@ const Atelier = () => {
               {s.label}
             </a>
           ))}
+          <Link
+            to="/"
+            aria-label="Back to portfolio"
+            className="ml-auto shrink-0 text-base leading-none focus-visible:ring-1 focus-visible:ring-current rounded"
+          >
+            <span aria-hidden="true">🎨</span>
+          </Link>
         </div>
       </nav>
 
