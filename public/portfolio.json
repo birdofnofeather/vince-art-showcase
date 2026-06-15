@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "argentinian-activist-who-spent",
+      "title": "Vigil Without an Answer",
+      "headline": "Argentinian activist who spent 50 years looking for disappeared son dies",
+      "date": "2026-06-15",
+      "image": "artworks/argentinian-activist-who-spent.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "growing-risk-thousands-buried",
       "title": "What the Hands Remembered",
       "headline": "Growing risk that thousands buried in Gaza’s rubble may never be identified, says Red Cross",
