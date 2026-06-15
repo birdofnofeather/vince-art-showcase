@@ -4,7 +4,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Layout from "./components/Layout";
-import ToggleGlyph from "./components/ToggleGlyph";
 import Work from "./pages/Work";
 import WorkDetail from "./pages/WorkDetail";
 import About from "./pages/About";
@@ -28,7 +27,6 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
-        <ToggleGlyph />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

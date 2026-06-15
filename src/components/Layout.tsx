@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
+import ToggleGlyph from "./ToggleGlyph";
 
 const Layout = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -40,6 +41,7 @@ const Layout = () => {
             >
               About
             </NavLink>
+            <ToggleGlyph />
           </nav>
         </div>
       </header>
