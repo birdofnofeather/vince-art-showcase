@@ -1,7 +1,44 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useProjectData, type DiaryEntry, type DraftImage, type Letter } from "@/hooks/useProjectData";
 import { resolveImage } from "@/lib/data";
+
+const Lightbox = ({ src, onClose }: { src: string; onClose: () => void }) => {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => { ref.current?.showModal(); }, []);
+  return (
+    <dialog
+      ref={ref}
+      onClick={(e) => { if (e.target === ref.current) onClose(); }}
+      onClose={onClose}
+      style={{
+        padding: 0, border: "none", background: "transparent",
+        maxWidth: "92vw", maxHeight: "94vh", overflow: "visible",
+      }}
+    >
+      <form method="dialog">
+        <button
+          style={{
+            position: "fixed", top: 18, right: 22, fontSize: 28,
+            color: "rgba(255,255,255,0.6)", background: "none",
+            border: "none", cursor: "pointer", lineHeight: 1,
+          }}
+          aria-label="Close"
+        >✕</button>
+      </form>
+      <img
+        src={src}
+        alt=""
+        onClick={onClose}
+        style={{
+          display: "block", maxWidth: "88vw", maxHeight: "86vh",
+          objectFit: "contain", borderRadius: 3,
+          boxShadow: "0 8px 48px rgba(0,0,0,0.85)", cursor: "zoom-out",
+        }}
+      />
+    </dialog>
+  );
+};
 
 const SECTIONS = [
   { id: "vision", label: "Vision" },
@@ -42,9 +79,11 @@ const ProseWithSideImages = ({
   selectedSlug?: string;
 }) => {
   const paragraphs = toParagraphs(body);
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
 
   return (
     <>
+      {lightboxSrc && <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />}
       {paragraphs.map((p, i) => {
         const inlineDrafts = drafts.filter((d) => d.anchor && p.includes(d.anchor));
         const hasSelectedAnchor = !!selectedAnchor && !!selectedSlug && p.includes(selectedAnchor);
@@ -69,16 +108,20 @@ const ProseWithSideImages = ({
         return (
           // overflow-hidden creates a block formatting context that contains the floats
           <div key={i} className="overflow-hidden mb-4 last:mb-0">
-            {inlineDrafts.map((d, j) => (
-              <img
-                key={j}
-                src={resolveImage(d.path)}
-                alt=""
-                loading="lazy"
-                className="float-right ml-5 mb-3 opacity-55 hover:opacity-85 transition-opacity"
-                style={{ width: "72px", height: "auto" }}
-              />
-            ))}
+            {inlineDrafts.map((d, j) => {
+              const src = resolveImage(d.path);
+              return (
+                <img
+                  key={j}
+                  src={src}
+                  alt=""
+                  loading="lazy"
+                  onClick={() => setLightboxSrc(src)}
+                  className="float-right ml-5 mb-3 opacity-55 hover:opacity-85 transition-opacity"
+                  style={{ width: "72px", height: "auto", cursor: "zoom-in" }}
+                />
+              );
+            })}
             <p className="whitespace-pre-line leading-relaxed">{renderText()}</p>
           </div>
         );
