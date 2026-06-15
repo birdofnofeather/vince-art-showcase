@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Run Report · 2026-06-14 · What the Hands Remembered</title>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --surface2: #1e1e1e;
+      --border: #2a2a2a;
+      --border2: #333;
+      --gold: #c8a46e;
+      --gold-dim: #8a6e42;
+      --text: #e0e0e0;
+      --text-muted: #7a7a7a;
+      --text-dim: #555;
+      --green: #4a9e6a;
+      --green-dim: #1e3d2a;
+      --red: #9e4a4a;
+      --red-dim: #3d1e1e;
+      --orange: #c87d4a;
+      --orange-dim: #3d2a1e;
+      --blue: #4a7ac8;
+      --blue-dim: #1e2a3d;
+      --purple: #7a4ac8;
+      --purple-dim: #2a1e3d;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Layout ── */
+    .page { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* ── Header ── */
+    .report-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 28px;
+      margin-bottom: 36px;
+    }
+    .report-header .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .report-header h1 {
+      font-size: 28px;
+      font-weight: 300;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .report-header .subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .meta-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .meta-chip .label { color: var(--text-dim); }
+    .meta-chip .value { color: var(--text); font-weight: 500; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .badge-success { background: var(--green-dim); color: var(--green); }
+    .badge-divergence { background: var(--purple-dim); color: var(--purple); }
+    .badge-convergence { background: var(--blue-dim); color: var(--blue); }
+    .badge-selected { background: var(--gold-dim); color: var(--gold); }
+    .badge-fail { background: var(--red-dim); color: var(--red); }
+    .badge-pass { background: var(--green-dim); color: var(--green); }
+
+    /* ── Section headings ── */
+    .section {
+      margin-bottom: 48px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .step-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .section-meta {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Story context ── */
+    .story-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 4px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .story-block .story-hed {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .story-block .story-source {
+      font-size: 11px;
+      color: var(--gold-dim);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .story-block .story-body {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* ── Anchor ── */
+    .anchor-block {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+    .anchor-block .anchor-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .anchor-block .anchor-text {
+      font-size: 14px;
+      color: var(--text);
+      font-style: italic;
+      line-height: 1.7;
+    }
+    .symbol-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .symbol-chip {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      padding: 2px 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Fetch stats ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .stat-card .stat-val {
+      font-size: 28px;
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .stat-card .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Scene cards ── */
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .scene-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .scene-card.primary {
+      border-color: var(--gold-dim);
+    }
+    .scene-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .scene-card-header .scene-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+    .scene-body { padding: 14px; }
+    .scene-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+    .blind-block, .critique-block {
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    .block-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+    .block-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .trace-score {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+    }
+    .trace-pip {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: var(--border2);
+    }
+    .trace-pip.filled { background: var(--gold); }
+    .trace-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+
+    /* ── Image render cards ── */
+    .render-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 800px) {
+      .render-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .render-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .render-card.selected-card {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px var(--gold-dim);
+    }
+    .render-img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      display: block;
+      background: var(--surface2);
+    }
+    .render-meta {
+      padding: 10px 12px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .render-meta .render-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .render-meta .render-dims {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .render-body { padding: 12px; }
+    .render-field { margin-bottom: 10px; }
+    .render-field:last-child { margin-bottom: 0; }
+    .render-field .field-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 3px;
+    }
+    .render-field .field-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── Direction selection box ── */
+    .direction-box {
+      background: var(--purple-dim);
+      border: 1px solid var(--purple);
+      border-radius: 4px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .direction-box .dir-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 6px;
+    }
+    .direction-box .dir-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Comparative review boxes ── */
+    .compare-box {
+      background: var(--blue-dim);
+      border: 1px solid var(--blue);
+      border-radius: 4px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      font-size: 12px;
+    }
+    .compare-box .cmp-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+    .compare-box .cmp-text {
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .compare-box .cmp-result {
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ── Prompt accordion ── */
+    details {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    summary {
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      user-select: none;
+      background: var(--surface2);
+      list-style: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+      content: '▶';
+      font-size: 9px;
+      margin-right: 8px;
+      color: var(--gold-dim);
+      display: inline-block;
+      transition: transform 0.15s;
+    }
+    details[open] summary::before { transform: rotate(90deg); }
+    .details-body {
+      padding: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      white-space: pre-wrap;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    .prompt-section { margin-bottom: 10px; }
+    .prompt-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+    .prompt-section-text {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.7;
+      padding: 10px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+
+    /* ── Cost tables ── */
+    .cost-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .cost-table th {
+      text-align: left;
+      padding: 6px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+    }
+    .cost-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      vertical-align: top;
+    }
+    .cost-table td.cost-val {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .cost-table tr.subtotal td {
+      background: var(--surface2);
+      font-weight: 700;
+      color: var(--text);
+      border-top: 1px solid var(--border2);
+    }
+    .cost-table tr.subtotal td.cost-val { color: var(--gold); }
+    .cost-total-box {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      padding: 16px 20px;
+      margin-top: 8px;
+    }
+    .cost-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .cost-total-row:last-child { margin-bottom: 0; }
+    .cost-total-row .ctr-label { font-size: 12px; color: var(--text-muted); }
+    .cost-total-row .ctr-val { font-size: 12px; color: var(--text); font-variant-numeric: tabular-nums; }
+    .grand-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      margin-top: 12px;
+      border-top: 1px solid var(--border2);
+    }
+    .grand-total-row .gt-label { font-size: 14px; font-weight: 700; color: #fff; }
+    .grand-total-row .gt-val { font-size: 20px; font-weight: 300; color: var(--gold); font-variant-numeric: tabular-nums; }
+
+    /* ── Selected final box ── */
+    .selected-box {
+      background: linear-gradient(135deg, #1a1400 0%, #0d0d0d 60%);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 700px) { .selected-box { grid-template-columns: 1fr; } }
+    .selected-img-wrap {
+      width: 200px;
+      flex-shrink: 0;
+    }
+    .selected-img-wrap img {
+      width: 100%;
+      border-radius: 3px;
+      display: block;
+    }
+    .selected-info { }
+    .selected-title {
+      font-size: 22px;
+      font-weight: 300;
+      color: #fff;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+    .selected-badges { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+    .selected-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-style: italic;
+      margin-bottom: 14px;
+    }
+
+    /* ── Flow diagram ── */
+    .flow-diagram {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 36px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      min-width: 100px;
+    }
+    .flow-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 2px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+    .flow-icon.done { border-color: var(--green); }
+    .flow-step-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.4;
+    }
+    .flow-step-sublabel {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: 2px;
+    }
+    .flow-arrow {
+      width: 40px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--border2);
+      font-size: 18px;
+      padding-top: 12px;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      border-left: 2px solid var(--border2);
+      margin-left: 12px;
+      padding-left: 20px;
+      margin-bottom: 24px;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border2);
+      border: 2px solid var(--bg);
+    }
+    .timeline-item.done::before { background: var(--green); }
+    .timeline-item .tl-time {
+      font-size: 10px;
+      color: var(--text-dim);
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 2px;
+    }
+    .timeline-item .tl-label {
+      font-size: 13px;
+      color: var(--text);
+    }
+    .timeline-item .tl-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
+
+    /* ── Phase header ── */
+    .phase-header {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .phase-header span { color: var(--text-muted); }
+
+    /* ── Note box ── */
+    .note-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--text-dim);
+      border-radius: 3px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .note-box strong { color: var(--text); }
+
+    /* ── Lightbox ── */
+    dialog#lb {
+      padding: 0;
+      border: none;
+      background: transparent;
+      max-width: 92vw;
+      max-height: 94vh;
+      overflow: visible;
+    }
+    dialog#lb::backdrop {
+      background: rgba(0,0,0,0.88);
+    }
+    dialog#lb img {
+      display: block;
+      max-width: 90vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 3px;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.8);
+    }
+    dialog#lb .lb-close {
+      position: fixed;
+      top: 18px;
+      right: 22px;
+      font-size: 32px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1;
+      cursor: pointer;
+      user-select: none;
+      background: none;
+      border: none;
+    }
+    dialog#lb .lb-close:hover { color: #fff; }
+    img.zoomable {
+      cursor: zoom-in;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <div class="report-header">
+    <div class="eyebrow">DeYaanga · Vince · Image Pipeline · Run Report</div>
+    <h1>"What the Hands Remembered"</h1>
+    <div class="subtitle">Session 004 · 2026-06-14 · Gaza / Red Cross identification crisis</div>
+    <div class="meta-row">
+      <div class="meta-chip"><span class="label">Date</span><span class="value">Sun 14 Jun 2026, ~08:28 UTC</span></div>
+      <div class="meta-chip"><span class="label">Duration</span><span class="value">~27 min</span></div>
+      <div class="meta-chip"><span class="label">Renders</span><span class="value">6 (3 divergence + 3 convergence)</span></div>
+      <div class="meta-chip"><span class="label">Model</span><span class="value">GPT Image 2 via fal.ai · Claude Sonnet 4.6 / Opus / Haiku</span></div>
+      <div class="meta-chip"><span class="label">Status</span><span class="badge badge-success">complete</span></div>
+    </div>
+  </div>
+
+  <!-- ── PIPELINE FLOW ── -->
+  <div class="flow-diagram">
+    <div class="flow-step">
+      <div class="flow-icon done">📰</div>
+      <div class="flow-step-label">Fetch News</div>
+      <div class="flow-step-sublabel">50 → 46 stories</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">✍️</div>
+      <div class="flow-step-label">Assemble Prompt</div>
+      <div class="flow-step-sublabel">rank · anchor · 3 scenes</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">🎨</div>
+      <div class="flow-step-label">Divergence</div>
+      <div class="flow-step-sublabel">3 drafts 512×640</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">🔀</div>
+      <div class="flow-step-label">Select Direction</div>
+      <div class="flow-step-sublabel">draft #2 chosen</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">🔁</div>
+      <div class="flow-step-label">Convergence</div>
+      <div class="flow-step-sublabel">3 passes 1024×1280</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">⭐</div>
+      <div class="flow-step-label">Select Winner</div>
+      <div class="flow-step-sublabel">#6 · trace 3/5</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">📊</div>
+      <div class="flow-step-label">Build + Push</div>
+      <div class="flow-step-sublabel">dashboard · git</div>
+    </div>
+  </div>
+
+  <!-- ── SELECTED ARTWORK ── -->
+  <div class="selected-box">
+    <div class="selected-img-wrap">
+      <img src="session-004/vince_20260614_006_growing-risk-thousands-buried.jpg" alt="What the Hands Remembered" loading="lazy">
+    </div>
+    <div class="selected-info">
+      <div class="selected-title">"What the Hands Remembered"</div>
+      <div class="selected-badges">
+        <span class="badge badge-selected">Selected</span>
+        <span class="badge badge-convergence">Convergence #3</span>
+        <span class="badge" style="background:#1a1a1a;color:#666;">1024×1280</span>
+        <span class="badge" style="background:#1a1a1a;color:#666;">img2img · GPT Image 2</span>
+      </div>
+      <div class="selected-note">
+        "Image 3 achieves the most emotionally resolved composition because the warm golden-hour light rakes across the scene with greater depth and atmosphere, unifying the figure, the grave, the rubble, and the distant neighborhood into a cohesive visual elegy."
+      </div>
+      <div style="font-size:12px;color:var(--text-dim);">
+        File: <code style="color:var(--text-muted);">vince_20260614_006_growing-risk-thousands-buried.jpg</code><br>
+        fal.ai ref: <code style="color:var(--text-muted);">019ec54f-f57d-7c53-afeb-bbecf2d07991</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       STEP 1: FETCH NEWS
+  ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">1</div>
+      <div class="section-title">fetch_news.js — Guardian World Section</div>
+      <div class="section-meta">~08:28 UTC · &lt;1 min</div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-val">50</div>
+        <div class="stat-label">Stories fetched</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">46</div>
+        <div class="stat-label">After noise filter</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">16</div>
+        <div class="stat-label">Recently covered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">30</div>
+        <div class="stat-label">Fresh candidates</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">4</div>
+        <div class="stat-label">Active silence clusters</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">46</div>
+        <div class="stat-label">Body text enriched</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>Noise filter</strong> excludes: celebrity, sports, crypto, earnings, lifestyle. Silence clusters suppress stories within 7 days of a recently covered topic cluster. The raw digest is saved to <code>shared/digest/raw-2026-06-14.json</code>.
+    </div>
+
+    <table class="cost-table">
+      <thead>
+        <tr><th>Step</th><th>Detail</th><th class="cost-val">Cost</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Guardian API (2 pages × 25 stories)</td><td>Free tier</td><td class="cost-val">$0.00</td></tr>
+        <tr><td>Guardian body text enrichment (46 stories)</td><td>Same API, no extra cost</td><td class="cost-val">$0.00</td></tr>
+        <tr class="subtotal"><td>Step 1 total</td><td></td><td class="cost-val">$0.00</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       STEP 2: ASSEMBLE PROMPT
+  ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">2</div>
+      <div class="section-title">assemble_prompt.js — Scene Assembly</div>
+      <div class="section-meta">~08:29 UTC · ~4 min</div>
+    </div>
+
+    <!-- Story selected -->
+    <div style="margin-bottom:20px;">
+      <div class="phase-header">2A · Story Ranking <span>— Claude Haiku</span></div>
+      <div class="story-block">
+        <div class="story-source">The Guardian · World · 2026-06-14 · Ranked #1 of 30 fresh candidates</div>
+        <div class="story-hed">Growing risk that thousands buried in Gaza's rubble may never be identified, says Red Cross</div>
+        <div class="story-body">
+          The ICRC warned that bodies trapped under collapsed rubble in Gaza are decomposing faster than recovery efforts can reach them, meaning DNA and other identification markers are being lost permanently. With slow and dangerous excavation conditions, thousands of victims face permanent anonymity — their families unable to confirm deaths, unable to grieve with certainty. The organization called for international pressure to enable systematic recovery operations.
+        </div>
+      </div>
+    </div>
+
+    <!-- Anchor -->
+    <div style="margin-bottom:24px;">
+      <div class="phase-header">2B · Anchor Extraction <span>— Claude Opus</span></div>
+      <div class="anchor-block">
+        <div class="anchor-label">Irreducible tension</div>
+        <div class="anchor-text">Bodies trapped under collapsed rubble decompose toward skeletonization faster than slow recovery efforts can reach them, making identification a race against time being lost.</div>
+      </div>
+      <div class="anchor-block">
+        <div class="anchor-label">Symbol field — the image must draw from these</div>
+        <div class="symbol-chips">
+          <span class="symbol-chip">rubble</span>
+          <span class="symbol-chip">skeletal remains</span>
+          <span class="symbol-chip">decomposition</span>
+          <span class="symbol-chip">excavation tools</span>
+          <span class="symbol-chip">shrouds</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 divergent scenes -->
+    <div style="margin-bottom:24px;">
+      <div class="phase-header">2C · Divergent Scene Generation <span>— Claude Opus · 3 compositions · differentiated from 5 recent works</span></div>
+      <div class="note-box">Each scene is written in present tense, photographic voice, 4-7 sentences. No setting or style block yet — pure visual composition. Claude scores each with a blind reverse test (Haiku reads the scene text, guesses the event) and a critique gate (Sonnet scores traceScore 1-5). Scenes failing traceScore &lt; 3 or using imported symbols are regenerated (max 2 retries).</div>
+
+      <div class="scene-grid">
+
+        <!-- Scene 1 -->
+        <div class="scene-card">
+          <div class="scene-card-header">
+            <span class="scene-num">SCENE 1</span>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span class="trace-score">
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-label">3/5</span>
+              </span>
+              <span class="badge badge-pass">pass</span>
+            </div>
+          </div>
+          <div class="scene-body">
+            <div class="scene-text">A single white cloth shroud lies across a broken slab of concrete in the foreground, its folds gone stiff and dust-grey where particulate has settled into the weave. The cloth is empty — sunken in the middle as if it remembers a shape it no longer holds, the fabric pressed flat into the contours of the rubble beneath. Bleaching noon light falls straight down, flattening every shadow so the white reads almost translucent against the concrete's grain. No figures. A faint repeating diamond pattern is just visible in the shroud's machine-woven border, surfacing where the light catches it at an angle, the kind of geometry you only notice on second looking. The longer the frame is held the more the emptiness asserts itself: this is a covering set down for someone not yet recovered.</div>
+            <div class="blind-block">
+              <div class="block-label">Blind reverse test (Haiku)</div>
+              <div class="block-text">"<em>Mass casualty disaster or conflict aftermath</em>" — an empty white shroud lies on broken concrete in bright sunlight</div>
+            </div>
+            <div class="critique-block">
+              <div class="block-label">Critique gate (Sonnet 4.6)</div>
+              <div class="block-text">The empty shroud elegantly captures aftermath and unrecovered bodies, but the blind viewer landing on generic 'mass casualty disaster' reveals the image hasn't communicated the specific crisis of identification. A visual element encoding the forensic or identity dimension would pull the scene closer to the anchor's core: not just death, but unidentifiable death.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 2 (primary) -->
+        <div class="scene-card primary">
+          <div class="scene-card-header">
+            <span class="scene-num">SCENE 2 <span class="badge badge-selected" style="margin-left:6px;">PRIMARY</span></span>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span class="trace-score">
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-label">4/5</span>
+              </span>
+              <span class="badge badge-pass">pass</span>
+            </div>
+          </div>
+          <div class="scene-body">
+            <div class="scene-text">A man crouches alone at the lip of a shallow pit he has opened by hand, a short trenching spade laid down beside him in the dirt where he stopped using it. His forearms rest on his knees, palms turned up, and he is not digging — he has gone completely still, looking down into the cavity. The amber light of late afternoon comes low from the west, raking across the disturbed earth so each clod throws a long shadow and the spade's blade catches a dull shine. Around the pit the broken stucco and rebar of a collapsed wall lie in strata, paler dust over darker fragment over older paint, an accidental archaeology. Nothing in his posture is urgent; the urgency is in what the stillness costs, the slowness of one pair of hands against a thing that does not wait.</div>
+            <div class="blind-block">
+              <div class="block-label">Blind reverse test (Haiku)</div>
+              <div class="block-text">"<em>Search and recovery in conflict zones or disaster sites</em>" — a man pauses while hand-digging a shallow pit, resting with his forearms on his knees as he looks down into the excavation</div>
+            </div>
+            <div class="critique-block">
+              <div class="block-label">Critique gate (Sonnet 4.6)</div>
+              <div class="block-text">The scene earns its connection through the spade set aside and the stratigraphy of collapsed stucco and rebar, but it misses the anchor's specific urgency — the race against decomposition and the threat of permanent unidentifiability; introducing a visible sign of human remains or an identification artifact would anchor the scene to forensic loss rather than generic recovery. <strong>traceScore 4, importedSymbol false.</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 3 -->
+        <div class="scene-card">
+          <div class="scene-card-header">
+            <span class="scene-num">SCENE 3</span>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span class="trace-score">
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-label">4/5</span>
+              </span>
+              <span class="badge badge-pass">pass</span>
+            </div>
+          </div>
+          <div class="scene-body">
+            <div class="scene-text">A child's small bone — a single pale fragment, scaled enormous, filling the lower third of the frame — rests on an ordinary stretch of cracked sidewalk, monumental as a fallen column. Its surface is chalked with the same fine grey dust that coats the pavement around it, so that bone and concrete share one bleached register and the eye must work to separate them. Flat noon light erases the shadow almost entirely, leaving only a thin dark seam where the curve meets the ground. No figures, no tools, no horizon — just the paving and the impossible scale of the thing laid upon it, made the size of the loss rather than the size of the object. The grain of the bone and the grain of the concrete rhyme, two surfaces decomposing on the same plane at different speeds.</div>
+            <div class="blind-block">
+              <div class="block-label">Blind reverse test (Haiku)</div>
+              <div class="block-text">"<em>Child mortality, mass graves, or archaeological discovery of remains</em>" — a small bone lies on a cracked sidewalk in bright daylight, its pale color blending with the dust and concrete</div>
+            </div>
+            <div class="critique-block">
+              <div class="block-label">Critique gate (Sonnet 4.6)</div>
+              <div class="block-text">The image earns its connection — bone, dust, and scale all trace directly to the anchor's vocabulary of decomposition and unrecoverable identity — but the blind guess drifts toward archaeology or mass graves rather than the specific crisis of identification; a faint visual suggestion of a tag, a number, or an absent label would sharpen the story's forensic urgency. <strong>traceScore 4, importedSymbol false.</strong></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end scene-grid -->
+
+      <div class="direction-box" style="background:var(--green-dim);border-color:var(--green);">
+        <div class="dir-label" style="color:var(--green);">Primary scene selected</div>
+        <div class="dir-text">Scene #2 chosen as primary (highest traceScore 4/5, no imported symbol, no tie). Setting variant drawn: <strong>noon</strong>. Style-state v1 loaded from <code>vince/style-state.json</code>. Full prompt assembled: 2,086 chars. Saved to <code>tmp/prompt-2026-06-14.txt</code>.</div>
+      </div>
+    </div>
+
+    <!-- Prompt full view -->
+    <details>
+      <summary>Full assembled prompt (2,086 chars)</summary>
+      <div class="details-body">
+        <div class="prompt-section">
+          <div class="prompt-section-label">Scene (content block)</div>
+          <div class="prompt-section-text">A man crouches alone at the lip of a shallow pit he has opened by hand, a short trenching spade laid down beside him in the dirt where he stopped using it. His forearms rest on his knees, palms turned up, and he is not digging — he has gone completely still, looking down into the cavity. The amber light of late afternoon comes low from the west, raking across the disturbed earth so each clod throws a long shadow and the spade's blade catches a dull shine. Around the pit the broken stucco and rebar of a collapsed wall lie in strata, paler dust over darker fragment over older paint, an accidental archaeology. Nothing in his posture is urgent; the urgency is in what the stillness costs, the slowness of one pair of hands against a thing that does not wait.</div>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-section-label">Setting (noon variant)</div>
+          <div class="prompt-section-text">South Central: bleached noon concrete, flat-roofed stucco faded to bone-white, bougainvillea scaling cyclone fences, utility poles trailing thick black cables, cracked sidewalks, dry yellow grass, a dense midday haze rising off the asphalt. Overexposed whites in direct sun. The geography is specific and legible — a real place baking.</div>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-section-label">Style (style-state v1)</div>
+          <div class="prompt-section-text">Hyper-photorealistic digital collage: every surface photographically exact — pores, rust, concrete aggregate, fabric weave, grain in the deep shadows — shot with a medium-format sensibility, shallow depth of field, faint lens aberration at the frame edges. Scale may be violated — enormous objects made small or intimate objects made monumental, coexisting without seams — when it amplifies the specific meaning of the anchor. When the same scale move would fit any story equally, leave it out and shoot straight. Palette is drawn from the setting light. Documentary photography staged with the stillness of a painting; avant-garde collage spatial logic beneath the skin of a photograph. Nothing posed, everything precise.</div>
+        </div>
+        <div class="prompt-section">
+          <div class="prompt-section-label">Constraints</div>
+          <div class="prompt-section-text">No legible text anywhere. No news graphics, banners, or captions. No brand logos visible. No news anchors or studio sets. No symbolic shorthand — no flags, no protest signs with readable slogans. Translate everything into scene, figure, light, and texture only.</div>
+        </div>
+      </div>
+    </details>
+
+    <table class="cost-table" style="margin-top:16px;">
+      <thead>
+        <tr><th>Step</th><th>Model</th><th>Est. tokens (in / out)</th><th class="cost-val">Cost</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Story ranking (1 of 30 candidates)</td><td>Claude Haiku 4.5</td><td>~3K / 150</td><td class="cost-val">$0.003</td></tr>
+        <tr><td>Anchor extraction</td><td>Claude Opus</td><td>~6K / 400</td><td class="cost-val">$0.120</td></tr>
+        <tr><td>Scene generation (3 divergent compositions)</td><td>Claude Opus</td><td>~10K / 1,500</td><td class="cost-val">$0.263</td></tr>
+        <tr><td>Blind reverse test × 3 scenes</td><td>Claude Haiku 4.5</td><td>~6K / 600 total</td><td class="cost-val">$0.007</td></tr>
+        <tr><td>Critique gate × 3 scenes</td><td>Claude Sonnet 4.6</td><td>~9K / 900 total</td><td class="cost-val">$0.041</td></tr>
+        <tr class="subtotal"><td>Step 2 total</td><td></td><td></td><td class="cost-val">$0.43</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box" style="margin-top:8px;">Pricing: Haiku $0.80/$4.00 per MTok in/out · Opus $15/$75 · Sonnet 4.6 $3/$15. Estimates based on observed token ranges for similar calls; actual billing may vary ±20%.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       STEP 3: IMAGE GENERATION
+  ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">3</div>
+      <div class="section-title">generate_image.js — Divergence → Convergence</div>
+      <div class="section-meta">~08:33–08:53 UTC · ~20 min</div>
+    </div>
+
+    <!-- DIVERGENCE PHASE -->
+    <div class="phase-header">Phase A · Divergence <span>— 3 directions drafted cheaply at 512×640 · GPT Image 2 text-to-image</span></div>
+    <div class="note-box">One prompt per scene, text-to-image at 512×640 (high quality). Each render is analyzed by Claude Sonnet (OBSERVED / ACCIDENT / BLIND / DECISION). All 3 drafts are generated before direction selection — no early exit in divergence phase.</div>
+
+    <div class="render-grid">
+
+      <!-- Draft 1 -->
+      <div class="render-card">
+        <img class="render-img" src="session-004/vince_20260614_001_growing-risk-thousands-buried.jpg" alt="Draft 1 — The Shroud" loading="lazy">
+        <div class="render-meta">
+          <div class="render-num">Draft #1 — Scene 1 (Shroud)</div>
+          <div class="render-dims">512×640 · text-to-image · 08:33 UTC</div>
+        </div>
+        <div class="render-body">
+          <div class="render-field">
+            <div class="field-label">Analysis</div>
+            <div class="field-text">A white blanket or sheet lies draped over broken concrete rubble on a cracked alley surface, with overgrown bushes bearing pink flowers and utility poles visible in the background.</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Accident</div>
+            <div class="field-text"><em>None noted.</em></div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Blind reverse test</div>
+            <div class="field-text">"Urban blight / homelessness crisis"
+              <span class="trace-score" style="display:inline-flex;margin-left:6px;">
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-label">2/5</span>
+              </span>
+            </div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Decision</div>
+            <div class="field-text"><span class="badge" style="background:#2a1a00;color:#c87a30;font-size:10px;">candidate</span> Shroud scene rendered but reads as generic urban decay rather than a recovery context. Low trace.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Draft 2 -->
+      <div class="render-card" style="border-color:var(--purple);">
+        <img class="render-img" src="session-004/vince_20260614_002_growing-risk-thousands-buried.jpg" alt="Draft 2 — The Man at the Pit" loading="lazy">
+        <div class="render-meta">
+          <div class="render-num">Draft #2 — Scene 2 (Pit) <span class="badge badge-divergence" style="margin-left:6px;">chosen</span></div>
+          <div class="render-dims">512×640 · text-to-image · 08:36 UTC</div>
+        </div>
+        <div class="render-body">
+          <div class="render-field">
+            <div class="field-label">Observed</div>
+            <div class="field-text">A tattooed man in all black crouches at the edge of a rectangular pit roughly 3×4 feet, his weight settled back on his heels, palms turned upward and open in a gesture of exhaustion or supplication — not defiance, not grief performed, but something quieter. A short-handled trenching spade lies discarded to his left, blade catching flat amber light. Behind him, a demolished wall rises in geological strata — pale stucco over aqua paint over older plaster, rebar threading through rubble like exposed nerve. The pit itself is the darkest element in the frame, a void that pulls the eye downward and holds it.</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Accident ✦</div>
+            <div class="field-text"><strong>The upturned palms.</strong> The prompt specified forearms on knees, but the hands have rotated to face upward — a posture that reads liturgically, as offering or as emptiness, and it carries more weight than the described position would have.</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Blind reverse test</div>
+            <div class="field-text">"Urban demolition and displacement"
+              <span class="trace-score" style="display:inline-flex;margin-left:6px;">
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-label">2/5</span>
+              </span>
+            </div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Decision</div>
+            <div class="field-text"><span class="badge badge-pass" style="font-size:10px;">strong</span> Compositionally resolved. The pit as void, the stilled figure, the upturned palms accident are all generative — strong direction with room to develop.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Draft 3 -->
+      <div class="render-card">
+        <img class="render-img" src="session-004/vince_20260614_003_growing-risk-thousands-buried.jpg" alt="Draft 3 — The Bone" loading="lazy">
+        <div class="render-meta">
+          <div class="render-num">Draft #3 — Scene 3 (Bone)</div>
+          <div class="render-dims">512×640 · text-to-image · 08:39 UTC</div>
+        </div>
+        <div class="render-body">
+          <div class="render-field">
+            <div class="field-label">Observed</div>
+            <div class="field-text">A large bone-shaped object — clearly cast from concrete or plaster — lies horizontally on a cracked concrete sidewalk, occupying the lower two-thirds of the frame. Its surface is porous, chalked grey-white, nearly indistinguishable in tone from the pavement beneath it. Flat midday light is harsh and shadowless, pressing the scene into a bleached, airless register.</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Accident ✦</div>
+            <div class="field-text">The bougainvillea — red blooms against the grey-white scene — arrived uninvited and functions as a dissonant pulse of biological life, which in context reads as unbearable rather than beautiful.</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Blind reverse test</div>
+            <div class="field-text">"Los Angeles urban decay / homelessness crisis"
+              <span class="trace-score" style="display:inline-flex;margin-left:6px;">
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-label">2/5</span>
+              </span>
+            </div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Decision</div>
+            <div class="field-text"><span class="badge badge-pass" style="font-size:10px;">strong</span> Scale trick works. Bougainvillea accident is generative. But bone reads as prop/sculpture rather than actual remains — connection lives more in the maker's concept than in the image itself.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end render-grid -->
+
+    <!-- Direction selection -->
+    <div class="direction-box">
+      <div class="dir-label">Direction selected — Claude Sonnet 4.6 comparative review</div>
+      <div class="dir-text">
+        <strong>Draft #2 chosen.</strong> "The upturned palms accident transforms a generic image of urban demolition into something liturgically precise — the open hands at the edge of a grave-shaped pit carry the specific horror of the story (the unrecoverable, the unidentified) without illustrating it, and that gap between image and referent is exactly where serious work lives."
+      </div>
+    </div>
+
+    <table class="cost-table" style="margin-bottom:28px;">
+      <thead>
+        <tr><th>Step</th><th>Model</th><th>Detail</th><th class="cost-val">Cost</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Draft #1 — generation</td><td>GPT Image 2 (fal.ai)</td><td>512×640, text-to-image, high</td><td class="cost-val">~$0.050</td></tr>
+        <tr><td>Draft #1 — vision analysis + blind test</td><td>Sonnet 4.6 + Haiku</td><td>~5K in + image / ~800 out</td><td class="cost-val">~$0.030</td></tr>
+        <tr><td>Draft #2 — generation</td><td>GPT Image 2 (fal.ai)</td><td>512×640, text-to-image, high</td><td class="cost-val">~$0.050</td></tr>
+        <tr><td>Draft #2 — vision analysis + blind test</td><td>Sonnet 4.6 + Haiku</td><td>~5K in + image / ~800 out</td><td class="cost-val">~$0.030</td></tr>
+        <tr><td>Draft #3 — generation</td><td>GPT Image 2 (fal.ai)</td><td>512×640, text-to-image, high</td><td class="cost-val">~$0.050</td></tr>
+        <tr><td>Draft #3 — vision analysis + blind test</td><td>Sonnet 4.6 + Haiku</td><td>~5K in + image / ~800 out</td><td class="cost-val">~$0.030</td></tr>
+        <tr><td>Direction selection (3-way compare)</td><td>Sonnet 4.6</td><td>~6K in + 3 images / ~300 out</td><td class="cost-val">~$0.032</td></tr>
+        <tr class="subtotal"><td>Divergence subtotal</td><td></td><td>3 images + 3 analyses + 1 compare</td><td class="cost-val">~$0.27</td></tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <!-- CONVERGENCE PHASE -->
+    <div class="phase-header">Phase B · Convergence <span>— 3 passes at 1024×1280 · GPT Image 2 img2img (edit) from draft #2 as seed</span></div>
+    <div class="note-box">Each pass uses <code>openai/gpt-image-2/edit</code> (img2img). Pass 1 seeds from chosen draft #2. Passes 2 and 3 seed from the current best (pass 1 if improved, otherwise best is held). After each pass, a comparative review picks the stronger of the new render vs. current best. A final 3-way review selects the winner.</div>
+
+    <div class="render-grid">
+
+      <!-- Pass 1 / image #4 -->
+      <div class="render-card" style="border-color:var(--blue-dim);">
+        <img class="render-img" src="session-004/vince_20260614_004_growing-risk-thousands-buried.jpg" alt="Convergence pass 1" loading="lazy">
+        <div class="render-meta">
+          <div class="render-num">Convergence Pass 1 — Image #4</div>
+          <div class="render-dims">1024×1280 · img2img from draft #2 · 08:43 UTC</div>
+        </div>
+        <div class="render-body">
+          <div class="render-field">
+            <div class="field-label">Blind reverse test</div>
+            <div class="field-text">"Urban demolition or community displacement"
+              <span class="trace-score" style="display:inline-flex;margin-left:6px;">
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-label">3/5</span>
+              </span>
+            </div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Comparative review vs. draft #2</div>
+            <div class="field-text">"Image 2 achieves stronger compositional resolution because the slightly lower camera angle gives the pit more geometric authority in the frame, the man's crouched silhouette reads more completely against the rubble, and the light-to-shadow ratio across the ground plane creates a more unified tonal structure."</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Result</div>
+            <div class="field-text"><span class="badge badge-pass" style="font-size:10px;">improved</span> New best. Seeding pass 2 from #4.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pass 2 / image #5 -->
+      <div class="render-card">
+        <img class="render-img" src="session-004/vince_20260614_005_growing-risk-thousands-buried.jpg" alt="Convergence pass 2" loading="lazy">
+        <div class="render-meta">
+          <div class="render-num">Convergence Pass 2 — Image #5</div>
+          <div class="render-dims">1024×1280 · img2img from #4 · 08:46 UTC</div>
+        </div>
+        <div class="render-body">
+          <div class="render-field">
+            <div class="field-label">Blind reverse test</div>
+            <div class="field-text">"Urban demolition or displacement of a community"
+              <span class="trace-score" style="display:inline-flex;margin-left:6px;">
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-label">3/5</span>
+              </span>
+            </div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Comparative review vs. #4</div>
+            <div class="field-text">"Image 1 wins on the strength of its golden-hour light, which casts a warm, melancholic glow that deepens the emotional weight of the figure's posture and integrates the ruins, hole, and background into a more atmospherically unified and cinematically resolved composition."</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Result</div>
+            <div class="field-text"><span class="badge badge-fail" style="font-size:10px;">no improvement</span> Keeping #4 as seed. Pass 3 will also run from #4.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pass 3 / image #6 -->
+      <div class="render-card selected-card">
+        <img class="render-img" src="session-004/vince_20260614_006_growing-risk-thousands-buried.jpg" alt="Convergence pass 3 — SELECTED" loading="lazy">
+        <div class="render-meta">
+          <div class="render-num">Convergence Pass 3 — Image #6 <span class="badge badge-selected" style="margin-left:6px;">SELECTED</span></div>
+          <div class="render-dims">1024×1280 · img2img from #4 · 08:50 UTC</div>
+        </div>
+        <div class="render-body">
+          <div class="render-field">
+            <div class="field-label">Blind reverse test</div>
+            <div class="field-text">"Urban demolition and displacement"
+              <span class="trace-score" style="display:inline-flex;margin-left:6px;">
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip filled"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-pip"></span>
+                <span class="trace-label">3/5</span>
+              </span>
+            </div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Comparative review vs. #4</div>
+            <div class="field-text">"Image 2 is compositionally stronger because the slightly wider framing better balances the figure against the rubble and open ground, and the golden-hour light falls more evenly across the scene, giving the man's contemplative posture over the grave-like pit a more resolved, melancholic weight."</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Final 3-way review (#4 / #5 / #6)</div>
+            <div class="field-text">"Image 3 achieves the most emotionally resolved composition because the warm golden-hour light rakes across the scene with greater depth and atmosphere, unifying the figure, the grave, the rubble, and the distant neighborhood into a cohesive visual elegy."</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Result</div>
+            <div class="field-text"><span class="badge badge-selected" style="font-size:10px;">winner</span> Image #6 selected. Title generated: <strong>"What the Hands Remembered"</strong></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end render-grid -->
+
+    <!-- Convergence edit chain diagram -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px 16px;margin-bottom:16px;font-size:12px;color:var(--text-muted);">
+      <div class="block-label" style="margin-bottom:8px;">img2img edit chain</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <span style="background:var(--surface2);padding:4px 10px;border-radius:3px;border:1px solid var(--border2);">Draft #2<br><span style="color:var(--text-dim);font-size:10px;">512×640 seed</span></span>
+        <span style="color:var(--border2);font-size:18px;">→</span>
+        <span style="background:var(--blue-dim);padding:4px 10px;border-radius:3px;border:1px solid var(--blue);">#4 Pass 1<br><span style="color:var(--blue);font-size:10px;">improved ✓</span></span>
+        <span style="color:var(--border2);font-size:18px;">→</span>
+        <span style="background:var(--surface2);padding:4px 10px;border-radius:3px;border:1px solid var(--border2);">#5 Pass 2<br><span style="color:var(--text-dim);font-size:10px;">no gain ✗</span></span>
+        <span style="color:var(--border2);font-size:18px;">→</span>
+        <span style="background:var(--gold-dim);padding:4px 10px;border-radius:3px;border:1px solid var(--gold);">#6 Pass 3<br><span style="color:var(--gold);font-size:10px;">winner ★</span></span>
+      </div>
+      <div style="margin-top:8px;color:var(--text-dim);font-size:11px;">Pass 2 and Pass 3 both seed from #4 (best held when pass 2 did not improve).</div>
+    </div>
+
+    <table class="cost-table" style="margin-bottom:8px;">
+      <thead>
+        <tr><th>Step</th><th>Model</th><th>Detail</th><th class="cost-val">Cost</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Pass 1 (#4) — generation</td><td>GPT Image 2/edit (fal.ai)</td><td>1024×1280, img2img, high</td><td class="cost-val">~$0.195</td></tr>
+        <tr><td>Pass 1 (#4) — vision analysis + blind test</td><td>Sonnet 4.6 + Haiku</td><td>~5K in + image / ~800 out</td><td class="cost-val">~$0.038</td></tr>
+        <tr><td>Comparative review #4 vs #2</td><td>Sonnet 4.6</td><td>~8K in + 2 images / ~200 out</td><td class="cost-val">~$0.032</td></tr>
+        <tr><td>Pass 2 (#5) — generation</td><td>GPT Image 2/edit (fal.ai)</td><td>1024×1280, img2img, high</td><td class="cost-val">~$0.195</td></tr>
+        <tr><td>Pass 2 (#5) — vision analysis + blind test</td><td>Sonnet 4.6 + Haiku</td><td>~5K in + image / ~800 out</td><td class="cost-val">~$0.038</td></tr>
+        <tr><td>Comparative review #5 vs #4</td><td>Sonnet 4.6</td><td>~8K in + 2 images / ~200 out</td><td class="cost-val">~$0.032</td></tr>
+        <tr><td>Pass 3 (#6) — generation</td><td>GPT Image 2/edit (fal.ai)</td><td>1024×1280, img2img, high</td><td class="cost-val">~$0.195</td></tr>
+        <tr><td>Pass 3 (#6) — vision analysis + blind test</td><td>Sonnet 4.6 + Haiku</td><td>~5K in + image / ~800 out</td><td class="cost-val">~$0.038</td></tr>
+        <tr><td>Final 3-way comparative review</td><td>Sonnet 4.6</td><td>~10K in + 3 images / ~250 out</td><td class="cost-val">~$0.044</td></tr>
+        <tr><td>Title generation</td><td>Sonnet 4.6</td><td>~3K in / ~50 out</td><td class="cost-val">~$0.010</td></tr>
+        <tr class="subtotal"><td>Convergence subtotal</td><td></td><td>3 images + 3 analyses + 3 reviews + title</td><td class="cost-val">~$0.82</td></tr>
+      </tbody>
+    </table>
+
+    <table class="cost-table">
+      <tbody>
+        <tr class="subtotal"><td><strong>Step 3 total</strong> (divergence + convergence)</td><td></td><td>6 images · 6 analyses · 4 comparisons</td><td class="cost-val">~$1.09</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       STEPS 4 & 5: BUILD LOG + PUSH
+  ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">4</div>
+      <div class="section-title">build_log.js — Dashboard Rebuild</div>
+      <div class="section-meta">~08:53 UTC · &lt;10 sec</div>
+    </div>
+    <div class="stat-row" style="margin-bottom:12px;">
+      <div class="stat-card"><div class="stat-val">70</div><div class="stat-label">Total artworks</div></div>
+      <div class="stat-card"><div class="stat-val">6</div><div class="stat-label">Digest dates</div></div>
+      <div class="stat-card"><div class="stat-val">1</div><div class="stat-label">Pipeline runs logged</div></div>
+      <div class="stat-card"><div class="stat-val">282</div><div class="stat-label">Stories across all digests</div></div>
+    </div>
+    <div class="note-box">Dashboard written to <code>docs/index.html</code>. No API calls — pure Node.js JSON read + HTML template render. Cost: $0.00</div>
+    <table class="cost-table">
+      <tbody>
+        <tr class="subtotal"><td>Step 4 total</td><td></td><td>Node.js build, no API</td><td class="cost-val">$0.00</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">5</div>
+      <div class="section-title">Commit &amp; Push</div>
+      <div class="section-meta">~08:53 UTC · &lt;10 sec</div>
+    </div>
+    <div class="note-box">
+      Committed 21 files (6 artworks × 3 files each: jpg/png/json; plus digest JSON; updated run-log.jsonl; updated docs/index.html).<br>
+      Branch: <code>claude/jolly-tesla-krxkue</code> → <code>origin/claude/jolly-tesla-krxkue</code><br>
+      Commit: <code>ddac076</code> — "Pipeline run 2026-06-14: growing-risk-thousands-buried"<br>
+      Cost: $0.00
+    </div>
+    <table class="cost-table">
+      <tbody>
+        <tr class="subtotal"><td>Step 5 total</td><td></td><td>git add / commit / push</td><td class="cost-val">$0.00</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       COST SUMMARY
+  ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">$</div>
+      <div class="section-title">Cost Summary</div>
+    </div>
+
+    <table class="cost-table" style="margin-bottom:12px;">
+      <thead>
+        <tr><th>Pipeline step</th><th>Description</th><th class="cost-val">Cost</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Step 1 — fetch_news</td><td>Guardian API (2 pages, 46 enriched stories)</td><td class="cost-val">$0.00</td></tr>
+        <tr><td>Step 2 — assemble_prompt</td><td>Story ranking (Haiku) + anchor (Opus) + 3 scenes (Opus) + blind tests (Haiku ×3) + critiques (Sonnet ×3)</td><td class="cost-val">$0.43</td></tr>
+        <tr><td>Step 3A — divergence</td><td>3 × (image gen 512×640 + vision analysis + blind test) + direction select</td><td class="cost-val">$0.27</td></tr>
+        <tr><td>Step 3B — convergence</td><td>3 × (image gen 1024×1280 img2img + analysis + blind test + comparative review) + 3-way final + title</td><td class="cost-val">$0.82</td></tr>
+        <tr><td>Step 4 — build_log</td><td>Node.js HTML render, no API</td><td class="cost-val">$0.00</td></tr>
+        <tr><td>Step 5 — commit &amp; push</td><td>git operations</td><td class="cost-val">$0.00</td></tr>
+        <tr class="subtotal"><td>Automated pipeline total</td><td>6 renders · 6 analyses · 4 comparisons · 1 anchor · 3 scenes</td><td class="cost-val">$1.52</td></tr>
+      </tbody>
+    </table>
+
+    <table class="cost-table" style="margin-bottom:16px;">
+      <thead><tr><th>Cost category</th><th class="cost-val">Amount</th></tr></thead>
+      <tbody>
+        <tr><td>Image generation (3 × 512×640 + 3 × 1024×1280 img2img)</td><td class="cost-val">$0.735</td></tr>
+        <tr><td>Claude — scene assembly (Opus × 2 calls + Haiku + Sonnet × 3)</td><td class="cost-val">$0.434</td></tr>
+        <tr><td>Claude — image analysis (Sonnet ×6 + Haiku ×6, vision)</td><td class="cost-val">$0.204</td></tr>
+        <tr><td>Claude — comparisons + direction + title (Sonnet ×5)</td><td class="cost-val">$0.150</td></tr>
+        <tr class="subtotal"><td>Total</td><td class="cost-val">$1.52</td></tr>
+      </tbody>
+    </table>
+
+    <div class="cost-total-box">
+      <div class="cost-total-row"><span class="ctr-label">Image generation (6 renders)</span><span class="ctr-val">$0.735</span></div>
+      <div class="cost-total-row"><span class="ctr-label">Claude — assemble_prompt</span><span class="ctr-val">$0.434</span></div>
+      <div class="cost-total-row"><span class="ctr-label">Claude — generate_image (analysis, comparisons, title)</span><span class="ctr-val">$0.354</span></div>
+      <div class="cost-total-row"><span class="ctr-label">News fetch + build + git</span><span class="ctr-val">$0.000</span></div>
+      <div class="grand-total-row">
+        <span class="gt-label">Automated pipeline total</span>
+        <span class="gt-val">$1.52</span>
+      </div>
+    </div>
+
+    <div class="note-box" style="margin-top:12px;">
+      <strong>Pricing basis (June 2026):</strong> Claude Haiku 4.5 $0.80/$4.00 per MTok in/out · Claude Sonnet 4.6 $3.00/$15.00 · Claude Opus $15.00/$75.00 · GPT Image 2 via fal.ai ~$0.050/image (512×640 high) and ~$0.195/image (1024×1280 high, text-to-image or edit). Image gen costs are fal.ai published rates for gpt-image-2 and may vary with fal markup. Claude token estimates are derived from observed prompt/response lengths; actual billing may vary ±20%. Vision tokens (per-image surcharge for Claude image analysis) are included in the Claude line items.
+      <br><br>
+      <strong>Reference:</strong> A worst-case 7-iteration legacy run (no divergence) at 1024×1280 text-to-image only would cost approximately $1.56 in image gen + ~$0.27 in Claude = ~$1.83. The divergence→convergence approach delivered 6 renders at comparable total cost ($1.52) with more intentional exploration of compositional directions.
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div style="border-top:1px solid var(--border);padding-top:20px;margin-top:40px;font-size:11px;color:var(--text-dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <span>DeYaanga · Vince Image Pipeline · Session 004 · 2026-06-14</span>
+    <span>Generated by Claude Code · claude/jolly-tesla-krxkue · commit ddac076</span>
+  </div>
+
+</div>
+
+<!-- Lightbox -->
+<dialog id="lb">
+  <button class="lb-close" onclick="document.getElementById('lb').close()">✕</button>
+  <img id="lb-img" src="" alt="" onclick="document.getElementById('lb').close()">
+</dialog>
+
+<script>
+(function () {
+  var dlg   = document.getElementById('lb');
+  var lbImg = document.getElementById('lb-img');
+
+  function openLightbox(src, alt) {
+    lbImg.src = src;
+    lbImg.alt = alt || '';
+    dlg.showModal();
+  }
+
+  /* Close when clicking the backdrop (outside the image) */
+  dlg.addEventListener('click', function (e) {
+    if (e.target === dlg) { dlg.close(); }
+  });
+
+  /* Wire every thumbnail */
+  document.querySelectorAll('.render-img, .selected-img-wrap img').forEach(function (img) {
+    img.classList.add('zoomable');
+    img.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openLightbox(img.getAttribute('src'), img.getAttribute('alt'));
+    });
+  });
+})();
+</script>
+</body>
+</html>
