@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "iran-deal-end-war",
+      "title": "Same Thirst, Same Crack",
+      "headline": "US and Iran deal to end war allows Tehran to sell oil and fuel – Middle East crisis live",
+      "date": "2026-06-16",
+      "image": "artworks/iran-deal-end-war.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "argentinian-activist-who-spent",
       "title": "Vigil Without an Answer",
       "headline": "Argentinian activist who spent 50 years looking for disappeared son dies",
