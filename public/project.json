@@ -109,6 +109,13 @@
   "correspondence": [],
   "runLog": [
     {
+      "ts": "2026-06-16T18:24:05.784Z",
+      "agent": "vince",
+      "pipeline": "image",
+      "status": "success",
+      "note": "US and Iran deal to end war allows Tehran to sell oil and fuel – Middle East crisis live"
+    },
+    {
       "ts": "2026-06-15T18:19:57.010Z",
       "agent": "vince",
       "pipeline": "image",
