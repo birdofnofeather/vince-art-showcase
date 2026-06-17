@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "they-forced-marriage-abused",
+      "title": "Where the Road Refuses",
+      "headline": "They were forced into marriage and abused. Now women facing exploitation in China have a glimmer of hope",
+      "date": "2026-06-17",
+      "image": "artworks/they-forced-marriage-abused.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "iran-deal-end-war",
       "title": "Same Thirst, Same Crack",
       "headline": "US and Iran deal to end war allows Tehran to sell oil and fuel – Middle East crisis live",
