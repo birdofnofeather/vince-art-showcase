@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "construction-equipment-multina",
+      "title": "Corporate Teeth in the Rubble",
+      "headline": "Construction equipment multinationals may be aiding Israeli war crimes, experts say",
+      "date": "2026-06-18",
+      "image": "artworks/construction-equipment-multina.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "they-forced-marriage-abused",
       "title": "Where the Road Refuses",
       "headline": "They were forced into marriage and abused. Now women facing exploitation in China have a glimmer of hope",
