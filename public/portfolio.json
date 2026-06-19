@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "macron-calls-vigilance-western",
+      "title": "Warnings Melt Before Heeded",
+      "headline": "Macron calls for vigilance as western Europe faces second heatwave of year",
+      "date": "2026-06-19",
+      "image": "artworks/macron-calls-vigilance-western.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "construction-equipment-multina",
       "title": "Corporate Teeth in the Rubble",
       "headline": "Construction equipment multinationals may be aiding Israeli war crimes, experts say",
