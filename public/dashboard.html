@@ -53,8 +53,16 @@
     gap: .5rem;
     flex-wrap: wrap;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 50;
   }
   .nav-bar strong { color: var(--text); margin-right: .5rem; }
+  .nav-bar a { white-space: nowrap; }
+
+  /* keep sticky nav from covering the heading you jumped to */
+  [id] { scroll-margin-top: 4rem; }
+  html { scroll-behavior: smooth; }
 
   main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
 
@@ -251,36 +259,31 @@
   .incident-banner.warn { background: #2a2110; border: 1px solid var(--pending); color: var(--pending); }
   .incident-msg { color: var(--muted); font-family: var(--mono); font-size: .72rem; max-width: 460px; }
 
-  /* ── tooltips ── */
+  /* ── tooltips (JS-positioned shared element; never clips off-screen) ── */
   .tip { border-bottom: 1px dotted var(--muted); cursor: help; }
-  [data-tip] { position: relative; }
-  [data-tip]::after {
-    content: attr(data-tip);
-    position: absolute;
-    bottom: 130%;
-    left: 50%;
-    transform: translateX(-50%);
+  [data-tip] { cursor: help; }
+  #tipbox {
+    position: fixed;
+    max-width: 280px;
     background: #222;
     color: var(--text);
-    border: 1px solid #444;
-    padding: .45rem .65rem;
+    border: 1px solid #555;
+    padding: .5rem .7rem;
     border-radius: 4px;
-    font-size: .7rem;
-    line-height: 1.5;
-    white-space: normal;
-    width: 260px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity .15s;
-    z-index: 100;
+    font-size: .72rem;
+    line-height: 1.55;
     font-family: var(--font);
     font-style: normal;
     letter-spacing: 0;
     font-weight: normal;
     text-transform: none;
-    border-bottom: none;
+    box-shadow: 0 4px 18px rgba(0,0,0,.6);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .12s;
+    z-index: 200;
   }
-  [data-tip]:hover::after { opacity: 1; }
+  #tipbox.show { opacity: 1; }
 
   /* ── section explainer ── */
   .section-explainer {
@@ -337,8 +340,27 @@
     margin: .75rem 0 .45rem;
   }
 
+  /* ── overview / orientation ── */
+  .overview { background: var(--surface); border: 1px solid var(--border); border-radius: 5px; padding: 1.4rem 1.6rem; }
+  .overview-lead { font-size: .92rem; line-height: 1.7; color: var(--text); margin-bottom: 1.1rem; }
+  .overview-lead strong { color: var(--accent); font-weight: normal; }
+  .flow-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .6rem; margin: 0 0 1rem; }
+  .flow-list li { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: .55rem; align-items: baseline; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 3px; padding: .55rem .7rem; }
+  .flow-num { grid-row: 1 / 3; font-family: var(--mono); font-size: 1.1rem; color: var(--accent); opacity: .7; align-self: center; }
+  .flow-k { font-weight: bold; font-size: .82rem; color: var(--text); letter-spacing: .03em; }
+  .flow-v { grid-column: 2; font-size: .72rem; color: var(--muted); line-height: 1.5; }
+  .glossary { border: 1px solid var(--border); border-radius: 4px; background: var(--bg); }
+  .glossary > summary { padding: .5rem .8rem; font-size: .8rem; color: var(--accent); }
+  .gloss-list { padding: .3rem 1rem 1rem; }
+  .gloss-item { padding: .55rem 0; border-bottom: 1px solid var(--border); }
+  .gloss-item:last-child { border-bottom: none; }
+  .gloss-item dt { font-weight: bold; font-size: .8rem; color: var(--text); margin-bottom: .2rem; }
+  .gloss-item dd { font-size: .76rem; color: var(--muted); line-height: 1.6; }
+  .gloss-item dd em, .flow-v em, .overview-lead em { color: var(--accent); font-style: normal; }
+
   /* ── iter-thumb improvements ── */
   .iter-thumb img { cursor: zoom-in; }
+  .hero-zoom { cursor: zoom-in; }
   .iter-more {
     display: block;
     font-size: .58rem;
@@ -376,11 +398,12 @@
 <header class="site-header">
   <h1>DeYaanga</h1>
   <span>Operator Dashboard</span>
-  <span class="generated">Generated Sat, 20 Jun 2026 06:16:44 GMT</span>
+  <span class="generated">Generated Sat, 20 Jun 2026 06:22:58 GMT</span>
 </header>
 
 <nav class="nav-bar">
   <strong>Jump to:</strong>
+  <a href="#overview">Overview</a> ·
   <a href="#incidents">Incidents</a> ·
   <a href="#runs">Runs</a> ·
   <a href="#judges">Judges</a> ·
@@ -391,6 +414,18 @@
 </nav>
 
 <main>
+
+  
+<section id="overview" class="overview">
+  <h2 class="section-header" style="margin-top:0">What is this?</h2>
+  <p class="overview-lead"><strong>DeYaanga</strong> is an autonomous art pipeline. <strong>Vince</strong> — an AI artist — translates each day's world news into hyper-photorealistic scenes of South Central Los Angeles, then generates them as images. This dashboard is the operator's-eye view of that machine: what it generated, how reliably it ran, and how it made each decision. So far it spans <strong>41 sessions</strong> — one news story each — and <strong>93 renders</strong> in total, drafts and finals together.</p>
+  <ol class="flow-list"><li><span class="flow-num">1</span><span class="flow-k">Fetch</span><span class="flow-v">Pull the Guardian world section; filter noise; skip stories Vince covered recently.</span></li><li><span class="flow-num">2</span><span class="flow-k">Anchor</span><span class="flow-v">Reduce the chosen story to its <em>irreducible moment</em> — the one image-able thing it is really about.</span></li><li><span class="flow-num">3</span><span class="flow-k">Diverge</span><span class="flow-v">Draft several different visual directions cheaply, each a distinct take on the anchor.</span></li><li><span class="flow-num">4</span><span class="flow-k">Judge</span><span class="flow-v">Two independent models (Claude + GPT-4o) compare the drafts pairwise and pick the direction with the most potential.</span></li><li><span class="flow-num">5</span><span class="flow-k">Converge</span><span class="flow-v">Refine the chosen direction across several passes, analysing each frame and chasing useful accidents.</span></li><li><span class="flow-num">6</span><span class="flow-k">Select</span><span class="flow-v">Pick the winning frame, run a final fidelity check, and publish it as the artwork.</span></li></ol>
+  <details class="glossary">
+    <summary>Glossary — the terms used on this page</summary>
+    <dl class="gloss-list"><div class="gloss-item"><dt>Anchor</dt><dd>The irreducible moment of a news story plus its symbol field, register, and timing. Vince paints the anchor, not the headline — so the work stays oblique rather than illustrative.</dd></div><div class="gloss-item"><dt>Divergence / Convergence</dt><dd>A run has two movements: <em>divergence</em> (several different draft directions) then <em>convergence</em> (one chosen direction refined over multiple passes).</dd></div><div class="gloss-item"><dt>Judges</dt><dd>Two independent AI models vote on which image is stronger. Each pair is shown twice with the images swapped; only a choice that survives the swap counts, which filters out left/right positional bias.</dd></div><div class="gloss-item"><dt>Trace score (1–5)</dt><dd>A blind test: a separate model sees only the image — no headline — and guesses the news event. 1 = oblique/displaced (the target), 5 = directly illustrates the headline. It is a label, never a gate.</dd></div><div class="gloss-item"><dt>Blind read</dt><dd>What that headline-free viewer thought the image was about. The gap between the blind read and the real story is the point of the work.</dd></div><div class="gloss-item"><dt>Fidelity check</dt><dd>The actual selection gate: yes/no questions on vocabulary, register, and timing. A scene that fails is discarded and redrawn.</dd></div><div class="gloss-item"><dt>Fallback</dt><dd>If Anthropic errors, the call retries then fails over to OpenAI. The run still finishes but is flagged as degraded in Incidents.</dd></div></dl>
+  </details>
+  <p class="section-explainer" style="margin-top:1rem">Jump to any section using the bar at the top. Hover any <span class="tip" data-tip="Like this — dotted-underline terms and stat numbers carry a plain-language explanation on hover.">dotted term</span> for a definition; click any image to enlarge it with its full analysis.</p>
+</section>
 
   <section>
   <h2 class="section-header" id="incidents">Incidents &amp; Fallbacks</h2>
@@ -497,7 +532,7 @@
 <div class="session">
   
 <article class="artwork-card artwork-selected">
-  <div class="artwork-img"><img src="renders/vince_20260619_004_macron-calls-vigilance-western.jpg" alt="Warnings Melt Before Heeded" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260619_004_macron-calls-vigilance-western.jpg" alt="Warnings Melt Before Heeded" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260619_004_macron-calls-vigilance-western"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-selected">selected</span> <span class="badge badge-phase">convergence</span> Warnings Melt Before Heeded</h3>
     <p class="artwork-subtitle">2026 06 19: Macron calls for vigilance as western Europe faces second heatwave of year</p>
@@ -619,7 +654,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 <div class="session">
   
 <article class="artwork-card artwork-selected">
-  <div class="artwork-img"><img src="renders/vince_20260618_006_construction-equipment-multina.jpg" alt="Corporate Teeth in the Rubble" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260618_006_construction-equipment-multina.jpg" alt="Corporate Teeth in the Rubble" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260618_006_construction-equipment-multina"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-selected">selected</span> <span class="badge badge-phase">convergence</span> Corporate Teeth in the Rubble</h3>
     <p class="artwork-subtitle">2026 06 18: Construction equipment multinationals may be aiding Israeli war crimes, experts say</p>
@@ -771,7 +806,7 @@ Replace the golden-hour light with flat overhead noon to strip the scene of beau
 <div class="session">
   
 <article class="artwork-card artwork-selected">
-  <div class="artwork-img"><img src="renders/vince_20260617_004_they-forced-marriage-abused.jpg" alt="Where the Road Refuses" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260617_004_they-forced-marriage-abused.jpg" alt="Where the Road Refuses" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260617_004_they-forced-marriage-abused"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-selected">selected</span> <span class="badge badge-phase">convergence</span> Where the Road Refuses</h3>
     <p class="artwork-subtitle">2026 06 17: They were forced into marriage and abused. Now women facing exploitation in China have a glimmer of hope</p>
@@ -928,7 +963,7 @@ The horizontal figure in the foreground — not in the prompt — creates an inv
 <div class="session">
   
 <article class="artwork-card artwork-selected">
-  <div class="artwork-img"><img src="renders/vince_20260616_004_iran-deal-end-war.jpg" alt="Same Thirst, Same Crack" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260616_004_iran-deal-end-war.jpg" alt="Same Thirst, Same Crack" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260616_004_iran-deal-end-war"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-selected">selected</span> <span class="badge badge-phase">convergence</span> Same Thirst, Same Crack</h3>
     <p class="artwork-subtitle">2026 06 16: US and Iran deal to end war allows Tehran to sell oil and fuel – Middle East crisis live</p>
@@ -1080,7 +1115,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 <div class="session">
   
 <article class="artwork-card artwork-selected">
-  <div class="artwork-img"><img src="renders/vince_20260615_004_argentinian-activist-who-spent.jpg" alt="Vigil Without an Answer" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260615_004_argentinian-activist-who-spent.jpg" alt="Vigil Without an Answer" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260615_004_argentinian-activist-who-spent"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-selected">selected</span> <span class="badge badge-phase">convergence</span> Vigil Without an Answer</h3>
     <p class="artwork-subtitle">2026 06 15: Argentinian activist who spent 50 years looking for disappeared son dies</p>
@@ -1194,7 +1229,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 <div class="session">
   
 <article class="artwork-card artwork-selected">
-  <div class="artwork-img"><img src="renders/vince_20260614_006_growing-risk-thousands-buried.jpg" alt="What the Hands Remembered" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260614_006_growing-risk-thousands-buried.jpg" alt="What the Hands Remembered" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260614_006_growing-risk-thousands-buried"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-selected">selected</span> <span class="badge badge-phase">convergence</span> What the Hands Remembered</h3>
     <p class="artwork-subtitle">2026 06 14: Growing risk that thousands buried in Gaza’s rubble may never be identified, says Red Cross</p>
@@ -1336,7 +1371,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 <div class="session">
   
 <article class="artwork-card artwork-selected">
-  <div class="artwork-img"><img src="renders/vince_20260613_004_philippines-picks-pieces-stron.jpg" alt="Still Measuring the Loss" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260613_004_philippines-picks-pieces-stron.jpg" alt="Still Measuring the Loss" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260613_004_philippines-picks-pieces-stron"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-selected">selected</span> <span class="badge badge-phase">convergence</span> Still Measuring the Loss</h3>
     <p class="artwork-subtitle">2026 06 13: Philippines picks up the pieces after strongest earthquake in decades </p>
@@ -1448,7 +1483,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 </div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260609_007_cuba-integrated-test.png" alt="cuba-integrated-test" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260609_007_cuba-integrated-test.png" alt="cuba-integrated-test" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260609_007_cuba-integrated-test"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug"><span class="badge badge-phase">integrated-test</span> cuba-integrated-test</h3>
     <p class="artwork-subtitle">2026 06 09: No electricity, no gas, no sleep: Cubans on edge amid endless outages</p>
@@ -1477,7 +1512,7 @@ Hyper-photorealistic, medium-format, deep grain in the darkness. Every surface e
 <div class="session">
   
 <article class="artwork-card artwork-selected">
-  <div class="artwork-img"><img src="renders/vince_20260609_005_electricity-gas-sleep-cubans.jpg" alt="Hollow Hours, Still Warm" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260609_005_electricity-gas-sleep-cubans.jpg" alt="Hollow Hours, Still Warm" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260609_005_electricity-gas-sleep-cubans"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-selected">selected</span> <span class="badge badge-phase">convergence</span> Hollow Hours, Still Warm</h3>
     <p class="artwork-subtitle">2026 06 09: No electricity, no gas, no sleep: Cubans on edge amid endless outages</p>
@@ -1619,7 +1654,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 <div class="session">
   
 <article class="artwork-card artwork-selected">
-  <div class="artwork-img"><img src="renders/vince_20260608_005_kuwait-bahrain-iran-exchange.jpg" alt="Neither Moved" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260608_005_kuwait-bahrain-iran-exchange.jpg" alt="Neither Moved" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260608_005_kuwait-bahrain-iran-exchange"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-selected">selected</span> <span class="badge badge-phase">convergence</span> Neither Moved</h3>
     <p class="artwork-subtitle">2026 06 08: Kuwait and Bahrain targeted by Iran after exchange of fire with US</p>
@@ -1744,7 +1779,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 <div class="session">
   
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260608_010_chornobyl-drone-nuclear-fuel.jpg" alt="The Light Is Still On" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260608_010_chornobyl-drone-nuclear-fuel.jpg" alt="The Light Is Still On" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260608_010_chornobyl-drone-nuclear-fuel"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-phase">convergence</span> The Light Is Still On</h3>
     <p class="artwork-subtitle">2026 06 08: Russian drone hits building storing spent nuclear fuel near Chornobyl</p>
@@ -1869,7 +1904,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 <div class="session">
   
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260606_009_pope-leo-reject-polarisation.jpg" alt="pope-leo-reject-polarisation" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260606_009_pope-leo-reject-polarisation.jpg" alt="pope-leo-reject-polarisation" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260606_009_pope-leo-reject-polarisation"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">pope-leo-reject-polarisation</h3>
     <p class="artwork-subtitle">2026 06 06: Pope Leo calls for leaders to reject polarisation as he begins Spanish tour</p>
@@ -1930,7 +1965,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 <div class="session">
   
 <article class="artwork-card artwork-selected">
-  <div class="artwork-img"><img src="renders/vince_20260606_006_palestinian-baby-shot-dead.jpg" alt="Still Above the Fence" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260606_006_palestinian-baby-shot-dead.jpg" alt="Still Above the Fence" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260606_006_palestinian-baby-shot-dead"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-selected">selected</span> Still Above the Fence</h3>
     <p class="artwork-subtitle">2026 06 06: Palestinian baby shot dead by Israeli troops in occupied West Bank</p>
@@ -2017,7 +2052,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 </div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_nbp_s3n04-ghost-handprints.jpg" alt="The Letter" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_nbp_s3n04-ghost-handprints.jpg" alt="The Letter" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_nbp_s3n04-ghost-handprints"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title">The Letter</h3>
     <p class="artwork-subtitle">2026 06 02: British couple jailed in Iran have lost appeal against convictions, family say</p>
@@ -2053,7 +2088,7 @@ Hyper-photorealistic documentary. Both bikes equally prominent in the foreground
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_nbp_s3n03-ulocked-map.jpg" alt="nbp_s3n03-ulocked-map" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_nbp_s3n03-ulocked-map.jpg" alt="nbp_s3n03-ulocked-map" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_nbp_s3n03-ulocked-map"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">nbp_s3n03-ulocked-map</h3>
     <p class="artwork-subtitle">2026 06 02: British couple jailed in Iran have lost appeal against convictions, family say</p>
@@ -2089,7 +2124,7 @@ Hyper-photorealistic, medium-format documentary. Both bikes in full frame. The w
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_nbp_s3n02-two-bmws.jpg" alt="nbp_s3n02-two-bmws" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_nbp_s3n02-two-bmws.jpg" alt="nbp_s3n02-two-bmws" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_nbp_s3n02-two-bmws"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">nbp_s3n02-two-bmws</h3>
     <p class="artwork-subtitle">2026 06 02: British couple jailed in Iran have lost appeal against convictions, family say</p>
@@ -2125,7 +2160,7 @@ Hyper-photorealistic documentary. Both bikes must be equally visible and framing
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_nbp_s3n01-motorcycles.jpg" alt="nbp_s3n01-motorcycles" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_nbp_s3n01-motorcycles.jpg" alt="nbp_s3n01-motorcycles" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_nbp_s3n01-motorcycles"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">nbp_s3n01-motorcycles</h3>
     <p class="artwork-subtitle">2026 06 02: British couple jailed in Iran have lost appeal against convictions, family say</p>
@@ -2161,7 +2196,7 @@ Hyper-photorealistic documentary photography. The motorcycles are in crisp foreg
 </article></div>
 <div class="session">
 <article class="artwork-card artwork-selected">
-  <div class="artwork-img"><img src="renders/vince_20260602_020_s3g04-world-map.jpg" alt="Where the Map Ends" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_020_s3g04-world-map.jpg" alt="Where the Map Ends" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_020_s3g04-world-map"></div>
   <div class="artwork-meta">
     <h3 class="artwork-title"><span class="badge badge-selected">selected</span> Where the Map Ends</h3>
     <p class="artwork-subtitle">2026 06 02: British couple jailed in Iran have lost appeal against convictions, family say</p>
@@ -2200,7 +2235,7 @@ Hyper-photorealistic documentary. Camera slightly low — the bikes frame the sk
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_019_s3g03-ulocked.jpg" alt="s3g03-ulocked" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_019_s3g03-ulocked.jpg" alt="s3g03-ulocked" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_019_s3g03-ulocked"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">s3g03-ulocked</h3>
     <p class="artwork-subtitle">2026 06 02: British couple jailed in Iran have lost appeal against convictions, family say</p>
@@ -2239,7 +2274,7 @@ Hyper-photorealistic documentary. The large photograph of the couple is in sharp
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_018_s3g02-handprints.jpg" alt="s3g02-handprints" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_018_s3g02-handprints.jpg" alt="s3g02-handprints" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_018_s3g02-handprints"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">s3g02-handprints</h3>
     <p class="artwork-subtitle">2026 06 02: British couple jailed in Iran have lost appeal against convictions, family say</p>
@@ -2278,7 +2313,7 @@ Hyper-photorealistic documentary photography. Medium-format quality — the deta
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_017_s3g01-motorcycles.jpg" alt="s3g01-motorcycles" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_017_s3g01-motorcycles.jpg" alt="s3g01-motorcycles" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_017_s3g01-motorcycles"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">s3g01-motorcycles</h3>
     <p class="artwork-subtitle">2026 06 02: British couple jailed in Iran have lost appeal against convictions, family say</p>
@@ -2315,7 +2350,7 @@ Hyper-photorealistic documentary photography. The motorcycles are in crisp foreg
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_016_s2-06-mural-style.jpg" alt="s2-06-mural-style" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_016_s2-06-mural-style.jpg" alt="s2-06-mural-style" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_016_s2-06-mural-style"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">s2-06-mural-style</h3>
     <p class="artwork-subtitle">2026 06 02: Death of Congolese man Yves Sakila renews scrutiny of race relations in Ireland</p>
@@ -2347,7 +2382,7 @@ Rendered as a Chicano mural style meets documentary photography. Saturated color
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_015_s2-05-mural-watches.jpg" alt="s2-05-mural-watches" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_015_s2-05-mural-watches.jpg" alt="s2-05-mural-watches" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_015_s2-05-mural-watches"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">s2-05-mural-watches</h3>
     <p class="artwork-subtitle">2026 06 02: Death of Congolese man Yves Sakila renews scrutiny of race relations in Ireland</p>
@@ -2381,7 +2416,7 @@ Hyper-photorealistic documentary photograph. Hard noon sun. The hand in the fore
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_014_s2-04-eyes-on-you.jpg" alt="s2-04-eyes-on-you" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_014_s2-04-eyes-on-you.jpg" alt="s2-04-eyes-on-you" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_014_s2-04-eyes-on-you"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">s2-04-eyes-on-you</h3>
     <p class="artwork-subtitle">2026 06 02: Death of Congolese man Yves Sakila renews scrutiny of race relations in Ireland</p>
@@ -2413,7 +2448,7 @@ Hyper-photorealistic documentary photograph. Hard flat noon sun, strong lens fla
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_013_s2-03-same-face.jpg" alt="s2-03-same-face" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_013_s2-03-same-face.jpg" alt="s2-03-same-face" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_013_s2-03-same-face"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">s2-03-same-face</h3>
     <p class="artwork-subtitle">2026 06 02: Death of Congolese man Yves Sakila renews scrutiny of race relations in Ireland</p>
@@ -2447,7 +2482,7 @@ Hyper-photorealistic documentary photograph. Hard flat noon sun, no shadows soft
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_012_s2-02-mural-stopped.jpg" alt="s2-02-mural-stopped" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_012_s2-02-mural-stopped.jpg" alt="s2-02-mural-stopped" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_012_s2-02-mural-stopped"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">s2-02-mural-stopped</h3>
     <p class="artwork-subtitle">2026 06 02: Death of Congolese man Yves Sakila renews scrutiny of race relations in Ireland</p>
@@ -2479,7 +2514,7 @@ Hyper-photorealistic. Documentary photograph quality — grain, the slight lens 
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_011_s2-01-broad-daylight.jpg" alt="s2-01-broad-daylight" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_011_s2-01-broad-daylight.jpg" alt="s2-01-broad-daylight" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_011_s2-01-broad-daylight"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">s2-01-broad-daylight</h3>
     <p class="artwork-subtitle">2026 06 02: Death of Congolese man Yves Sakila renews scrutiny of race relations in Ireland</p>
@@ -2509,7 +2544,7 @@ Hyper-photorealistic documentary photograph. Extremely hard noon sun — the pav
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_010_iter-06-sign-clear.jpg" alt="iter-06-sign-clear" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_010_iter-06-sign-clear.jpg" alt="iter-06-sign-clear" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_010_iter-06-sign-clear"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">iter-06-sign-clear</h3>
     <p class="artwork-subtitle">2026 06 02: Middle East crisis: Kuwait missile/drone attack — ceasefire collapse</p>
@@ -2541,7 +2576,7 @@ Hyper-photorealistic press photography. Noon sun, direct, hard, overexposed on t
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_009_iter-05-facing-camera.jpg" alt="iter-05-facing-camera" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_009_iter-05-facing-camera.jpg" alt="iter-05-facing-camera" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_009_iter-05-facing-camera"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">iter-05-facing-camera</h3>
     <p class="artwork-subtitle">2026 06 02: Middle East crisis: Kuwait missile/drone attack — ceasefire collapse</p>
@@ -2573,7 +2608,7 @@ Hyper-photorealistic press photograph. Direct noon sun — harsh, no fill, the w
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_008_iter-04-kneeling.jpg" alt="iter-04-kneeling" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_008_iter-04-kneeling.jpg" alt="iter-04-kneeling" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_008_iter-04-kneeling"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">iter-04-kneeling</h3>
     <p class="artwork-subtitle">2026 06 02: Middle East crisis: Kuwait missile/drone attack — ceasefire collapse</p>
@@ -2603,7 +2638,7 @@ Hyper-photorealistic medium-format press photography. Hard, direct noon sunlight
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_007_iter-03-father-child.jpg" alt="iter-03-father-child" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_007_iter-03-father-child.jpg" alt="iter-03-father-child" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_007_iter-03-father-child"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">iter-03-father-child</h3>
     <p class="artwork-subtitle">2026 06 02: Middle East crisis: Kuwait missile/drone attack — ceasefire collapse</p>
@@ -2633,7 +2668,7 @@ Hyper-photorealistic medium-format documentary photography. Hard noon sun. Shall
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_006_iter-02-drone-crash.jpg" alt="iter-02-drone-crash" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_006_iter-02-drone-crash.jpg" alt="iter-02-drone-crash" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_006_iter-02-drone-crash"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">iter-02-drone-crash</h3>
     <p class="artwork-subtitle">2026 06 02: Middle East crisis: Kuwait missile/drone attack — ceasefire collapse</p>
@@ -2659,7 +2694,7 @@ Noon sun, direct and brutally hard. Hyper-photorealistic documentary photograph,
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_005_iter-01-drone-landing.jpg" alt="iter-01-drone-landing" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_005_iter-01-drone-landing.jpg" alt="iter-01-drone-landing" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_005_iter-01-drone-landing"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">iter-01-drone-landing</h3>
     <p class="artwork-subtitle">2026 06 02: Middle East crisis: Kuwait missile/drone attack — ceasefire collapse</p>
@@ -2681,7 +2716,7 @@ Hyper-photorealistic digital collage. Medium-format documentary photography aest
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_004_missile-horrorvacui-max.jpg" alt="missile-horrorvacui-max" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_004_missile-horrorvacui-max.jpg" alt="missile-horrorvacui-max" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_004_missile-horrorvacui-max"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">missile-horrorvacui-max</h3>
     <p class="artwork-subtitle">2026 06 02: Middle East crisis live: Kuwait reports missile and drone attack; US says it struck Iran radar sites over weekend</p>
@@ -2706,7 +2741,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_003_ebola-horrorvacui.jpg" alt="ebola-horrorvacui" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_003_ebola-horrorvacui.jpg" alt="ebola-horrorvacui" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_003_ebola-horrorvacui"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">ebola-horrorvacui</h3>
     <p class="artwork-subtitle">2026 06 02: WHO calls for community cooperation to contain Ebola outbreak in DRC — protests over protocols for handling victims' bodies in Ituri province</p>
@@ -2731,7 +2766,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_002_castle-horrorvacui.jpg" alt="castle-horrorvacui" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_002_castle-horrorvacui.jpg" alt="castle-horrorvacui" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_002_castle-horrorvacui"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">castle-horrorvacui</h3>
     <p class="artwork-subtitle">2026 06 02: European leaders condemn Israel's deepening incursion into Lebanon — military captures medieval Beaufort castle, deepest in 26 years</p>
@@ -2756,7 +2791,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260602_001_missile-horrorvacui.jpg" alt="missile-horrorvacui" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260602_001_missile-horrorvacui.jpg" alt="missile-horrorvacui" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260602_001_missile-horrorvacui"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">missile-horrorvacui</h3>
     <p class="artwork-subtitle">2026 06 02: Middle East crisis live: Kuwait reports missile and drone attack; US says it struck Iran radar sites over weekend</p>
@@ -2781,7 +2816,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260601_006_ebola-marigolds-sheet.jpg" alt="ebola-marigolds-sheet" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260601_006_ebola-marigolds-sheet.jpg" alt="ebola-marigolds-sheet" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260601_006_ebola-marigolds-sheet"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">ebola-marigolds-sheet</h3>
     <p class="artwork-subtitle">2026 06 01: WHO calls for community cooperation to contain Ebola outbreak in DRC</p>
@@ -2806,7 +2841,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260601_005_castle-erupting-bungalows.jpg" alt="castle-erupting-bungalows" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260601_005_castle-erupting-bungalows.jpg" alt="castle-erupting-bungalows" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260601_005_castle-erupting-bungalows"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">castle-erupting-bungalows</h3>
     <p class="artwork-subtitle">2026 06 01: European leaders condemn Israel's deepening incursion into Lebanon — military captures medieval Beaufort castle</p>
@@ -2831,7 +2866,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 </article></div>
 <div class="session">
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260601_004_missile-frozen-7eleven.jpg" alt="missile-frozen-7eleven" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260601_004_missile-frozen-7eleven.jpg" alt="missile-frozen-7eleven" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260601_004_missile-frozen-7eleven"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">missile-frozen-7eleven</h3>
     <p class="artwork-subtitle">2026 06 01: Middle East crisis live: Kuwait reports missile and drone attack; US says it struck Iran radar sites over weekend</p>
@@ -2858,7 +2893,7 @@ No legible text anywhere. No news graphics, banners, or captions. No brand logos
 <div class="session">
   
 <article class="artwork-card">
-  <div class="artwork-img"><img src="renders/vince_20260601_001_middle-east-crisis-live.jpg" alt="middle-east-crisis-live" loading="lazy"></div>
+  <div class="artwork-img"><img src="renders/vince_20260601_001_middle-east-crisis-live.jpg" alt="middle-east-crisis-live" loading="lazy" class="zoomable hero-zoom" data-key="vince_20260601_001_middle-east-crisis-live"></div>
   <div class="artwork-meta">
     <h3 class="artwork-slug">middle-east-crisis-live</h3>
     <p class="artwork-date">01 Jun 2026, 04:18 UTC</p>
@@ -6686,6 +6721,41 @@ Used: 2026-06-19 — Macron calls for vigilance as western Europe faces second h
     fig.style.cursor = 'pointer';
     fig.addEventListener('click', function() { openLightbox(key); });
   });
+  // hero (selected final) images open the same lightbox
+  document.querySelectorAll('img.hero-zoom[data-key]').forEach(function(img) {
+    img.addEventListener('click', function() { openLightbox(img.dataset.key); });
+  });
+})();
+
+// ── tooltip engine: one shared box, clamped to the viewport (no clipping) ──
+(function() {
+  var box = document.createElement('div');
+  box.id = 'tipbox';
+  document.body.appendChild(box);
+  var hideT;
+  function place(el) {
+    var tip = el.getAttribute('data-tip');
+    if (!tip) return;
+    clearTimeout(hideT);
+    box.textContent = tip;
+    box.classList.add('show');
+    var r = el.getBoundingClientRect();
+    var bw = box.offsetWidth, bh = box.offsetHeight;
+    var left = r.left + r.width / 2 - bw / 2;
+    left = Math.max(8, Math.min(left, window.innerWidth - bw - 8));
+    var top = r.top - bh - 8;                 // prefer above
+    if (top < 8) top = r.bottom + 8;          // flip below if no room
+    box.style.left = left + 'px';
+    box.style.top = top + 'px';
+  }
+  function hide() { hideT = setTimeout(function() { box.classList.remove('show'); }, 60); }
+  document.querySelectorAll('[data-tip]').forEach(function(el) {
+    el.addEventListener('mouseenter', function() { place(el); });
+    el.addEventListener('mouseleave', hide);
+    el.addEventListener('focus', function() { place(el); });
+    el.addEventListener('blur', hide);
+  });
+  window.addEventListener('scroll', function() { box.classList.remove('show'); }, true);
 })();
 </script>
 </body>
