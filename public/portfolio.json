@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "oil-prices-fall-peace",
+      "title": "Glut Finding Its Channel",
+      "headline": "Oil prices fall after peace deal signed – as it happened",
+      "date": "2026-06-20",
+      "image": "artworks/oil-prices-fall-peace.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "macron-calls-vigilance-western",
       "title": "Warnings Melt Before Heeded",
       "headline": "Macron calls for vigilance as western Europe faces second heatwave of year",
