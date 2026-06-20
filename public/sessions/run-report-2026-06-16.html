@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Run Report · 2026-06-16 · Same Thirst, Same Crack</title>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --surface2: #1e1e1e;
+      --border: #2a2a2a;
+      --border2: #333;
+      --gold: #c8a46e;
+      --gold-dim: #8a6e42;
+      --text: #e0e0e0;
+      --text-muted: #7a7a7a;
+      --text-dim: #555;
+      --green: #4a9e6a;
+      --green-dim: #1e3d2a;
+      --red: #9e4a4a;
+      --red-dim: #3d1e1e;
+      --orange: #c87d4a;
+      --orange-dim: #3d2a1e;
+      --blue: #4a7ac8;
+      --blue-dim: #1e2a3d;
+      --purple: #7a4ac8;
+      --purple-dim: #2a1e3d;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* ── Header ── */
+    .report-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 28px;
+      margin-bottom: 36px;
+    }
+    .report-header .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .report-header h1 {
+      font-size: 28px;
+      font-weight: 300;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .report-header .subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .meta-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .meta-chip .label { color: var(--text-dim); }
+    .meta-chip .value { color: var(--text); font-weight: 500; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .badge-success { background: var(--green-dim); color: var(--green); }
+    .badge-divergence { background: var(--purple-dim); color: var(--purple); }
+    .badge-convergence { background: var(--blue-dim); color: var(--blue); }
+    .badge-selected { background: var(--gold-dim); color: var(--gold); }
+    .badge-fail { background: var(--red-dim); color: var(--red); }
+    .badge-pass { background: var(--green-dim); color: var(--green); }
+
+    /* ── Section headings ── */
+    .section {
+      margin-bottom: 48px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .step-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .section-meta {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Story context ── */
+    .story-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 4px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .story-block .story-hed {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .story-block .story-source {
+      font-size: 11px;
+      color: var(--gold-dim);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .story-block .story-body {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* ── Anchor ── */
+    .anchor-block {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+    .anchor-block .anchor-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .anchor-block .anchor-text {
+      font-size: 14px;
+      color: var(--text);
+      font-style: italic;
+      line-height: 1.7;
+    }
+    .symbol-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .symbol-chip {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      padding: 2px 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Fetch stats ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .stat-card .stat-val {
+      font-size: 28px;
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .stat-card .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Scene cards ── */
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .scene-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .scene-card.selected-direction {
+      border-color: var(--purple);
+    }
+    .scene-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .scene-card-header .scene-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+    .scene-body { padding: 14px; }
+    .scene-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+    .blind-block, .critique-block {
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    .block-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+    .block-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .trace-score {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+    }
+    .trace-pip {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: var(--border2);
+    }
+    .trace-pip.filled { background: var(--gold); }
+    .trace-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+
+    /* ── Image render cards ── */
+    .render-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 800px) {
+      .render-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .render-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .render-card.selected-card {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px var(--gold-dim);
+    }
+    .render-img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      display: block;
+      background: var(--surface2);
+    }
+    .render-meta {
+      padding: 10px 12px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .render-meta .render-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .render-meta .render-dims {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .render-body { padding: 12px; }
+    .render-field { margin-bottom: 10px; }
+    .render-field:last-child { margin-bottom: 0; }
+    .render-field .field-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 3px;
+    }
+    .render-field .field-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── Direction selection box ── */
+    .direction-box {
+      background: var(--purple-dim);
+      border: 1px solid var(--purple);
+      border-radius: 4px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .direction-box .dir-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 6px;
+    }
+    .direction-box .dir-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Tournament bracket ── */
+    .tournament-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .matchup-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 12px 14px;
+      font-size: 12px;
+    }
+    .matchup-card .match-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .matchup-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .matchup-contender {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .contender-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .contender-label.winner { color: var(--gold); font-weight: 700; }
+    .vote-tally {
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-dim);
+    }
+    .vote-tally.winning { color: var(--green); }
+    .match-reason {
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      font-style: italic;
+    }
+    .judge-chips {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+    .judge-chip {
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 2px;
+      font-weight: 600;
+    }
+    .judge-chip.claude { background: #1a1a2e; color: #7a9ac8; }
+    .judge-chip.gpt { background: #1a2a1a; color: #6aaa6a; }
+    .judge-chip.abstain { background: var(--surface2); color: var(--text-dim); }
+
+    /* ── Compare boxes ── */
+    .compare-box {
+      background: var(--blue-dim);
+      border: 1px solid var(--blue);
+      border-radius: 4px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      font-size: 12px;
+    }
+    .compare-box .cmp-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+    .compare-box .cmp-text {
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .compare-box .cmp-result {
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ── Prompt accordion ── */
+    details {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    summary {
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      user-select: none;
+      background: var(--surface2);
+      list-style: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+      content: '▶';
+      font-size: 9px;
+      margin-right: 8px;
+      color: var(--gold-dim);
+      display: inline-block;
+      transition: transform 0.15s;
+    }
+    details[open] summary::before { transform: rotate(90deg); }
+    .details-body {
+      padding: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      white-space: pre-wrap;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    .prompt-section { margin-bottom: 10px; }
+    .prompt-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+    .prompt-section-text {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.7;
+      padding: 10px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+
+    /* ── Selected final box ── */
+    .selected-box {
+      background: linear-gradient(135deg, #1a1400 0%, #0d0d0d 60%);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 700px) { .selected-box { grid-template-columns: 1fr; } }
+    .selected-img-wrap {
+      width: 200px;
+      flex-shrink: 0;
+    }
+    .selected-img-wrap img {
+      width: 100%;
+      border-radius: 3px;
+      display: block;
+    }
+    .selected-info { }
+    .selected-title {
+      font-size: 22px;
+      font-weight: 300;
+      color: #fff;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+    .selected-badges { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+    .selected-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-style: italic;
+      margin-bottom: 14px;
+    }
+
+    /* ── Flow diagram ── */
+    .flow-diagram {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 36px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      min-width: 100px;
+    }
+    .flow-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 2px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+    .flow-icon.done { border-color: var(--green); }
+    .flow-step-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.4;
+    }
+    .flow-step-sublabel {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: 2px;
+    }
+    .flow-arrow {
+      width: 40px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--border2);
+      font-size: 18px;
+      padding-top: 12px;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      border-left: 2px solid var(--border2);
+      margin-left: 12px;
+      padding-left: 20px;
+      margin-bottom: 24px;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border2);
+      border: 2px solid var(--bg);
+    }
+    .timeline-item.done::before { background: var(--green); }
+    .timeline-item .tl-time {
+      font-size: 10px;
+      color: var(--text-dim);
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 2px;
+    }
+    .timeline-item .tl-label {
+      font-size: 13px;
+      color: var(--text);
+    }
+    .timeline-item .tl-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
+
+    /* ── Phase header ── */
+    .phase-header {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .phase-header span { color: var(--text-muted); }
+
+    /* ── Note box ── */
+    .note-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--text-dim);
+      border-radius: 3px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .note-box strong { color: var(--text); }
+
+    /* ── Accident highlight ── */
+    .accident-box {
+      background: var(--orange-dim);
+      border: 1px solid var(--orange);
+      border-radius: 4px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .accident-box .acc-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 4px;
+    }
+
+    /* ── Lightbox ── */
+    dialog#lb {
+      padding: 0;
+      border: none;
+      background: transparent;
+      max-width: 92vw;
+      max-height: 94vh;
+      overflow: visible;
+    }
+    dialog#lb::backdrop {
+      background: rgba(0,0,0,0.88);
+    }
+    dialog#lb img {
+      display: block;
+      max-width: 90vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 3px;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.8);
+    }
+    dialog#lb .lb-close {
+      position: fixed;
+      top: 18px;
+      right: 22px;
+      font-size: 32px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1;
+      cursor: pointer;
+      user-select: none;
+      background: none;
+      border: none;
+    }
+    dialog#lb .lb-close:hover { color: #fff; }
+    img.zoomable { cursor: zoom-in; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <div class="report-header">
+    <div class="eyebrow">DeYaanga · Vince · Image Pipeline · Run Report</div>
+    <h1>"Same Thirst, Same Crack"</h1>
+    <div class="subtitle">Run of 2026-06-16 (PDT) · Iran deal / Sirik water crisis</div>
+    <div class="meta-row">
+      <div class="meta-chip"><span class="label">Date</span><span class="value">Mon 16 Jun 2026, 18:27 UTC</span></div>
+      <div class="meta-chip"><span class="label">Duration</span><span class="value">~22 min</span></div>
+      <div class="meta-chip"><span class="label">Renders</span><span class="value">6 (3 divergence + 3 convergence)</span></div>
+      <div class="meta-chip"><span class="label">Image model</span><span class="value">GPT Image 2 via fal.ai</span></div>
+      <div class="meta-chip"><span class="label">Text models</span><span class="value">Claude Sonnet 4.6 / Haiku · GPT-4o judge</span></div>
+      <div class="meta-chip"><span class="label">Status</span><span class="badge badge-success">complete</span></div>
+    </div>
+  </div>
+
+  <!-- ── PIPELINE FLOW ── -->
+  <div class="flow-diagram">
+    <div class="flow-step">
+      <div class="flow-icon done">📰</div>
+      <div class="flow-step-label">Fetch News</div>
+      <div class="flow-step-sublabel">50 → 46 stories</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">✍️</div>
+      <div class="flow-step-label">Assemble Prompt</div>
+      <div class="flow-step-sublabel">rank · anchor · 3 scenes</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">🎨</div>
+      <div class="flow-step-label">Divergence</div>
+      <div class="flow-step-sublabel">3 drafts 512×640</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">🔀</div>
+      <div class="flow-step-label">Select Direction</div>
+      <div class="flow-step-sublabel">draft #2 chosen</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">🔁</div>
+      <div class="flow-step-label">Convergence</div>
+      <div class="flow-step-sublabel">3 passes 1024×1280</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">⭐</div>
+      <div class="flow-step-label">Select Winner</div>
+      <div class="flow-step-sublabel">#4 · first pass wins</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="flow-icon done">📊</div>
+      <div class="flow-step-label">Build + Push</div>
+      <div class="flow-step-sublabel">dashboard · git</div>
+    </div>
+  </div>
+
+  <!-- ── SELECTED ARTWORK ── -->
+  <div class="selected-box">
+    <div class="selected-img-wrap">
+      <img src="run-2026-06-16/vince_20260616_004_iran-deal-end-war.jpg" alt="The Pipe Held Nothing" loading="lazy">
+    </div>
+    <div class="selected-info">
+      <div class="selected-title">"Same Thirst, Same Crack"</div>
+      <div class="selected-badges">
+        <span class="badge badge-selected">Selected</span>
+        <span class="badge badge-convergence">Convergence Pass 1</span>
+        <span class="badge" style="background:#1a1a1a;color:#666;">1024×1280</span>
+        <span class="badge" style="background:#1a1a1a;color:#666;">GPT Image 2</span>
+      </div>
+      <div class="selected-note">
+        "The pipe as both tomb and water-conduit directly activates the anchor's destroyed water infrastructure, the indifferent passersby literalize the 'offering them nothing' of the peace deal, and the sunset light over palm trees delivers the cruel beauty of a place the world considers elsewhere."
+      </div>
+      <div style="font-size:12px;color:var(--text-dim);">
+        File: <code style="color:var(--text-muted);">vince_20260616_004_iran-deal-end-war.jpg</code><br>
+        Iteration: <code style="color:var(--text-muted);">4 of 6 — first convergence pass</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       STEP 1: FETCH NEWS
+  ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">1</div>
+      <div class="section-title">fetch_news.js — Guardian World Section</div>
+      <div class="section-meta">18:27 UTC · &lt;1 min</div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-val">50</div>
+        <div class="stat-label">Stories fetched</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">46</div>
+        <div class="stat-label">After noise filter</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">4</div>
+        <div class="stat-label">Stories dropped</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">14+</div>
+        <div class="stat-label">Iran/peace deal variants</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      The 46 candidate stories included more than a dozen articles about the US–Iran peace deal signed that morning — the live blog, multiple reaction pieces, analysis, a G7 sidebar. The pipeline's story-ranking and silence-tracker logic had to select a single anchor rather than the loudest headline.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       STEP 2: ASSEMBLE PROMPT
+  ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">2</div>
+      <div class="section-title">assemble_prompt.js — Story selection, anchor extraction, scene generation</div>
+      <div class="section-meta">~18:27 UTC · 2–3 min</div>
+    </div>
+
+    <div class="story-block">
+      <div class="story-source">The Guardian · World · 2026-06-16</div>
+      <div class="story-hed">'Everyone is angry for different reasons': scepticism in Iran as peace deal nears</div>
+      <div class="story-body">
+        In the rural town of Sirik, in southern Iran, temperatures over the past week have climbed to 45°C (113°F), and residents were still queueing to fill buckets of water days after US strikes reportedly damaged two drinking water facilities serving nearby villages. Amid the water shortages and the looming fear of war came news of a possible deal between Washington and Tehran. But for those struggling to pick up the pieces in the aftermath, the announcement brought little relief. "I fear the uncertainty surrounding [the peace deal]," said Nahid*, a mother in Sirik, who described how villagers were queueing for water in the same heat that had forced children indoors for weeks.
+      </div>
+    </div>
+
+    <div class="anchor-block">
+      <div class="anchor-label">Anchor — irreducible moment</div>
+      <div class="anchor-text">"Days after strikes damaged their water facilities, villagers in a 45°C town queue with buckets while a dehydrated four-year-old cries, as news of an oil-for-peace deal arrives offering them nothing."</div>
+    </div>
+
+    <div class="anchor-block">
+      <div class="anchor-label">Symbol field — objects extracted</div>
+      <div class="symbol-chips">
+        <span class="symbol-chip">buckets</span>
+        <span class="symbol-chip">queue</span>
+        <span class="symbol-chip">cracked water pipe</span>
+        <span class="symbol-chip">punishing heat</span>
+        <span class="symbol-chip">empty oil drum</span>
+        <span class="symbol-chip">child's chafed skin</span>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:16px;">
+      The pipeline correctly avoided the headline-level framing (Trump, Hormuz, Netanyahu) in favour of the Sirik passage — the human body inside the geopolitical event. The story chosen for displacement was not the live blog but the granular reaction piece where the deal's inadequacy is felt at the level of a queueing child rather than at the level of a signing ceremony.
+    </p>
+
+    <p style="font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:16px;">
+      Three divergent scene ideas were generated from the anchor and symbol field, each translating the event into South Central LA register:
+    </p>
+
+    <ul style="font-size:13px;color:var(--text-muted);line-height:1.8;padding-left:20px;margin-bottom:0;">
+      <li><strong style="color:var(--text);">Scene A</strong> — The bucket queue: a recession of empty white buckets along a cracked stucco wall, merciless overhead noon light, no people</li>
+      <li><strong style="color:var(--text);">Scene B</strong> — Skin and pipe: a four-year-old's chapped forearm resting across a concrete ledge, cracks in skin rhyming with cracks in a nearby pipe</li>
+      <li><strong style="color:var(--text);">Scene C</strong> — Drum and lid: an empty steel drum with an undersized tin bucket propped upside-down on top — futility dressed as solution</li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       STEP 3: DIVERGENCE (3 drafts)
+  ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">3</div>
+      <div class="section-title">generate_image.js — Divergence Phase</div>
+      <div class="section-meta">18:27–18:33 UTC · 3 renders · 512×640</div>
+    </div>
+
+    <div class="note-box">
+      Three scenes generated simultaneously at draft resolution (512×640). Each uses the same anchor but arrives via a different object from the symbol field. Vision analysis, blind reverse test, and trace scoring run after each render.
+    </div>
+
+    <div class="phase-header">DIVERGENCE <span>— 3 drafts, 3 angles</span></div>
+
+    <div class="scene-grid">
+
+      <!-- Scene 1: Bucket queue -->
+      <div class="scene-card">
+        <div class="scene-card-header">
+          <span class="scene-num">DRAFT 001</span>
+          <span class="badge badge-divergence">Divergence</span>
+        </div>
+        <div class="scene-body">
+          <img src="run-2026-06-16/vince_20260616_001_iran-deal-end-war.jpg" alt="Draft 001 — Bucket queue" loading="lazy"
+            style="width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:3px;margin-bottom:12px;">
+
+          <div class="scene-text">A long recession of white plastic buckets along a cracked stucco wall — each spaced exactly one footstep apart, the line receding the full length of the frame. The first bucket is bone-dry, its bottom filmed with dust. Every bucket holds nothing but its own shadow. No people. One distant bucket has tipped on its side. The queue continues past it anyway.</div>
+
+          <div class="blind-block">
+            <div class="block-label">Vision analysis</div>
+            <div class="block-text">A long recession of white plastic buckets lines a cracked sidewalk against a heavily deteriorated stucco wall, beginning large in the lower-left foreground and diminishing in sharp perspective toward a warm-lit vanishing point. The wall's decay — plaster falling away to expose raw mud-brick — reads as structural thirst, the building itself desiccating in parallel with the people who set the buckets down. The light is not the flat overhead noon the prompt specified but rather a raking late-afternoon orange — it aestheticizes the queue rather than exhausting the viewer.</div>
+          </div>
+
+          <div class="accident-box">
+            <div class="acc-label">Accident</div>
+            The wall's decay — plaster falling away to expose raw mud-brick beneath — reads as structural thirst, the building itself desiccating in parallel with the people who set the buckets down. The prompt asked for nothing but the wall got desperate anyway.
+          </div>
+
+          <div class="critique-block">
+            <div class="block-label">Revision note</div>
+            <div class="block-text">The golden-hour light is emotionally seductive where it should be merciless — it aestheticizes the queue rather than exhausting the viewer. Change the light to flat white overhead noon, which shortens shadows to stubs and removes the beauty that is currently absorbing the weight the anchor needs to land.</div>
+          </div>
+
+          <div class="blind-block">
+            <div class="block-label">Blind reverse test — no caption, guess the event</div>
+            <div class="block-text" style="font-style:italic;">"A long row of empty white buckets lines a crumbling sidewalk along a weathered building at golden hour." — Event guessed: water shortage crisis</div>
+            <div class="trace-score">
+              <div class="trace-pip filled"></div>
+              <div class="trace-pip filled"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-label">Trace 2/5 — too direct on water scarcity</div>
+            </div>
+          </div>
+
+          <details style="margin-top:12px;">
+            <summary>Image generation prompt</summary>
+            <div class="details-body">A child's-size plastic bucket sits at the front of a long queue of identical buckets, each spaced exactly one footstep apart along a cracked stucco wall, the line receding the full length of the frame. The first bucket is bone-dry, its bottom filmed with the same pale dust that coats the wall behind it; every bucket holds nothing but its own shadow, shortened to a stub by the overhead noon sun. There are no people — only the buckets, arranged with the patience of those who set them down hours ago to hold a place. The afternoon light is flat and merciless, bleaching the colored plastic toward white, and the spacing of the line reads as a wait that has outlasted the reason for waiting. One distant bucket has tipped on its side. The queue continues past it anyway.</div>
+          </details>
+        </div>
+      </div>
+
+      <!-- Scene 2: Child's forearm — SELECTED DIRECTION -->
+      <div class="scene-card selected-direction">
+        <div class="scene-card-header">
+          <span class="scene-num">DRAFT 002</span>
+          <div style="display:flex;gap:6px;">
+            <span class="badge badge-divergence">Divergence</span>
+            <span class="badge" style="background:var(--purple-dim);color:var(--purple);border:1px solid var(--purple);">Direction →</span>
+          </div>
+        </div>
+        <div class="scene-body">
+          <img src="run-2026-06-16/vince_20260616_002_iran-deal-end-war.jpg" alt="Draft 002 — Child's forearm" loading="lazy"
+            style="width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:3px;margin-bottom:12px;">
+
+          <div class="scene-text">A four-year-old's bare forearm rests palm-up across a sun-warmed concrete ledge, the skin across the inner elbow and wrist chapped into a fine map of cracks — indistinguishable in close looking from the split running through the glazed surface of a pipe lying just beyond the hand. The two surfaces, skin and ceramic conduit, meet at the picture's center where the focus is sharpest, dust gathered identically in both sets of fissures.</div>
+
+          <div class="blind-block">
+            <div class="block-label">Vision analysis</div>
+            <div class="block-text">The skin of the inner forearm and wrist is visibly chapped, cracked into a fine reticulated map of fissures that catches dust in its channels, the surface reading simultaneously as skin and as parched earth. Two large concrete pipes lie horizontal on the ground, their cylindrical forms receding into soft focus while their surface fractures rhyme precisely with the cracks on the child's skin. The crack running across the nearest pipe's surface and the crack-map on the child's forearm converge at the frame's center with enough visual coherence that the comparison lands without annotation.</div>
+          </div>
+
+          <div class="accident-box">
+            <div class="acc-label">Accident</div>
+            The dust settled identically into the pipe's surface crack and the skin's fissure lines — an unplanned material rhyme that the camera caught rather than constructed, and it is the image's most honest moment.
+          </div>
+
+          <div class="critique-block">
+            <div class="block-label">Revision note</div>
+            <div class="block-text">The light is amber-golden rather than the prompt's "high white of midday casting almost no shadow" — this warmth slightly romanticizes the scene. Shift the light to bleached, shadowless overhead white to restore the flatness and refusal that the anchor requires.</div>
+          </div>
+
+          <div class="blind-block">
+            <div class="block-label">Blind reverse test</div>
+            <div class="block-text" style="font-style:italic;">"A dry, cracked forearm rests on a concrete ledge near large drainage pipes at sunset." — Event guessed: California drought crisis</div>
+            <div class="trace-score">
+              <div class="trace-pip filled"></div>
+              <div class="trace-pip filled"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-label">Trace 2/5 — reads drought but not geopolitics</div>
+            </div>
+          </div>
+
+          <details style="margin-top:12px;">
+            <summary>Image generation prompt</summary>
+            <div class="details-body">A four-year-old's bare forearm fills most of the frame, resting palm-up across a sun-warmed concrete lip, the skin across the inner elbow and wrist chapped into a fine map of cracks — and those cracks, in their branching and their dryness, are indistinguishable in close looking from the split running through the glazed surface of a pipe lying just beyond the hand. The two surfaces, child's skin and ceramic conduit, meet at the picture's center where the focus is sharpest, dust gathered identically in both sets of fissures. The light is the high white of midday, casting almost no shadow, refusing to soften anything. Behind, thrown out of focus, the dull curve of an empty drum holds the only deep tone in the frame. Nothing here is exaggerated in scale; the rhyme is found, not staged. The longer the eye stays, the harder it is to say which surface came first.</div>
+          </details>
+        </div>
+      </div>
+
+      <!-- Scene 3: Drum + lid -->
+      <div class="scene-card">
+        <div class="scene-card-header">
+          <span class="scene-num">DRAFT 003</span>
+          <span class="badge badge-divergence">Divergence</span>
+        </div>
+        <div class="scene-body">
+          <img src="run-2026-06-16/vince_20260616_003_iran-deal-end-war.jpg" alt="Draft 003 — Drum and lid" loading="lazy"
+            style="width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:3px;margin-bottom:12px;">
+
+          <div class="scene-text">An empty steel drum stands alone in a swept dirt yard, dented and rust-bloomed. Someone has propped a battered tin bucket upside-down over its open mouth like a lid that fits nothing — the bucket far too small, perched at a slight tilt. Heat shimmer rises off the drum's shoulder. The yard is bare except for a single dark ring stained into the dirt where something once stood fuller.</div>
+
+          <div class="blind-block">
+            <div class="block-label">Vision analysis</div>
+            <div class="block-text">The spatial mismatch between drum and bucket is immediate and precise: the bucket sits atop rather than inside, a gesture of futility wearing the costume of solution. Behind the drum, a stucco wall catches warm golden-hour light in a terracotta wash, and above it bougainvillea bleeds dark magenta against the fence line — an incongruous lushness above the bareness below. The dark stain ring in the foreground dirt — where something once sat, or something once spilled — arrived exactly as described and reads as an absence that preceded the current one.</div>
+          </div>
+
+          <div class="accident-box">
+            <div class="acc-label">Accident</div>
+            The bougainvillea's flowering abundance directly above the empty drum creates an unsolicited vertical irony — water denied below, botanical excess above — that the prompt never requested and that sharpens the register of exhaustion without any figure present to carry it.
+          </div>
+
+          <div class="blind-block">
+            <div class="block-label">Blind reverse test</div>
+            <div class="block-text" style="font-style:italic;">"A rusted metal barrel with a small galvanized bucket balanced on top sits in a dry, dusty lot against a stucco wall." — Event guessed: California drought water restrictions</div>
+            <div class="trace-score">
+              <div class="trace-pip filled"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-label">Trace 1/5 — reads abstract / domestic rather than geopolitical</div>
+            </div>
+          </div>
+
+          <details style="margin-top:12px;">
+            <summary>Image generation prompt</summary>
+            <div class="details-body">An empty steel drum stands alone in a swept dirt yard, dented and rust-bloomed, and someone has propped a battered tin bucket upside-down over its open mouth like a lid that fits nothing — the bucket far too small for the drum, perched there at a slight tilt. Heat shimmer rises off the drum's shoulder in the noon glare, visible as a faint warping of the wall behind it. The yard is bare except for a single dark ring stained into the dirt where the drum once sat fuller, or where another stood beside it. The bucket's handle hangs straight down, motionless, throwing a thin shadow no longer than a finger. There are no figures and no water anywhere in the frame; the two containers, one made to hold what is carried and one made to hold what is bargained, sit nested and useless in the flattening light.</div>
+          </details>
+        </div>
+      </div>
+
+    </div><!-- /scene-grid -->
+
+    <div class="direction-box">
+      <div class="dir-label">Direction selected — Draft 002 advances</div>
+      <div class="dir-text">
+        Draft 002 (skin and pipe) chosen for convergence. The skin–pipe crack rhyme is the most formally strong accident in the divergence set, and the scene contains the anchor's human body (the dehydrated child) without illustrating it — the arm is present, the child is not. The material double (skin = parched earth = cracked infrastructure) is an expandable metaphor that can absorb the geopolitical content without collapsing into illustration. Draft 001's bucket queue is too declarative; Draft 003's drum is formally interesting but loses the body.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       STEP 4: CONVERGENCE (3 passes)
+  ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">4</div>
+      <div class="section-title">generate_image.js — Convergence Phase</div>
+      <div class="section-meta">18:38–18:48 UTC · 3 passes · 1024×1280</div>
+    </div>
+
+    <div class="note-box">
+      Three convergence passes at full resolution (1024×1280), each using the Draft 002 scene prompt as base. After each pass, a pairwise comparison selects the stronger image to carry forward. A final round-robin tournament determines the winner from all three convergence renders.
+    </div>
+
+    <div class="phase-header">CONVERGENCE <span>— 3 passes on the skin/pipe direction, full resolution</span></div>
+
+    <div class="render-grid">
+
+      <!-- Convergence pass 1 — WINNER -->
+      <div class="render-card selected-card">
+        <img src="run-2026-06-16/vince_20260616_004_iran-deal-end-war.jpg" alt="Convergence Pass 1 — selected" loading="lazy" class="render-img">
+        <div class="render-meta">
+          <div class="render-num">RENDER 004 — Convergence Pass 1 ★ SELECTED</div>
+          <div class="render-dims">1024×1280 · GPT Image 2 · goldenHour setting</div>
+        </div>
+        <div class="render-body">
+          <div class="render-field">
+            <div class="field-label">Vision analysis</div>
+            <div class="field-text">A concrete drainage pipe — sand-colored, cracked longitudinally — lies on a sidewalk curb in the left-center foreground, its open mouth facing the viewer at a slight angle. From inside or beneath the pipe emerges a child's bare forearm, resting palm-upward on the concrete lip, fingers loosely open. Across the inner wrist the skin displays chapping that rhymes visually with the pipe's own crack. Scattered across the sidewalk behind are fallen purple jacaranda blossoms — dozens of them, small, limp — reading simultaneously as beautiful and as litter. In the middle distance, two figures walk away from camera: a smaller child running slightly ahead, a larger adult following, both silhouetted against a warm golden-hour sky. Palm trees and power lines recede toward a setting sun.</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Accident</div>
+            <div class="field-text">The jacaranda petals scattered across the sidewalk — unprompted, unscripted — function as a third texture in the crack-skin-pipe rhyme: dried, fallen, spent. They carry their own exhaustion.</div>
+          </div>
+          <div class="blind-block">
+            <div class="block-label">Blind reverse test</div>
+            <div class="block-text" style="font-style:italic;">"A human arm extends from inside a concrete drainage pipe lying on a city sidewalk at sunset, with fallen jacaranda petals scattered around and pedestrians walking in the distance." — Event guessed: urban homelessness crisis</div>
+            <div class="trace-score">
+              <div class="trace-pip filled"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-label">Trace 1/5 — displaced; reads LA, not Iran</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Convergence pass 2 -->
+      <div class="render-card">
+        <img src="run-2026-06-16/vince_20260616_005_iran-deal-end-war.jpg" alt="Convergence Pass 2" loading="lazy" class="render-img">
+        <div class="render-meta">
+          <div class="render-num">RENDER 005 — Convergence Pass 2</div>
+          <div class="render-dims">1024×1280 · GPT Image 2 · goldenHour setting</div>
+        </div>
+        <div class="render-body">
+          <div class="render-field">
+            <div class="field-label">Vision analysis</div>
+            <div class="field-text">A bare forearm rests palm-open across a weathered concrete ledge, the inner wrist and forearm displaying a pronounced network of fine cracked-skin texture that mirrors almost exactly the fracture running longitudinally along a glazed pipe lying parallel just beyond. The two cracked surfaces converge at the image's sharpest focal point, dust settling identically into both sets of fissures. A rusted cylindrical vessel occupies the right foreground, its oxidized texture completing a triad of decay: skin, pipe, steel. The light is a deep amber-orange sunset, casting long warm shadows. The street depth beyond — low stucco walls, parked cars, palms — reads unmistakably as South Central Los Angeles.</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Accident</div>
+            <div class="field-text">The bougainvillea blooming against the chain-link in the upper left — vivid red against the orange sky — arrives as an unrequested counterweight, beauty persisting alongside infrastructure failure and bodily dehydration, deepening the cruelty of the image without comment.</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Revision note</div>
+            <div class="field-text">The light is the single departure — amber sunset versus the prompt's specified flat midday white. That warmth softens the image's brutality and aestheticizes what should feel clinical and pitiless. Next iteration: overhead noon light — shadowless, bleaching — so the cracks read as damage, not texture.</div>
+          </div>
+          <div class="blind-block">
+            <div class="block-label">Blind reverse test</div>
+            <div class="block-text" style="font-style:italic;">"A dry, cracked forearm rests on a weathered concrete ledge under an intense orange sky with palm trees." — Event guessed: LA wildfires and drought crisis</div>
+            <div class="trace-score">
+              <div class="trace-pip filled"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-label">Trace 1/5</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Convergence pass 3 -->
+      <div class="render-card">
+        <img src="run-2026-06-16/vince_20260616_006_iran-deal-end-war.jpg" alt="Convergence Pass 3" loading="lazy" class="render-img">
+        <div class="render-meta">
+          <div class="render-num">RENDER 006 — Convergence Pass 3</div>
+          <div class="render-dims">1024×1280 · GPT Image 2 · goldenHour setting</div>
+        </div>
+        <div class="render-body">
+          <div class="render-field">
+            <div class="field-label">Vision analysis</div>
+            <div class="field-text">A child's bare forearm — skin tone warm brown, inner surface chapped into a fine reticulated map of cracks — rests across a sun-heated concrete ledge. The cracked glaze of a painted pipe runs parallel just beyond the arm, and the two surfaces mirror each other so precisely in their fissure patterns that the eye must work to separate them. A rusted cylindrical vessel occupies the right foreground, its oxidized texture completing a triad: skin, pipe, metal. Behind and receding: a pink stucco wall, bougainvillea in magenta bloom, a sidewalk in warm raking light. The street depth beyond gives the image breath, a city continuing indifferently.</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Accident</div>
+            <div class="field-text">The bougainvillea — not asked for — reads as brutal irony: extravagant, hydrated pink bloom directly above desiccated skin, the landscape well-watered while the body is not.</div>
+          </div>
+          <div class="render-field">
+            <div class="field-label">Revision note</div>
+            <div class="field-text">The light is the one technical failure: warm and directional, not flat midday white. That softness makes the skin cracks beautiful rather than clinical, risking aestheticizing the suffering. Next: overhead noon, shadowless, bleaching — so the cracks read as damage.</div>
+          </div>
+          <div class="blind-block">
+            <div class="block-label">Blind reverse test</div>
+            <div class="block-text" style="font-style:italic;">"A person's dry, cracked arm rests on a concrete curb beside a rusty metal container on a sun-baked Los Angeles sidewalk." — Event guessed: homelessness crisis in Los Angeles</div>
+            <div class="trace-score">
+              <div class="trace-pip filled"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-pip"></div>
+              <div class="trace-label">Trace 1/5</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /render-grid -->
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       STEP 5: SELECTION TOURNAMENT
+  ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">5</div>
+      <div class="section-title">Comparative selection — tournament round-robin</div>
+      <div class="section-meta">18:38–18:49 UTC</div>
+    </div>
+
+    <div class="note-box">
+      Two independent judges — Claude and GPT-4o — vote pairwise. After each convergence pass a pass-improve vote advances the stronger image into the next round. A final round-robin between all three convergence renders decides the winner. Both judges see only the images with no metadata; votes are cast independently and then compared.
+    </div>
+
+    <div class="phase-header">PASS-IMPROVE ROUNDS <span>— after each convergence render</span></div>
+
+    <div class="compare-box">
+      <div class="cmp-label">Pass 1 check — Render 004 vs. Divergence template (002)</div>
+      <div class="cmp-text">Does the first convergence pass improve on the direction draft?</div>
+      <div class="cmp-result">Winner: 004 — convergence pass 1 advances over divergence draft</div>
+    </div>
+
+    <div class="compare-box">
+      <div class="cmp-label">Pass 2 check — Render 005 vs. current champion (004)</div>
+      <div class="cmp-text">"Image 2's vivid use of color and texture better conveys the dire circumstances of the narrative, offering more potential for emotional development."</div>
+      <div class="cmp-result">
+        Winner: 005 (GPT-4o · 1–0; Claude abstained)
+        <div class="judge-chips">
+          <span class="judge-chip gpt">GPT → 005</span>
+          <span class="judge-chip abstain">Claude abstained</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="compare-box">
+      <div class="cmp-label">Pass 3 check — Render 006 vs. current champion (005)</div>
+      <div class="cmp-text">"Image 1's firestorm sky fuses the child's dehydrated, cracking skin with the scorched environment into a single indivisible image of systemic collapse — the body and the world share the same wound."</div>
+      <div class="cmp-result">
+        Winner: 005 (unanimous · 2–0)
+        <div class="judge-chips">
+          <span class="judge-chip claude">Claude → 005</span>
+          <span class="judge-chip gpt">GPT → 005</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-header" style="margin-top:24px;">FINAL ROUND-ROBIN <span>— all three convergence renders head-to-head</span></div>
+
+    <div class="tournament-grid">
+
+      <div class="matchup-card">
+        <div class="match-label">004 vs. 005</div>
+        <div class="matchup-row">
+          <span class="contender-label winner">004 ★</span>
+          <span class="vote-tally winning">1</span>
+        </div>
+        <div class="matchup-row">
+          <span class="contender-label">005</span>
+          <span class="vote-tally">0</span>
+        </div>
+        <div class="judge-chips">
+          <span class="judge-chip gpt">GPT → 004</span>
+          <span class="judge-chip abstain">Claude abstained</span>
+        </div>
+        <div class="match-reason">"Image 1 more effectively embodies the anchor by highlighting the contrast between personal hardship and societal indifference, offering dynamic storytelling potential."</div>
+      </div>
+
+      <div class="matchup-card">
+        <div class="match-label">004 vs. 006</div>
+        <div class="matchup-row">
+          <span class="contender-label winner">004 ★</span>
+          <span class="vote-tally winning">2</span>
+        </div>
+        <div class="matchup-row">
+          <span class="contender-label">006</span>
+          <span class="vote-tally">0</span>
+        </div>
+        <div class="judge-chips">
+          <span class="judge-chip claude">Claude → 004</span>
+          <span class="judge-chip gpt">GPT → 004</span>
+        </div>
+        <div class="match-reason">"Image 1 holds the more generative accident — the pipe as both tomb and water-conduit directly activates the anchor's destroyed water infrastructure, the indifferent passersby literalize the 'offering them nothing' of the peace deal, and the sunset light over palm trees delivers the cruel beauty of a place the world considers elsewhere."</div>
+      </div>
+
+      <div class="matchup-card">
+        <div class="match-label">005 vs. 006</div>
+        <div class="matchup-row">
+          <span class="contender-label winner">005 ★</span>
+          <span class="vote-tally winning">2</span>
+        </div>
+        <div class="matchup-row">
+          <span class="contender-label">006</span>
+          <span class="vote-tally">0</span>
+        </div>
+        <div class="judge-chips">
+          <span class="judge-chip claude">Claude → 005</span>
+          <span class="judge-chip gpt">GPT → 005</span>
+        </div>
+        <div class="match-reason">"Image 1's wildfire sky fuses the political catastrophe of the anchor — burned infrastructure, 45°C heat, oil deals — directly into the body itself, creating a generative accident where the child's arm becomes indistinguishable from cracked earth under a burning sky, which is a specific, expandable metaphor."</div>
+      </div>
+
+    </div>
+
+    <div style="background:var(--gold-dim);border:1px solid var(--gold);border-radius:4px;padding:16px 20px;margin-bottom:0;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Final selection — Render 004</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7;">
+        Tournament standings: <strong>004</strong> wins 2 of 2 matches · <strong>005</strong> wins 1 of 2 · <strong>006</strong> wins 0 of 2<br>
+        Winner: <strong>004 — Convergence Pass 1.</strong> The first convergence render outperformed both subsequent passes. The jacaranda petals (unscripted accident) and the two figures walking away (indifference literalized) give 004 a compositional specificity that 005 and 006's more saturated color cannot match as generative material. Vince titled it <strong>"Same Thirst, Same Crack."</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       RUN NOTES
+  ══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">→</div>
+      <div class="section-title">Run notes</div>
+    </div>
+
+    <div class="note-box" style="border-left-color:var(--orange);">
+      <strong>Light correction not achieved.</strong> All six renders came out with warm golden-hour/sunset light despite the prompt specifying "flat white overhead noon." The revision notes for 001, 002, 005, and 006 all flag this. GPT Image 2 appears to default to warm-directional light regardless of the explicit instruction. The pipeline's revision loop identified the problem correctly after each pass but the model did not correct it; the convergence passes continued to produce amber/orange skies. Future consideration: add a lighting constraint to the style-state.json, or experiment with explicit negative prompting.
+    </div>
+
+    <div class="note-box" style="border-left-color:var(--green);">
+      <strong>First convergence pass won.</strong> Iterations 005 and 006 added saturation and drama but lost the compositional specificity that made 004 the strongest image. The jacaranda petals and receding figures in 004 were the definitive accidents — they did not reappear with the same clarity in later passes. This confirms that refinement is not always improvement: the pipeline correctly surfaced this via tournament rather than assuming the last render was best.
+    </div>
+
+    <div class="note-box" style="border-left-color:var(--blue);">
+      <strong>Story selection.</strong> With 14+ Iran/peace deal articles in the candidate pool, the pipeline bypassed the treaty-level framing (Trump, Hormuz, Netanyahu) and selected the Sirik water crisis passage — the human body inside the geopolitical event. This is the correct behavior: the anchor is a dehydrated four-year-old in 45°C heat, not an MOU signing ceremony.
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item done">
+        <div class="tl-time">18:27 UTC</div>
+        <div class="tl-label">fetch_news.js complete — 46 stories</div>
+        <div class="tl-sub">assemble_prompt.js begins</div>
+      </div>
+      <div class="timeline-item done">
+        <div class="tl-time">18:27 UTC</div>
+        <div class="tl-label">Story selected — Sirik / scepticism in Iran</div>
+        <div class="tl-sub">Anchor extracted, symbol field built, 3 scenes generated</div>
+      </div>
+      <div class="timeline-item done">
+        <div class="tl-time">18:27 UTC</div>
+        <div class="tl-label">Divergence — Render 001 (bucket queue)</div>
+      </div>
+      <div class="timeline-item done">
+        <div class="tl-time">18:30 UTC</div>
+        <div class="tl-label">Divergence — Render 002 (child's forearm + pipe)</div>
+      </div>
+      <div class="timeline-item done">
+        <div class="tl-time">18:33 UTC</div>
+        <div class="tl-label">Divergence — Render 003 (drum + undersized lid)</div>
+      </div>
+      <div class="timeline-item done">
+        <div class="tl-time">18:33 UTC</div>
+        <div class="tl-label">Direction selected — Draft 002 advances to convergence</div>
+      </div>
+      <div class="timeline-item done">
+        <div class="tl-time">18:38 UTC</div>
+        <div class="tl-label">Convergence Pass 1 — Render 004 (1024×1280)</div>
+        <div class="tl-sub">Pass-improve: 004 beats divergence template</div>
+      </div>
+      <div class="timeline-item done">
+        <div class="tl-time">18:44 UTC</div>
+        <div class="tl-label">Convergence Pass 2 — Render 005 (1024×1280)</div>
+        <div class="tl-sub">Pass-improve: 005 beats 004 (GPT only; Claude abstained)</div>
+      </div>
+      <div class="timeline-item done">
+        <div class="tl-time">18:48 UTC</div>
+        <div class="tl-label">Convergence Pass 3 — Render 006 (1024×1280)</div>
+        <div class="tl-sub">Pass-improve: 005 holds over 006 (unanimous)</div>
+      </div>
+      <div class="timeline-item done">
+        <div class="tl-time">18:49 UTC</div>
+        <div class="tl-label">Final round-robin — tournament complete</div>
+        <div class="tl-sub">Winner: 004. Committed to shared/artworks/ and pushed.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <hr class="divider">
+  <div style="font-size:12px;color:var(--text-dim);text-align:center;">
+    DeYaanga · Run report · 2026-06-16 (PDT) · Pipeline dashboard (internal)
+  </div>
+
+</div><!-- /page -->
+
+<!-- ── Lightbox ── -->
+<dialog id="lb">
+  <button class="lb-close" onclick="document.getElementById('lb').close()">✕</button>
+  <img id="lb-img" src="" alt="" onclick="document.getElementById('lb').close()">
+</dialog>
+<script>
+(function () {
+  var dlg = document.getElementById('lb');
+  var lbImg = document.getElementById('lb-img');
+  function openLightbox(src, alt) {
+    lbImg.src = src;
+    lbImg.alt = alt || '';
+    dlg.showModal();
+  }
+  dlg.addEventListener('click', function (e) {
+    if (e.target === dlg) dlg.close();
+  });
+  document.querySelectorAll('.render-img, .selected-img-wrap img, .scene-body img').forEach(function (img) {
+    img.classList.add('zoomable');
+    img.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openLightbox(img.getAttribute('src'), img.getAttribute('alt'));
+    });
+  });
+})();
+</script>
+</body>
+</html>
