@@ -184,6 +184,13 @@
   "correspondence": [],
   "runLog": [
     {
+      "ts": "2026-06-20T15:26:53.609Z",
+      "agent": "vince",
+      "pipeline": "image",
+      "status": "success",
+      "note": "Oil prices fall after peace deal signed – as it happened"
+    },
+    {
       "ts": "2026-06-19T16:26:20.205Z",
       "agent": "vince",
       "pipeline": "image",
