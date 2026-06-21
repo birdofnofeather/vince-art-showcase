@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "dutch-apologises-moluccan-sold",
+      "title": "Shadows Longer Than Ships",
+      "headline": "Dutch PM apologises for Moluccan soldiers’ mistreatment after Indonesian independence",
+      "date": "2026-06-21",
+      "image": "artworks/dutch-apologises-moluccan-sold.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "oil-prices-fall-peace",
       "title": "Glut Finding Its Channel",
       "headline": "Oil prices fall after peace deal signed – as it happened",
