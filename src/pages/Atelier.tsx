@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import ToggleGlyph from "@/components/ToggleGlyph";
 import { useProjectData, type DiaryEntry, type DraftImage, type Letter } from "@/hooks/useProjectData";
 import { resolveImage } from "@/lib/data";
 
