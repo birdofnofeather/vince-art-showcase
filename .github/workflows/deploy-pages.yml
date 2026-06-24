@@ -1,4 +1,7 @@
-name: Deploy to GitHub Pages
+name: Deploy dashboard to GitHub Pages
+
+# Runs on every push to main — triggered by the publish-portfolio.yml workflow
+# in VincePipelineTest whenever a run, artwork, or dashboard change lands.
 
 on:
   push:
@@ -21,25 +24,13 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Build
-        run: bun run build
-
-      - name: Add 404.html for SPA routing
-        run: cp dist/index.html dist/404.html
-
-      - name: Upload Pages artifact
+      - name: Upload public/ as Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: public
 
       - name: Deploy to GitHub Pages
         id: deployment
