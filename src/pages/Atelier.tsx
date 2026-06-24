@@ -281,6 +281,9 @@ const Atelier = () => {
               {s.label}
             </a>
           ))}
+          <div className="ml-auto shrink-0 text-[#EDEDED]">
+            <ToggleGlyph />
+          </div>
         </div>
       </nav>
 
