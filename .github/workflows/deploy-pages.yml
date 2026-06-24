@@ -1,7 +1,4 @@
-name: Deploy dashboard to GitHub Pages
-
-# Runs on every push to main — triggered by the publish-portfolio.yml workflow
-# in VincePipelineTest whenever a run, artwork, or dashboard change lands.
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -13,7 +10,6 @@ permissions:
   pages: write
   id-token: write
 
-# One concurrent deployment; skip in-flight, don't cancel it.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -25,13 +21,25 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Upload public/ as Pages artifact
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build
+
+      - name: Add 404.html for SPA routing
+        run: cp dist/index.html dist/404.html
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: dist
 
       - name: Deploy to GitHub Pages
         id: deployment
