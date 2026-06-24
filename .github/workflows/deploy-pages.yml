@@ -27,10 +27,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Upload public/ as Pages artifact
+      - name: Prepare Pages artifact (exclude large image dirs)
+        run: rsync -a --exclude='renders/' --exclude='drafts/' public/ _site/
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
