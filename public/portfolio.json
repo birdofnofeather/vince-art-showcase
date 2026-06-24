@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "play-puts-spotlight-kenyas",
+      "title": "What the Floor Remembers",
+      "headline": "Play puts spotlight on Kenya’s crisis of gender-based violence",
+      "date": "2026-06-24",
+      "image": "artworks/play-puts-spotlight-kenyas.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "former-pinochet-agents-convict",
       "title": "Guilt Arrives from Every Direction",
       "headline": "Former Pinochet agents convicted over 1976 Washington DC carbomb murder",
