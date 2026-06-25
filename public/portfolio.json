@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "venezuela-declares-state-emerg",
+      "title": "Still Listening for Aftershocks",
+      "headline": "Venezuela declares state of emergency after deadly twin earthquakes",
+      "date": "2026-06-25",
+      "image": "artworks/venezuela-declares-state-emerg.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "play-puts-spotlight-kenyas",
       "title": "What the Floor Remembers",
       "headline": "Play puts spotlight on Kenya’s crisis of gender-based violence",
