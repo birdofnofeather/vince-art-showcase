@@ -311,9 +311,9 @@ const Atelier = () => {
               >
                 01 / Vision
               </div>
-              <p className="text-xl md:text-2xl leading-[1.55] text-[#EDEDED] max-w-3xl">
-                {data.vision}
-              </p>
+              <div className="text-xl md:text-2xl leading-[1.55] text-[#EDEDED] max-w-3xl">
+                <Paragraphs body={data.vision} />
+              </div>
             </section>
 
             <hr style={{ borderColor: "#222" }} />
