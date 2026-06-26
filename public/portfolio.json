@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "papua-new-guinea-risk",
+      "title": "What the Light Carried",
+      "headline": "Papua New Guinea at risk of food shortages as El Niño brings frost and drought",
+      "date": "2026-06-26",
+      "image": "artworks/papua-new-guinea-risk.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "venezuela-declares-state-emerg",
       "title": "Still Listening for Aftershocks",
       "headline": "Venezuela declares state of emergency after deadly twin earthquakes",
