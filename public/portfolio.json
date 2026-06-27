@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "all-quiet-eastern-flank",
+      "title": "Span Holds Nothing",
+      "headline": " All quiet on the eastern flank? Nato leaders fear they can no longer rely on US help if Russia attacks",
+      "date": "2026-06-27",
+      "image": "artworks/all-quiet-eastern-flank.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "papua-new-guinea-risk",
       "title": "What the Light Carried",
       "headline": "Papua New Guinea at risk of food shortages as El Niño brings frost and drought",
