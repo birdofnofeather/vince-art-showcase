@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "escalating-usiran-strikes-thre",
+      "title": "Anchor Without Water",
+      "headline": "Escalating US-Iran strikes threaten interim peace agreement",
+      "date": "2026-06-28",
+      "image": "artworks/escalating-usiran-strikes-thre.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "all-quiet-eastern-flank",
       "title": "Span Holds Nothing",
       "headline": " All quiet on the eastern flank? Nato leaders fear they can no longer rely on US help if Russia attacks",
