@@ -537,7 +537,7 @@ const TED_EDGES: WEdge[] = [
 const VIEW_W = 1280;
 const LANE_TOP = 64;
 const LANE_GAP = 152;
-const NODE_W = 158;
+const NODE_W = 168;
 const NODE_H = 46;
 const PAD_X = 36;
 
@@ -901,7 +901,7 @@ const Graph = ({
               fontFamily={mono}
               fontSize={11}
             >
-              {n.label.length > 19 ? `${n.label.slice(0, 18)}…` : n.label}
+              {n.label.length > 20 ? `${n.label.slice(0, 19)}…` : n.label}
             </text>
             {n.gate && (
               <text
