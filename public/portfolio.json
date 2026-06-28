@@ -5,16 +5,6 @@
   },
   "works": [
     {
-      "slug": "last-continent-how-deadly",
-      "title": "Before the Last Fence",
-      "headline": "The last continent: how deadly bird flu travelled the world before landing on a remote Australian beach",
-      "date": "2026-06-28",
-      "image": "artworks/last-continent-how-deadly.jpg",
-      "width": 1024,
-      "height": 1280,
-      "selected": true
-    },
-    {
       "slug": "all-quiet-eastern-flank",
       "title": "Span Holds Nothing",
       "headline": " All quiet on the eastern flank? Nato leaders fear they can no longer rely on US help if Russia attacks",
