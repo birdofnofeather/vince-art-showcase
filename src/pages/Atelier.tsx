@@ -205,7 +205,7 @@ const LetterBlock = ({ letter }: { letter: Letter }) => {
   );
 };
 
-import PipelineGraph from "@/components/PipelineGraph";
+import WorkflowMap from "@/components/WorkflowMap";
 
 const Atelier = () => {
   const { data, loading, error } = useProjectData();
@@ -334,7 +334,7 @@ const Atelier = () => {
                   Full Dashboard ↗
                 </a>
               </div>
-              <PipelineGraph nodes={data.pipeline.nodes} edges={data.pipeline.edges} />
+              <WorkflowMap />
             </section>
 
             <hr style={{ borderColor: "#222" }} />
