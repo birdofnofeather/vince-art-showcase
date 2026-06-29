@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "how-children-west-bank",
+      "title": "First Day, Last Bell",
+      "headline": "How children in West Bank are being killed by Israel ‘without accountability’",
+      "date": "2026-06-29",
+      "image": "artworks/how-children-west-bank.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "escalating-usiran-strikes-thre",
       "title": "Anchor Without Water",
       "headline": "Escalating US-Iran strikes threaten interim peace agreement",
