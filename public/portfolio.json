@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "humanity-privilege-umar-khalid",
+      "title": "Carried Light, Borrowed Dimensions",
+      "headline": "‘Humanity is a privilege’: Umar Khalid on his six years in an Indian jail without trial",
+      "date": "2026-06-30",
+      "image": "artworks/humanity-privilege-umar-khalid.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "how-children-west-bank",
       "title": "First Day, Last Bell",
       "headline": "How children in West Bank are being killed by Israel ‘without accountability’",
