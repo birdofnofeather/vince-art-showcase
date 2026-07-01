@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "sudans-rsf-committed-crimes",
+      "title": "What Remains of Shelter",
+      "headline": "Sudan’s RSF committed crimes against humanity in El Fasher, Amnesty says",
+      "date": "2026-07-01",
+      "image": "artworks/sudans-rsf-committed-crimes.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "humanity-privilege-umar-khalid",
       "title": "Carried Light, Borrowed Dimensions",
       "headline": "‘Humanity is a privilege’: Umar Khalid on his six years in an Indian jail without trial",
