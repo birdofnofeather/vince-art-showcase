@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "death-toll-rises-more",
+      "title": "Still Life After Subtraction",
+      "headline": "Death toll rises to 21 with more than 80 injured in huge Russian attack on Kyiv –as it happened",
+      "date": "2026-07-02",
+      "image": "artworks/death-toll-rises-more.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "sudans-rsf-committed-crimes",
       "title": "What Remains of Shelter",
       "headline": "Sudan’s RSF committed crimes against humanity in El Fasher, Amnesty says",
