@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "deaths-france-surged-during",
+      "title": "After the Heat Stayed",
+      "headline": "Deaths in France surged 30% during hottest week of record June heatwave",
+      "date": "2026-07-03",
+      "image": "artworks/deaths-france-surged-during.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "death-toll-rises-more",
       "title": "Still Life After Subtraction",
       "headline": "Death toll rises to 21 with more than 80 injured in huge Russian attack on Kyiv –as it happened",
