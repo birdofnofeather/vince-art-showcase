@@ -1,0 +1,31 @@
+name: Usage spend tracker
+
+on:
+  schedule:
+    - cron: "23 * * * *" # hourly
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Collect API usage
+        env:
+          OPENROUTER_KEY_TED: ${{ secrets.OPENROUTER_KEY_TED }}
+          ANTHROPIC_ADMIN_KEY: ${{ secrets.ANTHROPIC_ADMIN_KEY }}
+        run: python3 scripts/collect_usage.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name "usage-bot"
+          git config user.email "usage-bot@users.noreply.github.com"
+          git pull --rebase
+          git add public/usage.json
+          git diff --cached --quiet && echo "no change" && exit 0
+          git commit -m "usage: hourly snapshot"
+          git push
