@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>DeYaanga — API Spend</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111;
+    --border: #222;
+    --text: #e8e8e8;
+    --muted: #666;
+    --accent: #c8a96e;
+    --fresh: #4caf50;
+    --covered: #e05252;
+    --pending: #e0a832;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; font-size: .85rem; line-height: 1.5; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  nav { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); padding: .4rem 1.2rem; font-size: .75rem; display: flex; flex-wrap: wrap; gap: .8rem; }
+  main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1.2rem; }
+  section { margin-bottom: 2.5rem; }
+  .section-header { font-size: 1rem; font-weight: 700; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: .3rem; margin-bottom: .75rem; }
+  .section-explainer { font-size: .75rem; color: var(--muted); margin-bottom: .75rem; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .8rem; margin-bottom: 1rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); padding: .9rem 1rem; }
+  .card h3 { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: .4rem; }
+  .big { font-size: 1.5rem; font-weight: 700; }
+  .unit { font-size: .75rem; color: var(--muted); font-weight: 400; }
+  .bar-wrap { background: #1a1a1a; height: 6px; margin-top: .6rem; overflow: hidden; }
+  .bar { height: 100%; background: var(--accent); }
+  .bar.hot { background: var(--covered); }
+  table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+  th, td { text-align: right; padding: .3rem .5rem; border-bottom: 1px solid #1a1a1a; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--border); }
+  tr:hover td { background: #141414; }
+  .err { color: var(--covered); font-size: .75rem; margin-top: .4rem; }
+  .foot { color: var(--muted); font-size: .7rem; margin-top: 2rem; }
+</style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html">← Operator Dashboard</a>
+  <span style="color:var(--muted)">API Spend</span>
+</nav>
+<main>
+  <section>
+    <div class="section-header">API Spend</div>
+    <div class="section-explainer" id="updated">loading…</div>
+    <div class="cards" id="cards"></div>
+  </section>
+  <section>
+    <div class="section-header">Anthropic — last 30 days</div>
+    <div class="section-explainer">Org-wide daily spend; token counts split per API key (Ted's gateway vs Vince's pipeline).</div>
+    <div style="overflow-x:auto"><table id="anth-table"><thead><tr><th>Date</th><th>USD</th><th>Tokens by key</th></tr></thead><tbody></tbody></table></div>
+    <div class="err" id="anth-err"></div>
+  </section>
+  <section>
+    <div class="section-header">OpenRouter (Ted) — daily spend</div>
+    <div class="section-explainer">Derived from hourly balance snapshots.</div>
+    <div style="overflow-x:auto"><table id="or-table"><thead><tr><th>Date</th><th>USD</th></tr></thead><tbody></tbody></table></div>
+  </section>
+  <div class="foot">Snapshots hourly via GitHub Actions · read-only keys · dollar totals only, no secrets served.</div>
+</main>
+
+<script>
+const fmt = n => n == null ? "–" : "$" + Number(n).toFixed(2);
+
+fetch("usage.json?" + Date.now()).then(r => r.json()).then(data => {
+  document.getElementById("updated").textContent = "Updated " + (data.updated_at || "?") + " UTC";
+  const cards = document.getElementById("cards");
+  const snaps = data.snapshots || [];
+  const last = snaps[snaps.length - 1] || {};
+  const ted = (last.openrouter || {}).ted;
+
+  if (ted) {
+    const used = ted.total_usage ?? ted.key_usage;
+    const total = ted.total_credits;
+    const pct = total ? Math.min(100, used / total * 100) : 0;
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `<h3>OpenRouter · Ted</h3>
+      <div class="big">${fmt(used)} <span class="unit">${total ? "of " + fmt(total) + " credits" : "used"}</span></div>
+      ${total ? `<div class="bar-wrap"><div class="bar ${pct > 85 ? "hot" : ""}" style="width:${pct}%"></div></div>` : ""}
+      ${ted.error ? `<div class="err">${ted.error}</div>` : ""}`;
+    cards.appendChild(div);
+  }
+
+  const anth = data.anthropic;
+  if (anth && anth.daily_cost_usd && anth.daily_cost_usd.length) {
+    const monthTotal = anth.daily_cost_usd.reduce((s, d) => s + (d.usd || 0), 0);
+    const today = anth.daily_cost_usd[anth.daily_cost_usd.length - 1];
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `<h3>Anthropic · org (Ted + Vince)</h3>
+      <div class="big">${fmt(monthTotal)} <span class="unit">last 30 days</span></div>
+      <div class="unit">latest day: ${today ? fmt(today.usd) : "–"}</div>`;
+    cards.appendChild(div);
+
+    const tbody = document.querySelector("#anth-table tbody");
+    const tokByDate = {};
+    for (const row of (anth.daily_tokens_by_key || [])) tokByDate[row.date] = row.by_key;
+    for (const d of [...anth.daily_cost_usd].reverse()) {
+      const keys = tokByDate[d.date] || {};
+      const kstr = Object.entries(keys).map(([k, v]) => `${k}: ${(v / 1000).toFixed(0)}k`).join(" · ");
+      tbody.insertAdjacentHTML("beforeend", `<tr><td>${d.date}</td><td>${fmt(d.usd)}</td><td>${kstr || "–"}</td></tr>`);
+    }
+    if (anth.cost_error || anth.usage_error)
+      document.getElementById("anth-err").textContent = "Partial data: " + (anth.cost_error || anth.usage_error);
+  } else {
+    document.getElementById("anth-err").textContent = "No Anthropic admin key configured yet — add ANTHROPIC_ADMIN_KEY to the repo's Actions secrets.";
+  }
+
+  // Daily OpenRouter spend from snapshot deltas
+  const byDay = {};
+  for (const s of snaps) {
+    const t = ((s.openrouter || {}).ted || {});
+    const u = t.total_usage ?? t.key_usage;
+    if (u == null) continue;
+    const day = s.at.slice(0, 10);
+    const cur = byDay[day] || { min: u, max: u };
+    cur.min = Math.min(cur.min, u); cur.max = Math.max(cur.max, u);
+    byDay[day] = cur;
+  }
+  const tbody2 = document.querySelector("#or-table tbody");
+  for (const day of Object.keys(byDay).sort().reverse().slice(0, 30)) {
+    const c = byDay[day];
+    tbody2.insertAdjacentHTML("beforeend", `<tr><td>${day}</td><td>${fmt(c.max - c.min)}</td></tr>`);
+  }
+}).catch(e => {
+  document.getElementById("updated").textContent = "Could not load usage.json — has the Usage spend tracker workflow run yet? (" + e + ")";
+});
+</script>
+</body>
+</html>
