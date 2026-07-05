@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "gazas-musicians-reopen-bombsha",
+      "title": "Still Breathing, Still Music",
+      "headline": "Gaza’s musicians reopen bomb-shattered conservatory – in tents",
+      "date": "2026-07-05",
+      "image": "artworks/gazas-musicians-reopen-bombsha.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "deaths-france-surged-during",
       "title": "After the Heat Stayed",
       "headline": "Deaths in France surged 30% during hottest week of record June heatwave",
