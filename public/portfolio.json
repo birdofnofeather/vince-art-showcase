@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "middle-east-crisis-funeral",
+      "title": "Those Who Watch the Watched",
+      "headline": "Middle East crisis: Funeral procession for supreme leader Ali Khamenei begins in Iran – as it happened",
+      "date": "2026-07-06",
+      "image": "artworks/middle-east-crisis-funeral.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "gazas-musicians-reopen-bombsha",
       "title": "Still Breathing, Still Music",
       "headline": "Gaza’s musicians reopen bomb-shattered conservatory – in tents",
