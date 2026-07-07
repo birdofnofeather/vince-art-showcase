@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "very-angry-gay-man",
+      "title": "Weight of Judgment",
+      "headline": "‘A very angry gay man’: activist’s 11-year fight to overturn Trinidad’s homophobic laws reaches final hurdle",
+      "date": "2026-07-07",
+      "image": "artworks/very-angry-gay-man.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "middle-east-crisis-funeral",
       "title": "Those Who Watch the Watched",
       "headline": "Middle East crisis: Funeral procession for supreme leader Ali Khamenei begins in Iran – as it happened",
