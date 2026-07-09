@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 /**
  * WorkflowMap — an interactive map of how the DeYaanga system actually works.
