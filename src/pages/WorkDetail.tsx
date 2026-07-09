@@ -8,18 +8,10 @@ const WorkDetail = () => {
   const navigate = useNavigate();
   const { data, loading, error } = usePortfolio();
 
-  if (loading) {
-    return <p className="text-sm text-muted-foreground text-center py-32">Loading…</p>;
-  }
-
-  if (error || !data) {
-    return <p className="text-sm text-muted-foreground text-center py-32">Unable to load.</p>;
-  }
-
-  const index = data.works.findIndex((w) => w.slug === slug);
-  const work = index >= 0 ? data.works[index] : undefined;
-  const prev = index > 0 ? data.works[index - 1] : undefined;
-  const next = index >= 0 && index < data.works.length - 1 ? data.works[index + 1] : undefined;
+  const index = data ? data.works.findIndex((w) => w.slug === slug) : -1;
+  const work = data && index >= 0 ? data.works[index] : undefined;
+  const prev = data && index > 0 ? data.works[index - 1] : undefined;
+  const next = data && index >= 0 && index < data.works.length - 1 ? data.works[index + 1] : undefined;
 
   const prevSlug = prev?.slug;
   const nextSlug = next?.slug;
@@ -53,6 +45,14 @@ const WorkDetail = () => {
       else if (dx > 0 && prevSlug) navigate(`/work/${prevSlug}`);
     }
   };
+
+  if (loading) {
+    return <p className="text-sm text-muted-foreground text-center py-32">Loading…</p>;
+  }
+
+  if (error || !data) {
+    return <p className="text-sm text-muted-foreground text-center py-32">Unable to load.</p>;
+  }
 
   if (!work) {
     return (
