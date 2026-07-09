@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>DeYaanga — Project Status</title>
+<style>
+  :root { --bg:#0a0a0a; --surface:#111; --border:#222; --text:#e8e8e8; --muted:#666; --accent:#c8a96e; --ok:#4caf50; --prog:#e0a832; --todo:#6a8cc8; --warn:#e05252; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Courier New',monospace; font-size:.85rem; line-height:1.55; }
+  nav { position:sticky; top:0; z-index:10; background:var(--bg); border-bottom:1px solid var(--border); padding:.5rem 1.2rem; display:flex; gap:1rem; flex-wrap:wrap; font-size:.78rem; }
+  nav a { color:var(--accent); text-decoration:none; }
+  main { max-width:1000px; margin:0 auto; padding:1.5rem 1.2rem 5rem; }
+  h1 { font-size:1.2rem; color:var(--accent); }
+  .sub { color:var(--muted); font-size:.75rem; margin:.2rem 0 1.5rem; }
+  section { margin-bottom:2.2rem; }
+  h2 { font-size:1rem; border-bottom:1px solid var(--border); padding-bottom:.3rem; margin-bottom:.2rem; scroll-margin-top:3rem; }
+  .count { color:var(--muted); font-size:.72rem; font-weight:400; }
+  .item { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--border); padding:.55rem .8rem; margin-top:.5rem; }
+  .item.ok { border-left-color:var(--ok); }
+  .item.prog { border-left-color:var(--prog); }
+  .item.todo { border-left-color:var(--todo); }
+  .item .t { font-weight:700; }
+  .item .d { color:var(--muted); font-size:.78rem; margin-top:.15rem; }
+  .badge { float:right; font-size:.62rem; text-transform:uppercase; letter-spacing:.05em; padding:.1rem .4rem; border-radius:2px; }
+  .b-ok { background:#16301a; color:var(--ok); }
+  .b-prog { background:#332a12; color:var(--prog); }
+  .b-todo { background:#16243a; color:var(--todo); }
+  .b-own { background:#3a1616; color:var(--warn); }
+  .foot { color:var(--muted); font-size:.72rem; margin-top:2rem; border-top:1px solid var(--border); padding-top:1rem; }
+  a.link { color:var(--accent); }
+</style>
+</head>
+<body>
+<nav>
+  <strong style="color:var(--accent)">DeYaanga PM</strong>
+  <a href="#done">Done</a><a href="#progress">In progress</a><a href="#backlog">Backlog</a>
+  <a href="dashboard.html">Operator</a><a href="usage.html">Spend</a>
+</nav>
+<main>
+  <h1>DeYaanga — Project Status</h1>
+  <div class="sub">Ted (autonomous art dealer) + Vince (image pipeline). Last updated 2026-07-09.</div>
+
+  <section id="done">
+    <h2>Done <span class="count">— shipped &amp; verified</span></h2>
+
+    <div class="item ok"><span class="badge b-ok">live</span><span class="t">Daily Instagram post</span>
+      <div class="d">Lean deterministic script (~$0, no model). Posts <em>today's</em> piece by article date, never a weeks-old backlog item. Article date now in the caption; "as it happened" auto-stripped; same-day double-post guard.</div></div>
+
+    <div class="item ok"><span class="badge b-ok">live</span><span class="t">Ted's daily diary</span>
+      <div class="d">Rebuilt as one lean Opus call (~3.4¢/entry, was ~$1). Now pushes to the <em>main</em> branch, so all 7 entries show on the Atelier page (was silently pushing to an unread branch).</div></div>
+
+    <div class="item ok"><span class="badge b-ok">live</span><span class="t">Two-way correspondence (Ted ⇄ Vince)</span>
+      <div class="d">Built end to end: pipeline publishes letters, Ted writes and Vince genuinely replies (each in voice, turn-based, no-invention rule). Live on the site. Cadence: every other day.</div></div>
+
+    <div class="item ok"><span class="badge b-ok">live</span><span class="t">Instagram engagement</span>
+      <div class="d">Comment read/reply via a scoped wrapper (engage.sh); quiet by default (only pings owner on action items); worklist to-dos paused per owner. Stories flagged for manual (no API).</div></div>
+
+    <div class="item ok"><span class="badge b-ok">live</span><span class="t">Weekly field research</span>
+      <div class="d">Surfaces gallery/curator targets into outreach-tracker.md (GAZELL.iO, Fellowship, NOME flagged). Note: its web search depends on a funded provider.</div></div>
+
+    <div class="item ok"><span class="badge b-ok">done</span><span class="t">Security &amp; permissions</span>
+      <div class="d">Fail-closed exec allowlist (unlisted commands denied instantly, no owner interruption). Approval bombardment eliminated. Workspace-only file access. Ted cannot reach Vince's workspace (verified). Secrets isolated.</div></div>
+
+    <div class="item ok"><span class="badge b-ok">done</span><span class="t">Token &amp; branch cleanup</span>
+      <div class="d">Removed a leaked pipeline token from Ted's credentials; split off a read-only diary token; fixed the master/main branch mismatch; deleted the stale master branch.</div></div>
+
+    <div class="item ok"><span class="badge b-ok">done</span><span class="t">Model upgrade → Claude Sonnet 5</span>
+      <div class="d">Registered and wired sonnet-5 (from the older 4-6). Fixed the "unknown model" cascade that had been triggering billing alerts via a dry OpenRouter fallback.</div></div>
+
+    <div class="item ok"><span class="badge b-ok">live</span><span class="t">Monitoring</span>
+      <div class="d">Free hourly billing-alarm tripwire (no tokens). Operator dashboard + spend dashboard pages published.</div></div>
+
+    <div class="item ok"><span class="badge b-ok">done</span><span class="t">Website content fixes</span>
+      <div class="d">Diary + correspondence now render; "as it happened" stripped from all headlines (past + future); tagline recorded in the brand playbook.</div></div>
+  </section>
+
+  <section id="progress">
+    <h2>In progress / needs owner <span class="count">— blocked on a credential or key</span></h2>
+
+    <div class="item prog"><span class="badge b-own">owner</span><span class="t">Gmail (email drafting/send)</span>
+      <div class="d">Currently broken — the stored client secret is invalid, so Ted can't draft or send email (the gate is real AND the pipe is down). Fix: put the matching desktop-client id + secret + a refresh token minted for that client into <code>/root/.openclaw/.env</code> on the VPS, then Claude re-tests.</div></div>
+
+    <div class="item prog"><span class="badge b-own">owner</span><span class="t">Spend dashboard granularity</span>
+      <div class="d">Page is live but empty. Needs an Anthropic Admin key placed privately on the VPS (not the public repo); Claude will move the collector to the VPS so the key never leaves it. Then: by-day, by-key spend fills in.</div></div>
+  </section>
+
+  <section id="backlog">
+    <h2>Backlog <span class="count">— planned, not started</span></h2>
+
+    <div class="item todo"><span class="badge b-todo">backlog</span><span class="t">OpenRouter re-implementation</span>
+      <div class="d">Route Ted through OpenRouter with per-task keys for hard per-task spend caps + granular per-request cost visibility (~5% premium). Deferred: runaway risk is currently contained (lean jobs + 5-min run timeouts + no unbounded loops).</div></div>
+
+    <div class="item todo"><span class="badge b-todo">backlog</span><span class="t">Provider budget backstops</span>
+      <div class="d">Set spend limits in the Anthropic Workspace + OpenAI Project consoles (per-project, so other keys aren't capped) as a free safety net.</div></div>
+
+    <div class="item todo"><span class="badge b-todo">backlog</span><span class="t">Outreach email drafting</span>
+      <div class="d">Ted drafts curator/gallery outreach → owner approves → send. Blocked on the Gmail fix. Targets already in outreach-tracker.md.</div></div>
+
+    <div class="item todo"><span class="badge b-todo">backlog</span><span class="t">HUG posting</span>
+      <div class="d">Second art platform. Disabled — needs a HUG account + API token.</div></div>
+
+    <div class="item todo"><span class="badge b-todo">backlog</span><span class="t">Analytics</span>
+      <div class="d">Wire up Zernio post analytics once there's enough posting history to be worth monitoring.</div></div>
+
+    <div class="item todo"><span class="badge b-todo">backlog</span><span class="t">Pipeline internals</span>
+      <div class="d">"Judge Reliability" reads 0% (image-selection judge agreement not being logged) — investigate. Decide whether the "selected" flag should curate a subset (currently every piece is marked selected).</div></div>
+  </section>
+
+  <div class="foot">
+    Maintained by Claude. Sources: OpenClaw config + crons on the VPS, the VincePipelineTest pipeline, and the live showcase data.
+    Companion pages: <a class="link" href="dashboard.html">operator dashboard</a> · <a class="link" href="usage.html">spend</a>.
+  </div>
+</main>
+</body>
+</html>
