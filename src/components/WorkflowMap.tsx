@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 /**
  * WorkflowMap — an interactive map of how the DeYaanga system actually works.
@@ -758,7 +758,7 @@ const Graph = ({
   edges: WEdge[];
   lanes: string[];
   active: string | null;
-  setActive: (id: string | null) => void;
+  setActive: React.Dispatch<React.SetStateAction<string | null>>;
 }) => {
   const { pos, height } = useMemo(() => layout(nodes), [nodes]);
   const nodeById = useMemo(() => Object.fromEntries(nodes.map((n) => [n.id, n])), [nodes]);
