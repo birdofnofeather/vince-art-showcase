@@ -14,7 +14,10 @@ const WorkDetail = () => {
     return <p className="text-sm text-muted-foreground text-center py-32">Unable to load.</p>;
   }
 
-  const work = data.works.find((w) => w.slug === slug);
+  const index = data.works.findIndex((w) => w.slug === slug);
+  const work = index >= 0 ? data.works[index] : undefined;
+  const prev = index > 0 ? data.works[index - 1] : undefined;
+  const next = index >= 0 && index < data.works.length - 1 ? data.works[index + 1] : undefined;
 
   if (!work) {
     return (
@@ -29,9 +32,40 @@ const WorkDetail = () => {
 
   return (
     <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-8 md:pt-12">
-      <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-        ← Work
-      </Link>
+      <div className="flex items-center justify-between gap-4">
+        <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          ← Work
+        </Link>
+
+        <div className="flex items-center gap-6 text-sm">
+          {prev ? (
+            <Link
+              to={`/work/${prev.slug}`}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label={`Previous: ${prev.title}`}
+            >
+              ← Previous
+            </Link>
+          ) : (
+            <span className="text-muted-foreground/40 cursor-default" aria-hidden="true">
+              ← Previous
+            </span>
+          )}
+          {next ? (
+            <Link
+              to={`/work/${next.slug}`}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label={`Next: ${next.title}`}
+            >
+              Next →
+            </Link>
+          ) : (
+            <span className="text-muted-foreground/40 cursor-default" aria-hidden="true">
+              Next →
+            </span>
+          )}
+        </div>
+      </div>
 
       <div className="mt-8 md:mt-12 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-10 md:gap-16 items-start">
         <div className="relative w-full bg-muted" style={{ aspectRatio: "4 / 5" }}>
@@ -61,3 +95,4 @@ const WorkDetail = () => {
 };
 
 export default WorkDetail;
+
