@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "licensed-drill-how-trumplinked",
+      "title": "Blank Authority, Rising Tide",
+      "headline": "Licensed to drill? How a Trump-linked Texas oil company is elbowing its way into Greenland",
+      "date": "2026-07-09",
+      "image": "artworks/licensed-drill-how-trumplinked.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "photo-bound-palestinian-detain",
       "title": "Bearing Witness Together",
       "headline": "Photo of bound Palestinian detainee corroborates Israeli torture reports, say rights groups",
