@@ -1,9 +1,11 @@
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { formatDate, resolveImage } from "@/lib/data";
 
 const WorkDetail = () => {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const { data, loading, error } = usePortfolio();
 
   if (loading) {
@@ -19,6 +21,39 @@ const WorkDetail = () => {
   const prev = index > 0 ? data.works[index - 1] : undefined;
   const next = index >= 0 && index < data.works.length - 1 ? data.works[index + 1] : undefined;
 
+  const prevSlug = prev?.slug;
+  const nextSlug = next?.slug;
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLElement) {
+        const tag = e.target.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA" || e.target.isContentEditable) return;
+      }
+      if (e.key === "ArrowLeft" && prevSlug) navigate(`/work/${prevSlug}`);
+      if (e.key === "ArrowRight" && nextSlug) navigate(`/work/${nextSlug}`);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [prevSlug, nextSlug, navigate]);
+
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart.current) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStart.current.x;
+    const dy = t.clientY - touchStart.current.y;
+    touchStart.current = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0 && nextSlug) navigate(`/work/${nextSlug}`);
+      else if (dx > 0 && prevSlug) navigate(`/work/${prevSlug}`);
+    }
+  };
+
   if (!work) {
     return (
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-12 md:pt-20">
@@ -31,7 +66,7 @@ const WorkDetail = () => {
   }
 
   return (
-    <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-8 md:pt-12">
+    <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-8 md:pt-12" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <div className="flex items-center justify-between gap-4">
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           ← Work
