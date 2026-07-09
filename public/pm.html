@@ -69,6 +69,9 @@
     <div class="item ok"><span class="badge b-ok">done</span><span class="t">Model upgrade → Claude Sonnet 5</span>
       <div class="d">Registered and wired sonnet-5 (from the older 4-6). Fixed the "unknown model" cascade that had been triggering billing alerts via a dry OpenRouter fallback.</div></div>
 
+    <div class="item ok"><span class="badge b-ok">done</span><span class="t">Gmail drafting wired</span>
+      <div class="d">Desktop OAuth client fixed (new secret + fresh refresh token, gmail.compose scope). Verified by creating a real draft. Ted can DRAFT emails; sending stays gated for owner approval.</div></div>
+
     <div class="item ok"><span class="badge b-ok">live</span><span class="t">Monitoring</span>
       <div class="d">Free hourly billing-alarm tripwire (no tokens). Operator dashboard + spend dashboard pages published.</div></div>
 
@@ -78,9 +81,6 @@
 
   <section id="progress">
     <h2>In progress / needs owner <span class="count">— blocked on a credential or key</span></h2>
-
-    <div class="item prog"><span class="badge b-own">owner</span><span class="t">Gmail (email drafting/send)</span>
-      <div class="d">Currently broken — the stored client secret is invalid, so Ted can't draft or send email (the gate is real AND the pipe is down). Fix: put the matching desktop-client id + secret + a refresh token minted for that client into <code>/root/.openclaw/.env</code> on the VPS, then Claude re-tests.</div></div>
 
     <div class="item prog"><span class="badge b-own">owner</span><span class="t">Spend dashboard granularity</span>
       <div class="d">Page is live but empty. Needs an Anthropic Admin key placed privately on the VPS (not the public repo); Claude will move the collector to the VPS so the key never leaves it. Then: by-day, by-key spend fills in.</div></div>
