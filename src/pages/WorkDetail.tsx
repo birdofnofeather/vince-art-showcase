@@ -1,9 +1,11 @@
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { formatDate, resolveImage } from "@/lib/data";
 
 const WorkDetail = () => {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const { data, loading, error } = usePortfolio();
 
   if (loading) {
