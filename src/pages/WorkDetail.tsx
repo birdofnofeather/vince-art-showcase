@@ -66,7 +66,7 @@ const WorkDetail = () => {
   }
 
   return (
-    <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-8 md:pt-12">
+    <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-8 md:pt-12" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <div className="flex items-center justify-between gap-4">
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           ← Work
