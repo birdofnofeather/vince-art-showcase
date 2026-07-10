@@ -134,7 +134,7 @@
   
 <section id="overview">
   <h2 class="section-header">Overview</h2>
-  <p class="section-explainer">191 renders across 61 sessions. 27 pipeline executions logged.</p>
+  <p class="section-explainer">191 renders across 61 sessions. 28 pipeline executions logged.</p>
   <div class="flow-diagram"><div class="flow-step"><span class="flow-label">Fetch</span><span class="flow-desc">Pull the Guardian world section; filter noise; skip stories Vince covered recently.</span></div><div class="flow-step"><span class="flow-label">Anchor</span><span class="flow-desc">Reduce the chosen story to its <em>irreducible moment</em> — the one image-able thing it is really about.</span></div><div class="flow-step"><span class="flow-label">Diverge</span><span class="flow-desc">Draft several different visual directions cheaply, each a distinct take on the anchor.</span></div><div class="flow-step"><span class="flow-label">Judge</span><span class="flow-desc">Two independent models (Claude + GPT-4o) compare the drafts pairwise and pick the direction with the most potential.</span></div><div class="flow-step"><span class="flow-label">Converge</span><span class="flow-desc">Refine the chosen direction across several passes, analysing each frame and chasing useful accidents.</span></div><div class="flow-step"><span class="flow-label">Select</span><span class="flow-desc">Pick the winning frame, run a final fidelity check, and publish it as the artwork.</span></div></div>
   <details style="margin-top:1rem">
     <summary style="cursor:pointer;color:var(--muted);font-size:.8rem">Glossary</summary>
@@ -145,10 +145,12 @@
   
 
   
+
+  
 <section>
   <h2 class="section-header" id="runs">Pipeline Runs
     <span style="font-size:.75rem;font-weight:normal;color:var(--fresh);margin-left:.8rem">
-      last: ok · Jul 9, 2026, 04:18 PM
+      last: ok · Jul 10, 2026, 04:10 PM
     </span>
   </h2>
   <p class="section-explainer">Each row is one full pipeline execution: fetch → assemble → generate → log. The most recent 20 runs are shown. Failed runs show the error inline.</p>
@@ -156,6 +158,12 @@
     <table class="story-table">
       <thead><tr><th>Started</th><th>Status</th><th>Story</th><th>Duration</th></tr></thead>
       <tbody>
+<tr>
+  <td class="run-time">Jul 10, 2026, 04:10 PM</td>
+  <td><span class="badge badge-fresh">ok</span></td>
+  <td class="run-story"><a href="https://www.theguardian.com/world/2026/jul/10/one-million-women-without-humanitarian-support-un-report" target="_blank" rel="noopener">One million women lost access to humanitarian support in past 18 months, UN report shows</a></td>
+  <td class="run-dur">1280s</td>
+</tr>
 <tr>
   <td class="run-time">Jul 9, 2026, 04:18 PM</td>
   <td><span class="badge badge-fresh">ok</span></td>
@@ -269,12 +277,6 @@
   <td><span class="badge badge-fresh">ok</span></td>
   <td class="run-story"><a href="https://www.theguardian.com/world/live/2026/jun/17/middle-east-war-iran-israel-us-donald-trump-hezbollah-lebanon-peace-deal-netanyahu-latest-news-updated" target="_blank" rel="noopener">Oil prices fall after peace deal signed – as it happened</a></td>
   <td class="run-dur">847s</td>
-</tr>
-<tr>
-  <td class="run-time">Jun 19, 2026, 04:26 PM</td>
-  <td><span class="badge badge-fresh">ok</span></td>
-  <td class="run-story"><a href="https://www.theguardian.com/world/2026/jun/19/macron-calls-for-vigilance-as-western-europe-faces-second-heatwave-of-year" target="_blank" rel="noopener">Macron calls for vigilance as western Europe faces second heatwave of year</a></td>
-  <td class="run-dur">826s</td>
 </tr></tbody>
     </table>
   </div>
