@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "updated": "2026-06-07",
+  "note": "Vince's evolving formal language. The image pipeline reads this instead of hardcoded constants; if this file is missing or unparseable, the scripts fall back to identical in-code defaults, so removing it never breaks a run. The SLOW layer (settingVariants — his place) should change rarely and only within the same world; the FASTER layer (styleBlock — palette, scale tendency, surface) is where periods happen. Every change must be appended to changelog with a reason, so the trajectory stays legible and reversible.",
+  "settingVariants": {
+    "noon": "South LA: bleached noon concrete, flat-roofed stucco faded to bone-white, bougainvillea scaling cyclone fences, utility poles trailing thick black cables, cracked sidewalks, dry yellow grass, a dense midday haze rising off the asphalt. Overexposed whites in direct sun. The geography is specific and legible — a real place baking.",
+    "goldenHour": "South LA: amber-smog sky of a 5pm freeway, stucco walls flushing rust-orange in the last hour of light, jacaranda blooms bruising the gutters purple, bougainvillea scaling cyclone fences, palm fronds crossing powerlines in silhouette. Long rust-orange shadows on cracked sidewalk, pool-blue shadow deep under awnings. Chain-link, iron grates."
+  },
+  "styleBlock": "Hyper-photorealistic digital collage: every surface photographically exact — pores, rust, concrete aggregate, fabric weave, grain in the deep shadows — shot with a medium-format sensibility, shallow depth of field, faint lens aberration at the frame edges. Scale may be violated — enormous objects made small or intimate objects made monumental, coexisting without seams — when it amplifies the specific meaning of the anchor. When the same scale move would fit any story equally, leave it out and shoot straight. Palette is drawn from the setting light. Documentary photography staged with the stillness of a painting; avant-garde collage spatial logic beneath the skin of a photograph. Nothing posed, everything precise.",
+  "constraintsBlock": "No legible text anywhere. No news graphics, banners, or captions. No brand logos visible. No news anchors or studio sets. No symbolic shorthand — no flags, no protest signs with readable slogans. Translate everything into scene, figure, light, and texture only.",
+  "changelog": [
+    {
+      "date": "2026-06-07",
+      "version": 1,
+      "layer": "all",
+      "change": "Initial style state — lifted the noon/goldenHour setting variants, the hyper-real collage style block, and the no-text constraints block verbatim out of the source code.",
+      "reason": "Establish a versioned, Vince-owned formal language separate from hardcoded constants, so style can evolve through a reviewable changelog rather than code edits."
+    },
+    {
+      "date": "2026-06-09",
+      "version": 1,
+      "layer": "settingVariants.goldenHour",
+      "change": "Removed 'a taco truck idling at the corner.' from the goldenHour setting.",
+      "reason": "Cuba run blind test (traceScore 2/5) flagged food truck in background as a driver of homelessness/food-insecurity misread. The taco truck is a generic ambient prop that asserts food-related imagery regardless of the story, competing with content-block anchors rather than supporting them."
+    },
+    {
+      "date": "2026-06-09",
+      "version": 1,
+      "layer": "styleBlock",
+      "change": "Softened scale violation from mandate to conditional: 'scale is deliberately and disturbingly violated' → 'scale may be violated when it amplifies the specific meaning of the anchor; when the same move would fit any story equally, leave it out and shoot straight.'",
+      "reason": "Cuba run and integrated-prompt tests showed the strongest images used no scale violation. Mandating it on every frame manufactures complexity and competes with compositional simplicity, which proved more effective in practice."
+    }
+  ]
+}
