@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "one-million-women-lost",
+      "title": "Still Counting at the Edge",
+      "headline": "One million women lost access to humanitarian support in past 18 months, UN report says",
+      "date": "2026-07-10",
+      "image": "artworks/one-million-women-lost.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "licensed-drill-how-trumplinked",
       "title": "Blank Authority, Rising Tide",
       "headline": "Licensed to drill? How a Trump-linked Texas oil company is elbowing its way into Greenland",
