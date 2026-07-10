@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { DATA_BASE_URL } from "@/lib/data";
 
 /**
  * WorkflowMap — how the DeYaanga system works, told two ways.
@@ -275,7 +276,7 @@ const VINCE: Group = {
           label: "write_correspondence.js",
           kind: "model",
           detail:
-            "Replies only when the latest letter is Ted's and at least two days old. Hard rules: invent no people or places, never mention how either brother is made.",
+            "Replies only when the latest letter is Ted's and at least two days old. Reads the weekly voice-watch note first, so the letter critique applies to the next letter. Hard rules: invent no people or places, never mention how either brother is made.",
           io: "→ shared/correspondence/DATE-vince.md",
         },
         {
@@ -299,7 +300,7 @@ const TED: Group = {
   accent: "#7FA6C9",
   storyBlurb: "The younger brother and dealer. He carries the work into the world.",
   techIntro:
-    "Ted is an OpenClaw agent running on an xCloud VPS: cron-scheduled skills, a hard spend cap via per-key OpenRouter budgets, and outward send-tools denied in the agent config — so anything that would reach another account waits for owner approval by construction, not by promise.",
+    "Ted is an OpenClaw agent running on an xCloud VPS: cron-scheduled skills on a spend-capped Anthropic key. His config disables the tools that send messages outward, so anything that would reach another person's account can only be drafted — it waits for owner approval by construction, not by promise. Ad-hoc research and work on our own accounts run freely.",
   story: [
     {
       title: "Shares the work",
@@ -406,7 +407,7 @@ const TED: Group = {
           label: "voice-watch",
           kind: "model",
           detail:
-            "Sundays: he rereads his own recent entries like a hard editor, names the phrases and shapes that are calcifying, and writes himself a blunt note the diary reads before every entry.",
+            "Sundays: he rereads his own recent diary entries and his letters to Vince like a hard editor, names the phrases and shapes that are calcifying in either register, and writes himself a blunt note that both the diary and the correspondence skills read before writing.",
           io: "Sundays 6 PM LA → voice-watch.md",
         },
       ],
@@ -441,7 +442,12 @@ const LOOPS: Group = {
     {
       title: "Keeping the voice fresh",
       when: "Sundays",
-      text: "Once a week, Vince rereads his own recent diary and notes the habits creeping into his writing — so the next week's pages don't go stale.",
+      text: "Once a week, each brother rereads his own recent writing — diary and letters — and notes the habits creeping in, so the next week's pages don't go stale.",
+    },
+    {
+      title: "Keeping the work fresh",
+      when: "weekly · monthly",
+      text: "The studio also measures whether the recent images are getting samey, and drafts small changes to Vince's style — which wait for a human's yes.",
     },
   ],
   tech: [
@@ -449,13 +455,13 @@ const LOOPS: Group = {
       id: "s-loops",
       title: "Slow loops",
       plain:
-        "The parts of the system that watch the system. One runs weekly; the rest are built and run on demand, and nothing changes Vince's style without a human's yes.",
+        "The parts of the system that watch the system. The self-checks auto-apply; anything that would change Vince's style is a proposal a human must approve.",
       steps: [
         {
           label: "weekly-voice-watch.yml",
           kind: "model",
           detail:
-            "The one scheduled self-check, running since June 2026: every Sunday a GitHub Action rereads Vince's last ~14 diary entries, names calcified openers and worn phrases, and rewrites the note his diary reads before every entry. Auto-applied, like the corpus memo — it is self-awareness, not a rule change.",
+            "Every Sunday a GitHub Action rereads Vince's last ~14 diary entries and his recent letters to Ted, names calcified openers and worn phrases in both registers, and rewrites the note the diary and correspondence pipelines read before writing. Auto-applied, like the corpus memo — it is self-awareness, not a rule change. Ted runs the same weekly review on his side.",
           io: "Sundays 20:00 UTC → vince/voice-watch.md + shared/voice-log.jsonl",
         },
         {
@@ -469,15 +475,15 @@ const LOOPS: Group = {
           label: "newness gauge",
           kind: "model",
           detail:
-            "Built but not yet scheduled — run by hand, it scores how different the last six keepers are from one another, so sameness is measured rather than felt.",
-          io: "npm run gauge → shared/newness-log.jsonl (on demand)",
+            "Every Monday: scores how different the last six keepers are from the archive before them, so sameness is measured rather than felt. The score is a record — it gates nothing directly.",
+          io: "weekly-evolve.yml, Mondays 16:00 UTC → shared/newness-log.jsonl",
         },
         {
           label: "style + preoccupation proposals",
           kind: "human",
           gate: true,
           detail:
-            "Also on demand, and deliberately never automatic: propose_style (a single clause) and propose_preoccupations (at most one change) write proposal files only. A human reviews and applies them by hand — the pipeline never rewrites its own rules.",
+            "Weekly and monthly, but deliberately never self-applying: propose_style drafts a single style clause only when two straight newness scores run low; propose_preoccupations (monthly) suggests at most one change. Both write proposal files a human reviews and applies by hand — the pipeline never rewrites its own rules.",
           io: "→ style-state.proposed.json + preoccupations.proposed.md",
         },
         {
@@ -494,9 +500,40 @@ const LOOPS: Group = {
 
 /* ------------------------------------------------------------- documents --- */
 
-type Doc = { name: string; desc: string; href: string; priv?: boolean };
+type Doc = { name: string; desc: string; href?: string; priv?: boolean; reader?: string };
 
 const GH = "https://github.com/birdofnofeather";
+
+/** Ted's bootstrap documents — read-only copies mirrored daily from the
+ *  private ted-workspace repo into this site's public/ted/ by the pipeline's
+ *  sync-ted-docs workflow. `reader` is the filename under /ted/. */
+const TED_BOOT_DOCS: Doc[] = [
+  {
+    name: "TEDUPBRINGING.md",
+    desc: "His life story — the source of all his biography.",
+    reader: "TEDUPBRINGING.md",
+  },
+  {
+    name: "SOUL.md",
+    desc: "Who he is when the machine wakes him.",
+    reader: "SOUL.md",
+  },
+  {
+    name: "IDENTITY.md",
+    desc: "Name, role, vibe.",
+    reader: "IDENTITY.md",
+  },
+  {
+    name: "AGENTS.md",
+    desc: "His standing operating instructions.",
+    reader: "AGENTS.md",
+  },
+  {
+    name: "MEMORY.md",
+    desc: "Durable facts he has learned — the only things he may treat as true.",
+    reader: "MEMORY.md",
+  },
+];
 
 const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
   {
@@ -539,30 +576,7 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
     heading: "Ted",
     accent: "#7FA6C9",
     docs: [
-      {
-        name: "TEDUPBRINGING.md",
-        desc: "His life story — the source of all his biography.",
-        href: `${GH}/ted-workspace/blob/main/TEDUPBRINGING.md`,
-        priv: true,
-      },
-      {
-        name: "SOUL.md",
-        desc: "Who he is when the machine wakes him.",
-        href: `${GH}/ted-workspace/blob/main/SOUL.md`,
-        priv: true,
-      },
-      {
-        name: "AGENTS.md",
-        desc: "His standing operating instructions.",
-        href: `${GH}/ted-workspace/blob/main/AGENTS.md`,
-        priv: true,
-      },
-      {
-        name: "MEMORY.md",
-        desc: "Durable facts he has learned — the only things he may treat as true.",
-        href: `${GH}/ted-workspace/blob/main/MEMORY.md`,
-        priv: true,
-      },
+      ...TED_BOOT_DOCS,
       {
         name: "TED-OUTREACH-PLAYBOOK.md",
         desc: "How galleries are approached and AI disclosure is sequenced.",
@@ -626,6 +640,9 @@ const railCss = `
 }
 @media (prefers-reduced-motion: reduce) {
   .wf-rail-pulse { display: none; }
+}
+dialog.wf-doc::backdrop {
+  background: rgba(0, 0, 0, 0.72);
 }
 `;
 
@@ -840,6 +857,208 @@ const TechGroup = ({ group, delay }: { group: Group; delay: string }) => (
   </section>
 );
 
+/* ------------------------------------------------------------ doc reader --- */
+
+// Just enough markdown for the bootstrap docs: #-headings, - lists, **bold**,
+// `code`, paragraphs. Anything else renders as the plain text it is.
+const mdInline = (s: string): React.ReactNode[] =>
+  s.split(/(\*\*[^*]+\*\*|`[^`]+`|\*[^*\n]+\*)/g).map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**"))
+      return <strong key={i} className="text-[#EDEDED] font-medium">{part.slice(2, -2)}</strong>;
+    if (part.startsWith("`") && part.endsWith("`"))
+      return (
+        <code key={i} style={{ fontFamily: mono, fontSize: "0.88em" }} className="text-[#C9C9C9]">
+          {part.slice(1, -1)}
+        </code>
+      );
+    if (part.startsWith("*") && part.endsWith("*") && part.length > 2)
+      return <em key={i} className="text-[#B9B9B9]">{part.slice(1, -1)}</em>;
+    return part;
+  });
+
+const MdLite = ({ text }: { text: string }) => {
+  const blocks = text.replace(/\r/g, "").trim().split(/\n{2,}/);
+  return (
+    <>
+      {blocks.map((block, bi) => {
+        const lines = block.split("\n");
+        const out: React.ReactNode[] = [];
+        let para: string[] = [];
+        let list: string[] = [];
+        const flushPara = () => {
+          if (para.length) {
+            out.push(
+              <p key={`p${out.length}`} className="text-[13.5px] leading-relaxed text-[#D6D6D6] mb-3">
+                {para.map((l, i) => (
+                  <React.Fragment key={i}>
+                    {i > 0 && <br />}
+                    {mdInline(l)}
+                  </React.Fragment>
+                ))}
+              </p>,
+            );
+            para = [];
+          }
+        };
+        const flushList = () => {
+          if (list.length) {
+            out.push(
+              <ul key={`u${out.length}`} className="mb-3 space-y-1.5 pl-4">
+                {list.map((li, i) => (
+                  <li key={i} className="text-[13.5px] leading-relaxed text-[#D6D6D6] list-disc marker:text-[#5a5a5a]">
+                    {mdInline(li)}
+                  </li>
+                ))}
+              </ul>,
+            );
+            list = [];
+          }
+        };
+        for (const line of lines) {
+          const h = line.match(/^(#{1,6})\s+(.*)$/);
+          const li = line.match(/^\s*[-*]\s+(.*)$/);
+          if (/^\s*-{3,}\s*$/.test(line)) {
+            flushPara(); flushList();
+            out.push(<hr key={`r${out.length}`} className="my-4 border-[#222]" />);
+            continue;
+          }
+          const q = line.match(/^>\s?(.*)$/);
+          if (q) {
+            flushPara(); flushList();
+            out.push(
+              <p key={`q${out.length}`} className="text-[13px] leading-relaxed text-[#ABABAB] border-l border-[#333] pl-3 mb-3">
+                {mdInline(q[1])}
+              </p>,
+            );
+            continue;
+          }
+          if (h) {
+            flushPara(); flushList();
+            const lvl = h[1].length;
+            out.push(
+              <div
+                key={`h${out.length}`}
+                className={lvl === 1 ? "text-[15px] text-[#EDEDED] font-medium mt-1 mb-3" : "text-[11px] uppercase tracking-[0.14em] text-[#8A8A8A] mt-5 mb-2"}
+                style={lvl === 1 ? undefined : { fontFamily: mono }}
+              >
+                {h[2]}
+              </div>,
+            );
+          } else if (li) {
+            flushPara();
+            list.push(li[1]);
+          } else {
+            flushList();
+            para.push(line);
+          }
+        }
+        flushPara(); flushList();
+        return <React.Fragment key={bi}>{out}</React.Fragment>;
+      })}
+    </>
+  );
+};
+
+type OpenDoc = { name: string; file: string };
+
+const DocReader = ({ doc, onClose }: { doc: OpenDoc; onClose: () => void }) => {
+  const ref = useRef<HTMLDialogElement>(null);
+  const [state, setState] = useState<
+    { status: "loading" } | { status: "error" } | { status: "ok"; text: string }
+  >({ status: "loading" });
+
+  useEffect(() => {
+    ref.current?.showModal();
+  }, []);
+
+  useEffect(() => {
+    let alive = true;
+    setState({ status: "loading" });
+    fetch(`${DATA_BASE_URL}/ted/${doc.file}`)
+      .then((r) => {
+        if (!r.ok) throw new Error(String(r.status));
+        return r.text();
+      })
+      .then((t) => alive && setState({ status: "ok", text: t }))
+      .catch(() => alive && setState({ status: "error" }));
+    return () => {
+      alive = false;
+    };
+  }, [doc.file]);
+
+  return (
+    <dialog
+      ref={ref}
+      className="wf-doc"
+      onClose={onClose}
+      onClick={(e) => {
+        if (e.target === ref.current) onClose();
+      }}
+      style={{
+        padding: 0,
+        border: "1px solid #262626",
+        background: "#0C0C0C",
+        color: "#EDEDED",
+        width: "min(92vw, 680px)",
+        maxHeight: "86vh",
+      }}
+      aria-label={`${doc.name} — read-only`}
+    >
+      <div className="flex items-baseline gap-3 px-5 sm:px-7 pt-5 pb-4 border-b border-[#1d1d1d] sticky top-0" style={{ background: "#0C0C0C" }}>
+        <span className="text-[13px] text-[#EDEDED]" style={{ fontFamily: mono }}>
+          {doc.name}
+        </span>
+        <span className="text-[9.5px] uppercase tracking-wider text-[#6E6E6E] hidden sm:inline" style={{ fontFamily: mono }}>
+          read-only · synced daily from ted-workspace
+        </span>
+        <form method="dialog" className="ml-auto">
+          <button
+            className="text-[#8A8A8A] hover:text-[#EDEDED] transition-colors text-base leading-none px-1 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </form>
+      </div>
+      <div className="px-5 sm:px-7 py-5 overflow-y-auto" style={{ maxHeight: "calc(86vh - 61px)" }}>
+        {state.status === "loading" && (
+          <p className="text-xs text-[#8A8A8A]" style={{ fontFamily: mono }}>loading…</p>
+        )}
+        {state.status === "error" && (
+          <p className="text-xs text-[#8A8A8A]" style={{ fontFamily: mono }}>
+            could not load this document — please try again later.
+          </p>
+        )}
+        {state.status === "ok" && <MdLite text={state.text} />}
+      </div>
+    </dialog>
+  );
+};
+
+const TedBootDocs = ({ onOpen }: { onOpen: (d: OpenDoc) => void }) => (
+  <div className="-mt-6 mb-16 sm:mb-20 ml-1 pl-7 sm:pl-9">
+    <div
+      className="text-[10px] uppercase tracking-wider text-[#6E6E6E] mb-2.5"
+      style={{ fontFamily: mono }}
+    >
+      His bootstrap documents — read them
+    </div>
+    <div className="flex flex-wrap gap-2">
+      {TED_BOOT_DOCS.map((d) => (
+        <button
+          key={d.name}
+          onClick={() => onOpen({ name: d.name, file: d.reader! })}
+          className="px-2.5 py-1.5 text-[11px] border border-[#262626] text-[#C9C9C9] hover:text-[#EDEDED] hover:border-[#7FA6C9]/60 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+          style={{ fontFamily: mono }}
+          title={d.desc}
+        >
+          {d.name}
+        </button>
+      ))}
+    </div>
+  </div>
+);
+
 /* ---------------------------------------------------------------- bridge --- */
 
 const Bridge = ({ mode }: { mode: Mode }) => (
@@ -895,7 +1114,58 @@ const Bridge = ({ mode }: { mode: Mode }) => (
 
 /* ------------------------------------------------------------- documents --- */
 
-const Documents = () => (
+const DocEntry = ({ d, onOpen }: { d: Doc; onOpen: (o: OpenDoc) => void }) => {
+  const inner = (
+    <>
+      <span className="flex items-baseline gap-2 flex-wrap">
+        <span
+          className="text-[11.5px] text-[#EDEDED] border-b border-[#EDEDED]/20 group-hover:border-[#EDEDED]/70 transition-colors"
+          style={{ fontFamily: mono }}
+        >
+          {d.name}
+        </span>
+        {d.reader && (
+          <span
+            className="text-[9px] uppercase tracking-wider text-[#9ED69E]/80"
+            style={{ fontFamily: mono }}
+          >
+            read it here
+          </span>
+        )}
+        {d.priv && (
+          <span
+            className="text-[9px] uppercase tracking-wider text-[#5a5a5a]"
+            style={{ fontFamily: mono }}
+          >
+            private
+          </span>
+        )}
+      </span>
+      <span className="block mt-1 text-[12px] text-[#8A8A8A] leading-relaxed">{d.desc}</span>
+    </>
+  );
+  if (d.reader) {
+    return (
+      <button
+        onClick={() => onOpen({ name: d.name, file: d.reader! })}
+        className="group block text-left w-full focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+      >
+        {inner}
+      </button>
+    );
+  }
+  return (
+    <a
+      href={d.href}
+      {...(d.href!.startsWith("#") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+      className="group block focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+    >
+      {inner}
+    </a>
+  );
+};
+
+const Documents = ({ onOpen }: { onOpen: (o: OpenDoc) => void }) => (
   <section aria-label="Key documents" className="mt-4">
     <div
       className="text-[10px] uppercase tracking-[0.22em] text-[#8A8A8A] mb-2"
@@ -908,7 +1178,9 @@ const Documents = () => (
     </h3>
     <p className="text-[13px] text-[#8A8A8A] leading-relaxed max-w-2xl mb-8">
       The written ground the brothers stand on. Neither invents biography or
-      behavior — everything they are comes from these files.
+      behavior — everything they are comes from these files. Ted's bootstrap
+      documents open right here, as read-only copies synced daily from his
+      workspace.
     </p>
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-8">
       {DOCS.map((col) => (
@@ -922,33 +1194,7 @@ const Documents = () => (
           <ul className="space-y-3.5">
             {col.docs.map((d) => (
               <li key={d.name}>
-                <a
-                  href={d.href}
-                  {...(d.href.startsWith("#")
-                    ? {}
-                    : { target: "_blank", rel: "noopener noreferrer" })}
-                  className="group block focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
-                >
-                  <span className="flex items-baseline gap-2 flex-wrap">
-                    <span
-                      className="text-[11.5px] text-[#EDEDED] border-b border-[#EDEDED]/20 group-hover:border-[#EDEDED]/70 transition-colors"
-                      style={{ fontFamily: mono }}
-                    >
-                      {d.name}
-                    </span>
-                    {d.priv && (
-                      <span
-                        className="text-[9px] uppercase tracking-wider text-[#5a5a5a]"
-                        style={{ fontFamily: mono }}
-                      >
-                        private
-                      </span>
-                    )}
-                  </span>
-                  <span className="block mt-1 text-[12px] text-[#8A8A8A] leading-relaxed">
-                    {d.desc}
-                  </span>
-                </a>
+                <DocEntry d={d} onOpen={onOpen} />
               </li>
             ))}
           </ul>
@@ -962,10 +1208,12 @@ const Documents = () => (
 
 const WorkflowMap = () => {
   const [mode, setMode] = useState<Mode>("story");
+  const [openDoc, setOpenDoc] = useState<OpenDoc | null>(null);
 
   return (
     <div className="w-full">
       <style>{railCss}</style>
+      {openDoc && <DocReader doc={openDoc} onClose={() => setOpenDoc(null)} />}
 
       <p className="text-[15px] sm:text-base leading-relaxed text-[#EDEDED]/90 max-w-2xl mb-8">
         Vince, the artist, turns each morning's news into one photograph from
@@ -1022,8 +1270,9 @@ const WorkflowMap = () => {
           <TechGroup group={VINCE} delay="0s" />
           <Bridge mode={mode} />
           <TechGroup group={TED} delay="2.5s" />
+          <TedBootDocs onOpen={setOpenDoc} />
           <TechGroup group={LOOPS} delay="5s" />
-          <Documents />
+          <Documents onOpen={setOpenDoc} />
         </>
       )}
     </div>
