@@ -25,6 +25,14 @@ const Layout = () => {
           </Link>
           <nav className="flex items-center gap-8 text-sm">
             <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground transition-colors"
+              }
+            >
+              About
+            </NavLink>
+            <NavLink
               to="/"
               end
               className={({ isActive }) =>
@@ -32,14 +40,6 @@ const Layout = () => {
               }
             >
               Work
-            </NavLink>
-            <NavLink
-              to="/about"
-              className={({ isActive }) =>
-                isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground transition-colors"
-              }
-            >
-              About
             </NavLink>
             <ToggleGlyph />
           </nav>
