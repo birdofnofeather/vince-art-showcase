@@ -1,1069 +1,1031 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 
 /**
- * WorkflowMap — an interactive map of how the DeYaanga system actually works.
+ * WorkflowMap — how the DeYaanga system works, told two ways.
  *
- * It is intentionally self-contained: the topology here is editorial documentation
- * of the architecture (every moving piece, every decision point), not live status.
- * Live run status lives in the Activity section of the Atelier page.
+ * "The story" is the human version: a short line for each thing that happens,
+ * written for someone who has never heard of an AI agent. "Under the hood"
+ * is the technical version: the same days opened up into every model call,
+ * gate, schedule, record, and governing document.
  *
- * The map distinguishes the two things that make this project legible:
- *   deterministic nodes — code and rules, identical output every run
- *   stochastic nodes    — model / LLM judgement, different every run
- * plus gates (decisions + approvals), external services, data stores, and outputs.
+ * The two modes carry separate copy on purpose — the story compresses, the
+ * technical view is verified against the pipeline code (assemble_prompt.js,
+ * generate_image.js, write_diary.js, write_correspondence.js, the GitHub
+ * Actions workflows, and Ted's OpenClaw skills). Live run status lives in
+ * the Activity section.
  */
 
-type Agent = "vince" | "ted";
+type Mode = "story" | "tech";
 
-type Kind =
-  | "deterministic"
-  | "stochastic"
-  | "human"
-  | "external"
-  | "store"
-  | "output";
+type Kind = "code" | "model" | "human" | "external" | "record";
 
-type Svc =
-  | "guardian"
-  | "anthropic"
-  | "fal"
-  | "github"
-  | "openrouter"
-  | "gmail"
-  | "zernio"
-  | "fxhash"
-  | "web"
-  | "instagram";
+const KIND_META: Record<Kind, { label: string; color: string }> = {
+  code: { label: "Deterministic code", color: "#8FB8A8" },
+  model: { label: "Model judgement", color: "#E0B563" },
+  human: { label: "Human approval", color: "#D98E8E" },
+  external: { label: "External service", color: "#7FA6C9" },
+  record: { label: "Permanent record", color: "#9A9A9A" },
+};
 
-type WNode = {
-  id: string;
+type StoryNode = { title: string; text: string; when?: string };
+
+type TechStep = {
   label: string;
   kind: Kind;
-  lane: number;
-  order: number;
   gate?: boolean;
-  blurb: string;
-  inputs?: string[];
-  outputs?: string[];
-  services?: Svc[];
-  note?: string;
+  detail: string;
+  io?: string;
 };
 
-type WEdge = { from: string; to: string };
-
-const KIND_COLOR: Record<Kind, string> = {
-  deterministic: "#8FB8A8",
-  stochastic: "#E0B563",
-  human: "#D98E8E",
-  external: "#7FA6C9",
-  store: "#6E6E6E",
-  output: "#EDEDED",
+type TechStage = {
+  id: string;
+  when?: string;
+  title: string;
+  plain: string;
+  steps: TechStep[];
 };
 
-const KIND_LABEL: Record<Kind, string> = {
-  deterministic: "Deterministic",
-  stochastic: "Stochastic",
-  human: "Human approval",
-  external: "External service",
-  store: "Data store",
-  output: "Published output",
+type Group = {
+  id: string;
+  kicker: string;
+  title: string;
+  accent: string;
+  storyBlurb?: string;
+  techIntro?: string;
+  story: StoryNode[];
+  tech: TechStage[];
 };
 
-const SVC_LABEL: Record<Svc, string> = {
-  guardian: "Guardian API",
-  anthropic: "Anthropic · Claude",
-  fal: "fal.ai",
-  github: "GitHub",
-  openrouter: "OpenRouter",
-  gmail: "Gmail",
-  zernio: "Zernio",
-  fxhash: "fxhash",
-  web: "Web",
-  instagram: "Instagram",
+/* ------------------------------------------------------------------ vince --- */
+
+const VINCE: Group = {
+  id: "vince",
+  kicker: "01 · Vince",
+  title: "The studio",
+  accent: "#E0B563",
+  storyBlurb: "The artist. One image a day, from the news to his neighborhood.",
+  techIntro:
+    "Vince is a daily GitHub Actions workflow: cron-triggered Node.js scripts orchestrating LLM calls — Claude primary, with automatic OpenAI fallback through a shared client — and image generation through fal.ai. Every artifact of every run is committed to the repo as a permanent record.",
+  story: [
+    {
+      title: "Reads the news",
+      when: "every morning",
+      text: "Vince starts the day with the world news.",
+    },
+    {
+      title: "Chooses a story",
+      text: "One story stays with him — the one with the most human weight.",
+    },
+    {
+      title: "Makes an image",
+      text: "He turns it into a photographic scene set in his own neighborhood in South LA. Never an illustration of the news; a translation of it.",
+    },
+    {
+      title: "Shows it",
+      text: "The finished image goes up on this site, with the day's drafts and working notes.",
+    },
+    {
+      title: "Writes his diary",
+      when: "every evening",
+      text: "He ends the day writing about the work in his diary.",
+    },
+    {
+      title: "Writes to Ted",
+      when: "a few times a week",
+      text: "And he trades letters with his brother Ted — about the work, the neighborhood, each other.",
+    },
+  ],
+  tech: [
+    {
+      id: "v-read",
+      when: "daily · 7:00 AM LA",
+      title: "Reads the news",
+      plain: "Around fifty stories from The Guardian's world desk.",
+      steps: [
+        {
+          label: "daily-run.yml",
+          kind: "code",
+          detail:
+            "A GitHub Actions cron at 14:00 UTC drives the whole morning: fetch, assemble, generate, dashboard, commit. No one presses a button.",
+        },
+        {
+          label: "fetch_news.js",
+          kind: "external",
+          detail:
+            "Pulls two pages of the Guardian world section, filters out live blogs and roundups, and marks topics already covered in the last seven days so the work doesn't repeat itself.",
+          io: "Guardian API + agent/covered-stories.md → shared/digest/raw-DATE.json",
+        },
+      ],
+    },
+    {
+      id: "v-choose",
+      when: "daily",
+      title: "Chooses a story",
+      plain:
+        "The one with the most human weight, skipping anything covered lately.",
+      steps: [
+        {
+          label: "story rank",
+          kind: "model",
+          detail:
+            "Claude weighs the fresh stories for human significance and emotional weight — an opinion under criteria, not a sort. It keeps an ordered top five, not just one.",
+          io: "story digest → ranked candidates",
+        },
+        {
+          label: "story fallback",
+          kind: "code",
+          gate: true,
+          detail:
+            "If a story later proves unworkable — say the model refuses its imagery — the refusal is logged and the next ranked story is tried. The run fails only if all five do.",
+          io: "refusals → shared/incident-log.jsonl",
+        },
+      ],
+    },
+    {
+      id: "v-distill",
+      when: "daily",
+      title: "Finds the image inside it",
+      plain:
+        "The story is distilled to its irreducible tension, then grown into three different scenes set in South LA.",
+      steps: [
+        {
+          label: "visual anchor",
+          kind: "model",
+          detail:
+            "Reads up to 6,000 characters of the article and distills it: the irreducible tension, a field of concrete materials, the emotional register, the timing (before, during, or after), and what the story is not about.",
+          io: "chosen article → anchor",
+        },
+        {
+          label: "divergent scenes ×3",
+          kind: "model",
+          detail:
+            "Three genuinely different compositions grown from the same anchor — biased by Vince's standing preoccupations, his evolving style-state, and his corpus memo, and pushed away from his last five selected works. Metabolize, never illustrate.",
+          io: "anchor + preoccupations.md + style-state.json → 3 scene texts",
+        },
+        {
+          label: "fidelity check",
+          kind: "model",
+          gate: true,
+          detail:
+            "Three yes/no questions per scene: right vocabulary, right register, right timing. A failing scene is discarded and redrawn fresh — no corrective feedback, which would loop it toward the literal. Up to two redraw rounds.",
+        },
+        {
+          label: "blind reverse test",
+          kind: "model",
+          detail:
+            "A reader who knows nothing guesses the news event from the scene text alone. The guess is recorded as a trace label on the work — a measurement, never a gate.",
+        },
+      ],
+    },
+    {
+      id: "v-make",
+      when: "daily",
+      title: "Makes the work",
+      plain:
+        "Three cheap drafts, one chosen direction, several full-resolution passes — leaning into accidents when they keep the story alive.",
+      steps: [
+        {
+          label: "draft renders ×3",
+          kind: "external",
+          detail:
+            "Each surviving scene is drafted cheaply at 512×640. GPT Image 2 via fal.ai is the primary renderer; Nano Banana Pro is the fallback.",
+        },
+        {
+          label: "two-judge panel",
+          kind: "model",
+          gate: true,
+          detail:
+            "Every comparative choice is a pairwise vote by two independent judges — Claude and GPT-4o — never one model grading itself. Every verdict, including undecided, is appended to a preference ledger that records but never steers.",
+          io: "verdicts → shared/preference-ledger.jsonl",
+        },
+        {
+          label: "convergence passes",
+          kind: "model",
+          detail:
+            "The chosen draft is developed at full resolution (1024×1280) through up to three image-to-image passes, always branching from the best frame so far. A pass that muddies the image becomes a dead end, not a foundation.",
+        },
+        {
+          label: "vision + accident gate",
+          kind: "model",
+          gate: true,
+          detail:
+            "Each render is read back: what actually appeared, what accident emerged, what to revise. An accident may redirect the work only while the story stays traceable (trace score at least 3); below that, pull back. The bridge between intention and discovery.",
+        },
+      ],
+    },
+    {
+      id: "v-sign",
+      when: "daily",
+      title: "Signs and shows it",
+      plain:
+        "The strongest frame is kept, named, and published with the whole day's process.",
+      steps: [
+        {
+          label: "final select + title",
+          kind: "model",
+          gate: true,
+          detail:
+            "The judge panel reviews every full-resolution candidate and picks the strongest frame, then the winner is checked against the anchor one last time — a failure demotes it and the panel re-picks once. The keeper is named in two to five words.",
+        },
+        {
+          label: "permanent record",
+          kind: "record",
+          detail:
+            "Every iteration — drafts, passes, and the keeper — is committed to the repo with full JSON metadata: the story, the anchor, the scene, the judges' reasoning. The keeper is appended to the corpus index.",
+          io: "shared/artworks/ + shared/corpus-index.jsonl",
+        },
+        {
+          label: "publish",
+          kind: "code",
+          detail:
+            "build_log.js rebuilds the pipeline dashboard and the portfolio build pushes the image and its story to deyaanga.art.",
+          io: "docs/index.html + portfolio.json → deyaanga.art",
+        },
+      ],
+    },
+    {
+      id: "v-diary",
+      when: "daily · 3:00 PM LA",
+      title: "Writes his diary",
+      plain: "One private entry covering the whole day. Ted never reads it.",
+      steps: [
+        {
+          label: "write_diary.js",
+          kind: "model",
+          detail:
+            "Claude Opus writes one entry covering every session that day, drawing on the day's artworks, the news digest, the corpus memo, this week's voice-watch note, and his upbringing document. Anti-tic voice rules keep the prose from grooving; an entry cut off mid-thought is never pushed.",
+          io: "cron 22:00 UTC → vince-workspace/diary/DATE.md (private repo)",
+        },
+        {
+          label: "private by construction",
+          kind: "record",
+          detail:
+            "The diary lives in a private workspace repo Ted has no access to. Privacy between the brothers is enforced by repository boundaries, not by a promise.",
+        },
+      ],
+    },
+    {
+      id: "v-letter",
+      when: "every other day or so",
+      title: "Writes to Ted",
+      plain:
+        "He answers Ted's latest letter on an every-other-day cadence — a correspondence, not a chat.",
+      steps: [
+        {
+          label: "write_correspondence.js",
+          kind: "model",
+          detail:
+            "Replies only when the latest letter is Ted's and at least two days old. Hard rules: invent no people or places, never mention how either brother is made.",
+          io: "→ shared/correspondence/DATE-vince.md",
+        },
+        {
+          label: "publish_project.js",
+          kind: "code",
+          detail:
+            "Publishes the diaries and letters to this Atelier page, anchoring each draft image to the exact sentence in the diary that mentions it.",
+          io: "→ project.json → deyaanga.art/atelier",
+        },
+      ],
+    },
+  ],
 };
 
-/* ------------------------------------------------------------------ data --- */
+/* -------------------------------------------------------------------- ted --- */
 
-const VINCE_LANES = [
-  "Source",
-  "Intake",
-  "Selection + scene",
-  "Image generation",
-  "Record",
-  "Publish",
-];
+const TED: Group = {
+  id: "ted",
+  kicker: "02 · Ted",
+  title: "The gallery",
+  accent: "#7FA6C9",
+  storyBlurb: "The younger brother and dealer. He carries the work into the world.",
+  techIntro:
+    "Ted is an OpenClaw agent running on an xCloud VPS: cron-scheduled skills, a hard spend cap via per-key OpenRouter budgets, and outward send-tools denied in the agent config — so anything that would reach another account waits for owner approval by construction, not by promise.",
+  story: [
+    {
+      title: "Shares the work",
+      when: "every day",
+      text: "Ted posts Vince's finished image to @deyaanga on Instagram and replies to the comments.",
+    },
+    {
+      title: "Studies the art world",
+      when: "weekly",
+      text: "He keeps up with galleries, curators, and platforms — looking for where Vince's work belongs.",
+    },
+    {
+      title: "Makes introductions",
+      text: "When he finds the right gallery or platform, he writes to them about his brother's work.",
+    },
+    {
+      title: "Writes his diary",
+      when: "every night",
+      text: "He keeps his own diary — the parts of the work he doesn't say to Vince.",
+    },
+    {
+      title: "Writes back to Vince",
+      text: "And he answers his brother's letters — dealer second, brother first.",
+    },
+  ],
+  tech: [
+    {
+      id: "t-share",
+      when: "daily · 11:00 AM LA",
+      title: "Shares the work",
+      plain:
+        "The newest selected work goes to @deyaanga on Instagram, then he works the replies.",
+      steps: [
+        {
+          label: "publish-social",
+          kind: "external",
+          detail:
+            "Fetches the public portfolio feed, finds the oldest selected work not yet posted, writes an oblique caption in Ted's voice (never #aiart), and posts it to @deyaanga via the Zernio API. One work a day, tracked in a posted-ledger.",
+          io: "portfolio.json + posted ledger → Instagram via Zernio",
+        },
+        {
+          label: "engage-social",
+          kind: "model",
+          detail:
+            "Fifteen minutes later: reshares the day's post to Stories and replies to genuine comments on our own posts — autonomous but guardrailed, with strategy set by a written playbook. Posting our own art to our own account is the one owner-decided exception to the approval gate.",
+          io: "cron 11:15 AM LA · refs/TED-INSTAGRAM-PLAYBOOK.md",
+        },
+      ],
+    },
+    {
+      id: "t-research",
+      when: "Mondays · 9:00 AM LA",
+      title: "Studies the field",
+      plain:
+        "Weekly research into galleries, curators, platforms, and open calls.",
+      steps: [
+        {
+          label: "field-research",
+          kind: "external",
+          detail:
+            "Reads what changed: new shows, curators' arguments, open calls, the state of the AI-art market. He reads a venue's actual current programme before forming a view. Durable findings go to his memory; targets go to the outreach tracker.",
+          io: "web → MEMORY.md + refs/outreach-tracker.md",
+        },
+      ],
+    },
+    {
+      id: "t-outreach",
+      when: "as the field warrants",
+      title: "Writes to galleries and platforms",
+      plain:
+        "Outreach is drafted, disclosed as AI, and sent only after the owner approves.",
+      steps: [
+        {
+          label: "draft-comms",
+          kind: "model",
+          detail:
+            "Researches the venue first, references their actual programme, and leads with the work's human meaning. Disclosure that Vince and Ted are AI is mandatory and honest — how it's sequenced depends on the audience, per a written playbook.",
+          io: "→ drafts/ (draft only, never sends)",
+        },
+        {
+          label: "owner approval",
+          kind: "human",
+          gate: true,
+          detail:
+            "Every outward message waits in drafts until the operator explicitly approves it. The deny is enforced in the agent's config — the send tools are locked — not just written down as a rule.",
+        },
+      ],
+    },
+    {
+      id: "t-diary",
+      when: "daily · 8:30 PM LA",
+      title: "Writes his diary",
+      plain:
+        "The rejections and what they cost, doubt, their mother's absence. Vince never reads it.",
+      steps: [
+        {
+          label: "diary",
+          kind: "model",
+          detail:
+            "Grounded only in his files and what actually happened that day — never invented. It lives in his private workspace repo, out of Vince's reach.",
+          io: "→ ted-workspace/diary/DATE.md (private repo)",
+        },
+        {
+          label: "voice-watch",
+          kind: "model",
+          detail:
+            "Sundays: he rereads his own recent entries like a hard editor, names the phrases and shapes that are calcifying, and writes himself a blunt note the diary reads before every entry.",
+          io: "Sundays 6 PM LA → voice-watch.md",
+        },
+      ],
+    },
+    {
+      id: "t-letter",
+      when: "when a letter arrives",
+      title: "Writes back to Vince",
+      plain:
+        "Specific about the work, honest about the field, brother first.",
+      steps: [
+        {
+          label: "correspondence",
+          kind: "model",
+          detail:
+            "Syncs the shared folder, reads what Vince actually wrote, and answers it — occasionally folding in a line from his field research. It reaches only his brother, so it needs no approval.",
+          io: "→ shared/correspondence/DATE-ted.md",
+        },
+      ],
+    },
+  ],
+};
 
-const VINCE_NODES: WNode[] = [
-  {
-    id: "guardian",
-    label: "Guardian world feed",
-    kind: "external",
-    lane: 0,
-    order: 0,
-    blurb: "Two pages of world-section stories, the raw material for the day.",
-    outputs: ["~50 candidate stories"],
-    services: ["guardian"],
-  },
-  {
-    id: "fetch",
-    label: "fetch_news",
-    kind: "deterministic",
-    lane: 1,
-    order: 0,
-    blurb: "Harvests and noise-filters the feed, then marks recently covered topics.",
-    inputs: ["Guardian feed", "covered-stories.md"],
-    outputs: ["digest/raw-DATE.json"],
-    services: ["guardian"],
-    note: "Pure rules: a blacklist filter and a 7-day silence check. Same input, same result.",
-  },
-  {
-    id: "digest",
-    label: "story digest",
-    kind: "store",
-    lane: 1,
-    order: 1,
-    blurb: "The filtered story set written to disk for the day.",
-    inputs: ["fetch_news"],
-    outputs: ["read by assemble"],
-  },
-  {
-    id: "preocc",
-    label: "preoccupations + style",
-    kind: "store",
-    lane: 1,
-    order: 2,
-    blurb: "Vince's standing artistic biases and the evolving formal language.",
-    outputs: ["biases scene + refine"],
-    note: "preoccupations.md and style-state.json. Both fall back to in-code defaults if absent.",
-  },
-  {
-    id: "rank",
-    label: "story rank",
-    kind: "stochastic",
-    lane: 2,
-    order: 0,
-    blurb: "Claude weighs ~20 candidates for human significance and emotional weight.",
-    inputs: ["story digest", "covered-stories.md"],
-    outputs: ["one chosen story"],
-    services: ["anthropic"],
-    note: "An opinion under criteria, not a sort. Re-run and it may choose differently.",
-  },
-  {
-    id: "anchor",
-    label: "visual anchor",
-    kind: "stochastic",
-    lane: 2,
-    order: 1,
-    blurb: "Reduces the story to one irreducible tension plus a field of concrete materials.",
-    inputs: ["chosen story"],
-    outputs: ["anchor: irreducible + symbolField"],
-    services: ["anthropic"],
-  },
-  {
-    id: "scenes",
-    label: "divergent scenes ×3",
-    kind: "stochastic",
-    lane: 2,
-    order: 2,
-    blurb: "Three genuinely different compositions from the same anchor. Metabolize, never illustrate.",
-    inputs: ["anchor", "preoccupations + style", "last 5 works"],
-    outputs: ["3 scene texts"],
-    services: ["anthropic"],
-  },
-  {
-    id: "blind",
-    label: "blind reverse test",
-    kind: "stochastic",
-    lane: 2,
-    order: 3,
-    blurb: "A blind reader guesses the news event from the scene text alone.",
-    inputs: ["scene text only"],
-    outputs: ["eventGuess + literal read"],
-    services: ["anthropic"],
-    note: "Tests whether the link lives in the image or only in the maker's head.",
-  },
-  {
-    id: "critique",
-    label: "critique gate",
-    kind: "stochastic",
-    gate: true,
-    lane: 2,
-    order: 4,
-    blurb: "Scores traceability 1–5 and flags imported symbols. Passes if score ≥ 3 and no import.",
-    inputs: ["scene", "real story", "blind guess"],
-    outputs: ["primary scene", "regen feedback"],
-    services: ["anthropic"],
-    note: "LLM judgement (stochastic) wrapped in a hard rule (deterministic). Fails regenerate up to twice.",
-  },
-  {
-    id: "drafts",
-    label: "divergence drafts ×3",
-    kind: "stochastic",
-    lane: 3,
-    order: 0,
-    blurb: "Each surviving scene is drafted cheaply at low resolution.",
-    inputs: ["primary + divergent scenes"],
-    outputs: ["3 draft images"],
-    services: ["fal", "anthropic"],
-  },
-  {
-    id: "converge",
-    label: "convergence select",
-    kind: "stochastic",
-    gate: true,
-    lane: 3,
-    order: 1,
-    blurb: "Claude picks the draft with the most potential — an accident worth building on, not the most polished.",
-    inputs: ["3 drafts + analysis"],
-    outputs: ["chosen draft"],
-    services: ["anthropic"],
-  },
-  {
-    id: "refine",
-    label: "convergence refine",
-    kind: "stochastic",
-    lane: 3,
-    order: 2,
-    blurb: "Develops the chosen draft at full resolution via image-to-image, up to three passes.",
-    inputs: ["chosen draft", "revised scene"],
-    outputs: ["refined image"],
-    services: ["fal", "anthropic"],
-  },
-  {
-    id: "vision",
-    label: "vision analysis",
-    kind: "stochastic",
-    lane: 3,
-    order: 3,
-    blurb: "Reads each render: what is observed, what accident appeared, what to revise.",
-    inputs: ["rendered image"],
-    outputs: ["analysis + accident + revision"],
-    services: ["anthropic"],
-  },
-  {
-    id: "accident",
-    label: "accident gate",
-    kind: "stochastic",
-    gate: true,
-    lane: 3,
-    order: 4,
-    blurb: "If an accident keeps the story traceable, lean in; if it drifts below score 3, pull back.",
-    inputs: ["accident", "trace score"],
-    outputs: ["revision direction"],
-    services: ["anthropic"],
-    note: "The bridge between intention and discovery. Threshold is a rule; the score it reads is stochastic.",
-  },
-  {
-    id: "select",
-    label: "final select + title",
-    kind: "stochastic",
-    lane: 3,
-    order: 5,
-    blurb: "Comparative review picks the strongest frame, then names it in two to five words.",
-    inputs: ["all iterations"],
-    outputs: ["winner + title + note"],
-    services: ["anthropic"],
-  },
-  {
-    id: "artworks",
-    label: "artworks",
-    kind: "store",
-    lane: 4,
-    order: 0,
-    blurb: "Every iteration plus the selected winner, image and JSON, committed as permanent record.",
-    inputs: ["final select"],
-    outputs: ["read by diary, dashboard, portfolio"],
-  },
-  {
-    id: "diary",
-    label: "write_diary",
-    kind: "stochastic",
-    lane: 5,
-    order: 0,
-    blurb: "Vince's private diary, written in his voice from the day's sessions. Never read by Ted.",
-    inputs: ["artworks", "digest", "preoccupations", "upbringing"],
-    outputs: ["vince-workspace/diary/DATE.md"],
-    services: ["anthropic", "github"],
-    note: "OpenAI GPT-4o is the fallback if Anthropic is unavailable.",
-  },
-  {
-    id: "dashboard",
-    label: "build_log → dashboard",
-    kind: "output",
-    lane: 5,
-    order: 1,
-    blurb: "Rebuilds the public dashboard and portfolio, then commits and pushes.",
-    inputs: ["artworks", "digests", "run log"],
-    outputs: ["docs/index.html", "portfolio.json"],
-    services: ["github"],
-    note: "Deterministic assembly of HTML from the records on disk.",
-  },
-];
+/* ------------------------------------------------------------------ loops --- */
 
-const VINCE_EDGES: WEdge[] = [
-  { from: "guardian", to: "fetch" },
-  { from: "fetch", to: "digest" },
-  { from: "digest", to: "rank" },
-  { from: "preocc", to: "scenes" },
-  { from: "rank", to: "anchor" },
-  { from: "anchor", to: "scenes" },
-  { from: "scenes", to: "blind" },
-  { from: "blind", to: "critique" },
-  { from: "critique", to: "scenes" }, // regen feedback
-  { from: "critique", to: "drafts" },
-  { from: "drafts", to: "converge" },
-  { from: "converge", to: "refine" },
-  { from: "refine", to: "vision" },
-  { from: "vision", to: "accident" },
-  { from: "accident", to: "refine" }, // revision loop
-  { from: "accident", to: "select" },
-  { from: "select", to: "artworks" },
-  { from: "artworks", to: "diary" },
-  { from: "artworks", to: "dashboard" },
-];
+const LOOPS: Group = {
+  id: "loops",
+  kicker: "03 · Weekly",
+  title: "The self-check",
+  accent: "#8FB8A8",
+  story: [
+    {
+      title: "Keeping the voice fresh",
+      when: "Sundays",
+      text: "Once a week, Vince rereads his own recent diary and notes the habits creeping into his writing — so the next week's pages don't go stale.",
+    },
+  ],
+  tech: [
+    {
+      id: "s-loops",
+      title: "Slow loops",
+      plain:
+        "The parts of the system that watch the system. One runs weekly; the rest are built and run on demand, and nothing changes Vince's style without a human's yes.",
+      steps: [
+        {
+          label: "weekly-voice-watch.yml",
+          kind: "model",
+          detail:
+            "The one scheduled self-check, running since June 2026: every Sunday a GitHub Action rereads Vince's last ~14 diary entries, names calcified openers and worn phrases, and rewrites the note his diary reads before every entry. Auto-applied, like the corpus memo — it is self-awareness, not a rule change.",
+          io: "Sundays 20:00 UTC → vince/voice-watch.md + shared/voice-log.jsonl",
+        },
+        {
+          label: "corpus memo",
+          kind: "model",
+          detail:
+            "Regenerated after each daily run: Vince's own running summary of what he has been making, read back by the scene writer and the diary.",
+          io: "shared/corpus-index.jsonl → vince/corpus-memo.md",
+        },
+        {
+          label: "newness gauge",
+          kind: "model",
+          detail:
+            "Built but not yet scheduled — run by hand, it scores how different the last six keepers are from one another, so sameness is measured rather than felt.",
+          io: "npm run gauge → shared/newness-log.jsonl (on demand)",
+        },
+        {
+          label: "style + preoccupation proposals",
+          kind: "human",
+          gate: true,
+          detail:
+            "Also on demand, and deliberately never automatic: propose_style (a single clause) and propose_preoccupations (at most one change) write proposal files only. A human reviews and applies them by hand — the pipeline never rewrites its own rules.",
+          io: "→ style-state.proposed.json + preoccupations.proposed.md",
+        },
+        {
+          label: "incident log",
+          kind: "record",
+          detail:
+            "Every Anthropic call routes through a client that retries, then fails over to OpenAI — except the two selection judges, which stay deliberately independent. Every fallback, refusal, and hard failure is logged and surfaced on the dashboard.",
+          io: "→ shared/incident-log.jsonl → dashboard",
+        },
+      ],
+    },
+  ],
+};
 
-const TED_LANES = [
-  "Triggers",
-  "Shared + memory",
-  "Skills (agent judgement)",
-  "Gate",
-  "Outbound",
-];
+/* ------------------------------------------------------------- documents --- */
 
-const TED_NODES: WNode[] = [
+type Doc = { name: string; desc: string; href: string; priv?: boolean };
+
+const GH = "https://github.com/birdofnofeather";
+
+const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
   {
-    id: "cron",
-    label: "cron schedule",
-    kind: "deterministic",
-    lane: 0,
-    order: 0,
-    blurb: "Fixed timers that wake the agent for daily and weekly work.",
-    outputs: ["triggers skills"],
-    note: "OpenClaw has no native spend cap, so cadence and budget are pinned in config.",
+    heading: "Vince",
+    accent: "#E0B563",
+    docs: [
+      {
+        name: "VINCEUPBRINGING.md",
+        desc: "His life story — the canon every diary entry and letter draws from.",
+        href: `${GH}/vince-workspace/blob/main/VINCEUPBRINGING.md`,
+        priv: true,
+      },
+      {
+        name: "preoccupations.md",
+        desc: "The standing artistic obsessions that bias every scene.",
+        href: `${GH}/VincePipelineTest/blob/main/vince/preoccupations.md`,
+        priv: true,
+      },
+      {
+        name: "style-state.json",
+        desc: "His evolving formal language — versioned, with a changelog.",
+        href: `${GH}/VincePipelineTest/blob/main/vince/style-state.json`,
+        priv: true,
+      },
+      {
+        name: "corpus-memo.md",
+        desc: "His own running summary of what he has been making.",
+        href: `${GH}/VincePipelineTest/blob/main/vince/corpus-memo.md`,
+        priv: true,
+      },
+      {
+        name: "voice-watch.md",
+        desc: "This week's note to himself about his prose habits.",
+        href: `${GH}/VincePipelineTest/blob/main/vince/voice-watch.md`,
+        priv: true,
+      },
+    ],
   },
   {
-    id: "email",
-    label: "inbound email",
-    kind: "external",
-    lane: 0,
-    order: 1,
-    blurb: "Gallery and curator mail arriving for Ted, logged as working context.",
-    outputs: ["context into memory"],
-    services: ["gmail"],
+    heading: "Ted",
+    accent: "#7FA6C9",
+    docs: [
+      {
+        name: "TEDUPBRINGING.md",
+        desc: "His life story — the source of all his biography.",
+        href: `${GH}/ted-workspace/blob/main/TEDUPBRINGING.md`,
+        priv: true,
+      },
+      {
+        name: "SOUL.md",
+        desc: "Who he is when the machine wakes him.",
+        href: `${GH}/ted-workspace/blob/main/SOUL.md`,
+        priv: true,
+      },
+      {
+        name: "AGENTS.md",
+        desc: "His standing operating instructions.",
+        href: `${GH}/ted-workspace/blob/main/AGENTS.md`,
+        priv: true,
+      },
+      {
+        name: "MEMORY.md",
+        desc: "Durable facts he has learned — the only things he may treat as true.",
+        href: `${GH}/ted-workspace/blob/main/MEMORY.md`,
+        priv: true,
+      },
+      {
+        name: "TED-OUTREACH-PLAYBOOK.md",
+        desc: "How galleries are approached and AI disclosure is sequenced.",
+        href: `${GH}/ted-workspace/blob/main/refs/TED-OUTREACH-PLAYBOOK.md`,
+        priv: true,
+      },
+      {
+        name: "TED-INSTAGRAM-PLAYBOOK.md",
+        desc: "The @deyaanga strategy — what posts, what waits for approval.",
+        href: `${GH}/ted-workspace/blob/main/refs/TED-INSTAGRAM-PLAYBOOK.md`,
+        priv: true,
+      },
+    ],
   },
   {
-    id: "sync",
-    label: "workspace sync",
-    kind: "deterministic",
-    lane: 0,
-    order: 2,
-    blurb: "Scoped pull/push keeps the shared correspondence and artworks current on the VPS.",
-    inputs: ["DeYaanga shared/"],
-    outputs: ["local shared checkout"],
-    services: ["github"],
-    note: "Only the shared/ subpath is checked out — privacy is enforced by construction.",
-  },
-  {
-    id: "corrIn",
-    label: "shared/correspondence",
-    kind: "store",
-    lane: 1,
-    order: 0,
-    blurb: "The two-way letter exchange. Both brothers read and write it.",
-    outputs: ["letters from Vince"],
-  },
-  {
-    id: "artRead",
-    label: "shared/artworks",
-    kind: "store",
-    lane: 1,
-    order: 1,
-    blurb: "Vince's selected work, read-only for Ted via the portfolio feed.",
-    outputs: ["recent selected art"],
-  },
-  {
-    id: "memory",
-    label: "MEMORY + upbringing",
-    kind: "store",
-    lane: 1,
-    order: 2,
-    blurb: "Durable grounded facts and Ted's character canon. No fabrication beyond these.",
-    outputs: ["voice + contacts + history"],
-  },
-  {
-    id: "correspondence",
-    label: "correspondence",
-    kind: "stochastic",
-    lane: 2,
-    order: 0,
-    blurb: "Reads Vince's latest letter and work, drafts a reply in Ted's voice as the younger brother.",
-    inputs: ["Vince's letter", "recent art", "memory"],
-    outputs: ["draft letter"],
-    services: ["anthropic", "openrouter"],
-    note: "Treats Vince as brother, never as agent. No mention of tools, AI, or scores.",
-  },
-  {
-    id: "ted-diary",
-    label: "diary",
-    kind: "stochastic",
-    lane: 2,
-    order: 1,
-    blurb: "Ted's private diary, written against a weekly voice-watch note. Never read by Vince.",
-    inputs: ["working notes", "memory", "voice-watch"],
-    outputs: ["diary/DATE.md"],
-    services: ["anthropic", "openrouter"],
-    note: "Private and ungated — it reaches no other account.",
-  },
-  {
-    id: "voicewatch",
-    label: "voice-watch",
-    kind: "stochastic",
-    lane: 2,
-    order: 2,
-    blurb: "Weekly read of recent diary entries to catch calcifying habits, then rewrites the watch note.",
-    inputs: ["last ~14 diary entries", "upbringing"],
-    outputs: ["voice-watch.md"],
-    services: ["anthropic", "openrouter"],
-  },
-  {
-    id: "research",
-    label: "field research",
-    kind: "stochastic",
-    lane: 2,
-    order: 3,
-    blurb: "Browses art-world sources for artists, dealers, and venues, then updates memory.",
-    inputs: ["reading list", "memory"],
-    outputs: ["research notes", "memory updates"],
-    services: ["web", "anthropic", "openrouter"],
-  },
-  {
-    id: "publish",
-    label: "publish skills",
-    kind: "stochastic",
-    lane: 2,
-    order: 4,
-    blurb: "Picks the newest unposted artwork and writes an oblique caption for each channel.",
-    inputs: ["portfolio.json", "post ledgers"],
-    outputs: ["caption + post request"],
-    services: ["anthropic", "openrouter"],
-    note: "Captions never use #aiart or #generativeart.",
-  },
-  {
-    id: "approval",
-    label: "operator approval",
-    kind: "human",
-    gate: true,
-    lane: 3,
-    order: 0,
-    blurb: "Every message reaching another account waits in drafts until the operator approves over WhatsApp.",
-    inputs: ["draft letter / outreach"],
-    outputs: ["approved to send"],
-    note: "Enforced in config, not just prose: approvals plus a deny-send on outward tools.",
-  },
-  {
-    id: "costcap",
-    label: "cost cap",
-    kind: "deterministic",
-    gate: true,
-    lane: 3,
-    order: 1,
-    blurb: "Per-mint price ceiling and a funded-wallet ceiling. Skips when a mint is too expensive.",
-    inputs: ["mint cost", "wallet balance"],
-    outputs: ["mint or skip"],
-    note: "A pure threshold check. The carve-out that lets minting run without per-message approval.",
-  },
-  {
-    id: "letterOut",
-    label: "letter → shared",
-    kind: "output",
-    lane: 4,
-    order: 0,
-    blurb: "The approved letter is written back into the shared correspondence history.",
-    inputs: ["approved letter"],
-    outputs: ["shared/correspondence/*-ted-to-vince.md"],
-    services: ["github"],
-  },
-  {
-    id: "instagram",
-    label: "@deyaanga Instagram",
-    kind: "output",
-    lane: 4,
-    order: 1,
-    blurb: "Posts Vince's own selected art to the project account. An owner-decided carve-out, ungated.",
-    inputs: ["caption + artwork"],
-    outputs: ["post + ledger entry"],
-    services: ["zernio", "instagram"],
-    note: "Autonomous because it posts our own art and messages no one.",
-  },
-  {
-    id: "chain",
-    label: "HUG + fxhash mint",
-    kind: "output",
-    lane: 4,
-    order: 2,
-    blurb: "Mints the selected artwork on-chain, but only after the cost cap clears.",
-    inputs: ["caption + artwork", "cost cap"],
-    outputs: ["mint + ledger entry"],
-    services: ["fxhash"],
+    heading: "Shared",
+    accent: "#D98E8E",
+    docs: [
+      {
+        name: "shared/correspondence/",
+        desc: "The letters — readable below, under Correspondence.",
+        href: "#correspondence",
+      },
+      {
+        name: "pipeline-changelog.md",
+        desc: "Every behavioral change to the pipeline, individually revertible.",
+        href: `${GH}/VincePipelineTest/blob/main/agent/pipeline-changelog.md`,
+        priv: true,
+      },
+      {
+        name: "Full dashboard",
+        desc: "Every run, incident, judge verdict, and artwork.",
+        href: "https://dashboard.deyaanga.art/dashboard.html",
+      },
+    ],
   },
 ];
-
-const TED_EDGES: WEdge[] = [
-  { from: "cron", to: "correspondence" },
-  { from: "cron", to: "ted-diary" },
-  { from: "cron", to: "voicewatch" },
-  { from: "cron", to: "research" },
-  { from: "cron", to: "publish" },
-  { from: "email", to: "memory" },
-  { from: "sync", to: "corrIn" },
-  { from: "sync", to: "artRead" },
-  { from: "corrIn", to: "correspondence" },
-  { from: "artRead", to: "correspondence" },
-  { from: "artRead", to: "publish" },
-  { from: "memory", to: "correspondence" },
-  { from: "memory", to: "ted-diary" },
-  { from: "memory", to: "research" },
-  { from: "research", to: "memory" }, // feedback: updates memory
-  { from: "correspondence", to: "approval" },
-  { from: "approval", to: "letterOut" },
-  { from: "letterOut", to: "corrIn" }, // feedback: two-way exchange
-  { from: "publish", to: "instagram" },
-  { from: "publish", to: "costcap" },
-  { from: "costcap", to: "chain" },
-];
-
-/* -------------------------------------------------------------- geometry --- */
-
-const VIEW_W = 1280;
-const LANE_TOP = 64;
-const LANE_GAP = 152;
-const NODE_W = 168;
-const NODE_H = 46;
-const PAD_X = 36;
-
-type Pos = { x: number; y: number };
-
-function layout(nodes: WNode[]): { pos: Record<string, Pos>; height: number; laneCount: number } {
-  const byLane: Record<number, WNode[]> = {};
-  nodes.forEach((n) => {
-    (byLane[n.lane] ||= []).push(n);
-  });
-  const laneCount = Math.max(...nodes.map((n) => n.lane)) + 1;
-  const pos: Record<string, Pos> = {};
-
-  Object.entries(byLane).forEach(([laneStr, laneNodes]) => {
-    const lane = Number(laneStr);
-    const sorted = [...laneNodes].sort((a, b) => a.order - b.order);
-    const n = sorted.length;
-    const usable = VIEW_W - PAD_X * 2;
-    let gap = n > 1 ? (usable - n * NODE_W) / (n - 1) : 0;
-    gap = Math.max(18, Math.min(gap, 90));
-    const blockW = n * NODE_W + (n - 1) * gap;
-    const startX = (VIEW_W - blockW) / 2 + NODE_W / 2;
-    sorted.forEach((node, i) => {
-      pos[node.id] = { x: startX + i * (NODE_W + gap), y: LANE_TOP + lane * LANE_GAP };
-    });
-  });
-
-  const height = LANE_TOP + (laneCount - 1) * LANE_GAP + NODE_H + 48;
-  return { pos, height, laneCount };
-}
-
-type EdgeShape = { d: string; feedback: boolean };
-
-function edgePath(a: WNode, b: WNode, pa: Pos, pb: Pos): EdgeShape {
-  // same lane → horizontal flow, or a downward bow for backward feedback
-  if (a.lane === b.lane) {
-    if (b.order > a.order) {
-      const x1 = pa.x + NODE_W / 2;
-      const y1 = pa.y;
-      const x2 = pb.x - NODE_W / 2;
-      const y2 = pb.y;
-      const mx = (x1 + x2) / 2;
-      return { d: `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`, feedback: false };
-    }
-    const x1 = pa.x;
-    const y1 = pa.y + NODE_H / 2;
-    const x2 = pb.x;
-    const y2 = pb.y + NODE_H / 2;
-    const dip = 58;
-    return {
-      d: `M ${x1} ${y1} C ${x1} ${y1 + dip}, ${x2} ${y2 + dip}, ${x2} ${y2}`,
-      feedback: true,
-    };
-  }
-  // forward, downward
-  if (b.lane > a.lane) {
-    const x1 = pa.x;
-    const y1 = pa.y + NODE_H / 2;
-    const x2 = pb.x;
-    const y2 = pb.y - NODE_H / 2;
-    const my = (y1 + y2) / 2;
-    return { d: `M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`, feedback: false };
-  }
-  // upward feedback → bow out to the right
-  const x1 = pa.x + NODE_W / 2;
-  const y1 = pa.y;
-  const x2 = pb.x + NODE_W / 2;
-  const y2 = pb.y;
-  const bow = 70 + (a.lane - b.lane) * 26;
-  const mx = Math.max(x1, x2) + bow;
-  return { d: `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`, feedback: true };
-}
 
 /* ----------------------------------------------------------------- atoms --- */
 
-const KindDot = ({ kind, size = 9 }: { kind: Kind; size?: number }) => (
+const mono = "'JetBrains Mono', ui-monospace, monospace";
+
+/* A faint pulse of light that travels down each timeline rail. Decorative
+   only; removed entirely for users who prefer reduced motion. */
+const railCss = `
+.wf-rail-pulse {
+  position: absolute;
+  left: -1px;
+  top: -72px;
+  width: 1px;
+  height: 72px;
+  opacity: 0;
+  pointer-events: none;
+  animation: wf-rail-travel 8s linear infinite;
+}
+@keyframes wf-rail-travel {
+  0% { top: -72px; opacity: 0; }
+  6% { opacity: 0.9; }
+  90% { opacity: 0.9; }
+  100% { top: 100%; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wf-rail-pulse { display: none; }
+}
+`;
+
+const KindDot = ({ kind, size = 8 }: { kind: Kind; size?: number }) => (
   <span
-    className="inline-block shrink-0"
+    aria-hidden
+    className="inline-block shrink-0 rounded-full"
+    style={{ width: size, height: size, backgroundColor: KIND_META[kind].color }}
+  />
+);
+
+const Legend = () => (
+  <div
+    className="flex flex-wrap gap-x-5 gap-y-2 text-[10px] mb-10"
+    style={{ fontFamily: mono }}
+  >
+    {(Object.keys(KIND_META) as Kind[]).map((k) => (
+      <span key={k} className="flex items-center gap-2 text-[#8A8A8A]">
+        <KindDot kind={k} />
+        {KIND_META[k].label}
+      </span>
+    ))}
+    <span className="flex items-center gap-2 text-[#8A8A8A]">
+      <span aria-hidden style={{ color: "#E0B563", fontSize: 12, lineHeight: 1 }}>◇</span>
+      Decision gate
+    </span>
+  </div>
+);
+
+const Rail = ({ accent, delay }: { accent: string; delay: string }) => (
+  <span
+    aria-hidden
+    className="absolute overflow-hidden"
+    style={{ left: -1, top: 0, bottom: 0, width: 1 }}
+  >
+    <span
+      className="wf-rail-pulse"
+      style={{
+        left: 0,
+        backgroundImage: `linear-gradient(to bottom, transparent, ${accent}, transparent)`,
+        animationDelay: delay,
+      }}
+    />
+  </span>
+);
+
+const NodeDot = ({ accent }: { accent: string }) => (
+  <span
+    aria-hidden
+    className="absolute left-0 top-[5px] -translate-x-1/2 rounded-full"
     style={{
-      width: size,
-      height: size,
-      borderRadius: kind === "store" ? 1 : "50%",
-      backgroundColor: KIND_COLOR[kind],
-      boxShadow: kind === "stochastic" ? `0 0 6px ${KIND_COLOR[kind]}` : "none",
+      width: 8,
+      height: 8,
+      backgroundColor: "#0A0A0A",
+      border: `1.5px solid ${accent}`,
+      boxShadow: "0 0 0 3px #0A0A0A",
     }}
   />
 );
 
-const mono = "'JetBrains Mono', ui-monospace, monospace";
+const When = ({ children }: { children: React.ReactNode }) => (
+  <span
+    className="text-[10px] uppercase tracking-wider text-[#6E6E6E]"
+    style={{ fontFamily: mono }}
+  >
+    {children}
+  </span>
+);
 
-const Legend = () => {
-  const items: Kind[] = [
-    "deterministic",
-    "stochastic",
-    "human",
-    "external",
-    "store",
-    "output",
-  ];
-  return (
-    <div className="flex flex-wrap gap-x-5 gap-y-2 text-[10px]" style={{ fontFamily: mono }}>
-      {items.map((k) => (
-        <span key={k} className="flex items-center gap-2 text-[#8A8A8A]">
-          <KindDot kind={k} />
-          {KIND_LABEL[k]}
-        </span>
-      ))}
-      <span className="flex items-center gap-2 text-[#8A8A8A]">
-        <span
-          aria-hidden
-          style={{ color: KIND_COLOR.stochastic, fontSize: 12, lineHeight: 1 }}
-        >
-          ◇
-        </span>
-        Decision gate
-      </span>
-      <span className="flex items-center gap-2 text-[#8A8A8A]">
-        <span
-          aria-hidden
-          style={{
-            display: "inline-block",
-            width: 18,
-            borderTop: `1px dashed ${KIND_COLOR.stochastic}`,
-          }}
-        />
-        Feedback loop
-      </span>
-    </div>
-  );
-};
-
-/* ----------------------------------------------------------------- panel --- */
-
-const DetailPanel = ({ node }: { node: WNode | null }) => {
-  if (!node) {
-    return (
-      <p className="text-xs text-[#8A8A8A]" style={{ fontFamily: mono }}>
-        Hover or tap a node to read what it does, what flows in and out, and why it is
-        deterministic or stochastic.
-      </p>
-    );
-  }
-  const color = KIND_COLOR[node.kind];
-  return (
-    <div>
-      <div className="flex items-center gap-3 flex-wrap mb-3">
-        <h4 className="text-[#EDEDED] text-base" style={{ fontFamily: mono }}>
-          {node.label}
-        </h4>
-        <span
-          className="flex items-center gap-1.5 text-[10px] px-2 py-0.5"
-          style={{ fontFamily: mono, color, border: `1px solid ${color}55` }}
-        >
-          <KindDot kind={node.kind} size={7} />
-          {KIND_LABEL[node.kind]}
-          {node.gate ? " · gate" : ""}
-        </span>
-      </div>
-      <p className="text-[#EDEDED]/90 text-sm leading-relaxed mb-4 max-w-2xl">{node.blurb}</p>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4">
-        {node.inputs?.length ? (
-          <div>
-            <div className="text-[10px] uppercase tracking-wider text-[#8A8A8A] mb-1.5" style={{ fontFamily: mono }}>
-              In
-            </div>
-            <ul className="space-y-1 text-xs text-[#EDEDED]/80">
-              {node.inputs.map((x) => (
-                <li key={x}>{x}</li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-        {node.outputs?.length ? (
-          <div>
-            <div className="text-[10px] uppercase tracking-wider text-[#8A8A8A] mb-1.5" style={{ fontFamily: mono }}>
-              Out
-            </div>
-            <ul className="space-y-1 text-xs text-[#EDEDED]/80">
-              {node.outputs.map((x) => (
-                <li key={x}>{x}</li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-        {node.services?.length ? (
-          <div>
-            <div className="text-[10px] uppercase tracking-wider text-[#8A8A8A] mb-1.5" style={{ fontFamily: mono }}>
-              Services
-            </div>
-            <ul className="space-y-1 text-xs">
-              {node.services.map((s) => (
-                <li key={s} className="flex items-center gap-1.5 text-[#EDEDED]/80">
-                  <KindDot kind="external" size={6} />
-                  {SVC_LABEL[s]}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-      </div>
-      {node.note ? (
-        <p className="mt-4 text-xs text-[#8A8A8A] italic max-w-2xl leading-relaxed">{node.note}</p>
-      ) : null}
-    </div>
-  );
-};
-
-/* ------------------------------------------------------------- the graph --- */
-
-const Graph = ({
-  nodes,
-  edges,
-  lanes,
-  active,
-  setActive,
-}: {
-  nodes: WNode[];
-  edges: WEdge[];
-  lanes: string[];
-  active: string | null;
-  setActive: React.Dispatch<React.SetStateAction<string | null>>;
-}) => {
-  const { pos, height } = useMemo(() => layout(nodes), [nodes]);
-  const nodeById = useMemo(() => Object.fromEntries(nodes.map((n) => [n.id, n])), [nodes]);
-
-  const adjacent = useMemo(() => {
-    if (!active) return new Set<string>();
-    const s = new Set<string>();
-    edges.forEach((e) => {
-      if (e.from === active) s.add(e.to);
-      if (e.to === active) s.add(e.from);
-    });
-    return s;
-  }, [active, edges]);
-
-  return (
-    <svg
-      viewBox={`0 0 ${VIEW_W} ${height}`}
-      className="w-full h-auto"
-      role="img"
-      aria-label="Workflow map"
-      style={{ minWidth: 720 }}
+const GroupHeader = ({ group, mode }: { group: Group; mode: Mode }) => (
+  <div className="mb-9">
+    <div
+      className="text-[10px] uppercase tracking-[0.22em] mb-2"
+      style={{ fontFamily: mono, color: group.accent }}
     >
-      <defs>
-        <marker id="wf-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#3a3a3a" />
-        </marker>
-        <marker id="wf-arrow-fb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill={KIND_COLOR.stochastic} />
-        </marker>
-        <filter id="wf-glow" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="2.4" result="b" />
-          <feMerge>
-            <feMergeNode in="b" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
+      {group.kicker}
+    </div>
+    <h3 className="text-[#EDEDED] text-lg sm:text-xl font-medium tracking-tight">
+      {group.title}
+    </h3>
+    {mode === "story" && group.storyBlurb && (
+      <p className="mt-2 text-[13px] text-[#8A8A8A] leading-relaxed max-w-xl">
+        {group.storyBlurb}
+      </p>
+    )}
+    {mode === "tech" && group.techIntro && (
+      <p className="mt-3 text-[13px] text-[#9A9A9A] leading-relaxed max-w-2xl border-l pl-4" style={{ borderColor: `${group.accent}44` }}>
+        {group.techIntro}
+      </p>
+    )}
+  </div>
+);
 
-      {/* lane labels + rules */}
-      {lanes.map((label, i) => {
-        const y = LANE_TOP + i * LANE_GAP;
-        return (
-          <g key={label}>
-            <line x1={0} y1={y - 34} x2={VIEW_W} y2={y - 34} stroke="#181818" strokeWidth={1} />
-            <text
-              x={4}
-              y={y - 40}
-              fill="#5a5a5a"
-              fontFamily={mono}
-              fontSize={10}
-              letterSpacing="0.18em"
-              style={{ textTransform: "uppercase" }}
-            >
-              {`${String(i + 1).padStart(2, "0")} · ${label}`}
-            </text>
-          </g>
-        );
-      })}
+/* ------------------------------------------------------------- story mode --- */
 
-      {/* edges */}
-      {edges.map((e, i) => {
-        const a = nodeById[e.from];
-        const b = nodeById[e.to];
-        if (!a || !b) return null;
-        const { d, feedback } = edgePath(a, b, pos[e.from], pos[e.to]);
-        const touched = active === e.from || active === e.to;
-        const dim = active && !touched;
-        const base = feedback ? KIND_COLOR.stochastic : "#2b2b2b";
-        return (
-          <g key={i} opacity={dim ? 0.12 : 1}>
-            <path
-              d={d}
-              stroke={base}
-              strokeWidth={1}
-              fill="none"
-              strokeDasharray={feedback ? "4 4" : undefined}
-              markerEnd={feedback ? "url(#wf-arrow-fb)" : "url(#wf-arrow)"}
-              opacity={feedback ? 0.5 : 1}
-            />
-            {!feedback && (
-              <path d={d} stroke="#EDEDED" strokeWidth={1.1} fill="none" strokeDasharray="3 140">
-                <animate
-                  attributeName="stroke-dashoffset"
-                  from="143"
-                  to="0"
-                  dur="4.5s"
-                  repeatCount="indefinite"
-                />
-              </path>
-            )}
-          </g>
-        );
-      })}
+const StoryGroup = ({ group, delay }: { group: Group; delay: string }) => (
+  <section aria-label={group.title} className="mb-16 sm:mb-20">
+    <GroupHeader group={group} mode="story" />
+    <ol className="relative border-l border-[#1f1f1f] ml-1" style={{ listStyle: "none" }}>
+      <Rail accent={group.accent} delay={delay} />
+      {group.story.map((node) => (
+        <li key={node.title} className="relative pl-7 sm:pl-9 pb-11 last:pb-1">
+          <NodeDot accent={group.accent} />
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1.5">
+            <h4 className="text-[#EDEDED] text-[17px] font-medium tracking-tight">
+              {node.title}
+            </h4>
+            {node.when && <When>{node.when}</When>}
+          </div>
+          <p className="text-[15px] leading-relaxed text-[#EDEDED]/75 max-w-lg">
+            {node.text}
+          </p>
+        </li>
+      ))}
+    </ol>
+  </section>
+);
 
-      {/* nodes */}
-      {nodes.map((n) => {
-        const p = pos[n.id];
-        if (!p) return null;
-        const color = KIND_COLOR[n.kind];
-        const isActive = active === n.id;
-        const isAdj = adjacent.has(n.id);
-        const dim = active && !isActive && !isAdj;
-        const x = p.x - NODE_W / 2;
-        const y = p.y - NODE_H / 2;
-        const stoch = n.kind === "stochastic";
-        return (
-          <g
-            key={n.id}
-            transform={`translate(${x}, ${y})`}
-            opacity={dim ? 0.28 : 1}
-            onMouseEnter={() => setActive(n.id)}
-            onMouseLeave={() => setActive((cur) => (cur === n.id ? null : cur))}
-            onClick={() => setActive(isActive ? null : n.id)}
-            style={{ cursor: "pointer" }}
-          >
-            <rect
-              width={NODE_W}
-              height={NODE_H}
-              rx={2}
-              fill={isActive ? "#16140f" : "#0c0c0c"}
-              stroke={isActive ? color : `${color}55`}
-              strokeWidth={isActive ? 1.6 : 1}
-              strokeDasharray={stoch ? "5 3" : undefined}
-              filter={stoch && (isActive || isAdj) ? "url(#wf-glow)" : undefined}
-            />
-            <circle cx={14} cy={NODE_H / 2} r={3.5} fill={color}>
-              {stoch && (
-                <animate
-                  attributeName="opacity"
-                  values="1;0.35;1"
-                  dur="2.6s"
-                  repeatCount="indefinite"
-                />
-              )}
-            </circle>
-            <text
-              x={26}
-              y={NODE_H / 2 + 4}
-              fill="#EDEDED"
-              fontFamily={mono}
-              fontSize={11}
-            >
-              {n.label.length > 20 ? `${n.label.slice(0, 19)}…` : n.label}
-            </text>
-            {n.gate && (
-              <text
-                x={NODE_W - 13}
-                y={NODE_H / 2 + 5}
-                fill={color}
-                fontSize={13}
-                textAnchor="middle"
-                aria-hidden
-              >
-                ◇
-              </text>
-            )}
-            {n.kind === "external" && (
-              <text
-                x={NODE_W - 13}
-                y={NODE_H / 2 + 4}
-                fill={color}
-                fontSize={11}
-                textAnchor="middle"
-                aria-hidden
-              >
-                ↗
-              </text>
-            )}
-          </g>
-        );
-      })}
-    </svg>
-  );
-};
+/* -------------------------------------------------------------- tech mode --- */
 
-/* ----------------------------------------------------------------- mobile -- */
-
-const MobileNode = ({ node }: { node: WNode }) => {
+const TechStepRow = ({ step }: { step: TechStep }) => {
   const [open, setOpen] = useState(false);
-  const color = KIND_COLOR[node.kind];
+  const meta = KIND_META[step.kind];
   return (
-    <div className="border border-[#1d1d1d] bg-[#0c0c0c]">
+    <div className="border-t border-[#1a1a1a] first:border-t-0">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left"
         aria-expanded={open}
+        className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
       >
-        <KindDot kind={node.kind} />
-        <span className="text-xs text-[#EDEDED]" style={{ fontFamily: mono }}>
-          {node.label}
+        <KindDot kind={step.kind} />
+        <span
+          className="text-xs text-[#EDEDED] group-hover:text-white"
+          style={{ fontFamily: mono }}
+        >
+          {step.label}
         </span>
-        {node.gate && (
-          <span style={{ color, fontSize: 12 }} aria-hidden>
+        {step.gate && (
+          <span
+            aria-label="decision gate"
+            title="decision gate"
+            style={{ color: meta.color, fontSize: 12, lineHeight: 1 }}
+          >
             ◇
           </span>
         )}
-        <span className="ml-auto text-[#5a5a5a] text-[10px]" style={{ fontFamily: mono }}>
+        <span
+          className="hidden sm:inline text-[9px] uppercase tracking-wider ml-1"
+          style={{ fontFamily: mono, color: `${meta.color}BB` }}
+        >
+          {meta.label}
+        </span>
+        <span
+          className="ml-auto text-[#5a5a5a] text-[11px] shrink-0"
+          style={{ fontFamily: mono }}
+          aria-hidden
+        >
           {open ? "–" : "+"}
         </span>
       </button>
       {open && (
-        <div className="px-3 pb-3 -mt-0.5">
-          <p className="text-xs text-[#EDEDED]/85 leading-relaxed mb-2">{node.blurb}</p>
-          {node.note ? <p className="text-[11px] text-[#8A8A8A] italic leading-relaxed">{node.note}</p> : null}
+        <div className="px-3.5 pb-3.5 pl-[34px]">
+          <p className="text-[13px] text-[#C9C9C9] leading-relaxed">{step.detail}</p>
+          {step.io && (
+            <p
+              className="mt-2 text-[10.5px] text-[#6E6E6E] break-words"
+              style={{ fontFamily: mono }}
+            >
+              {step.io}
+            </p>
+          )}
         </div>
       )}
     </div>
   );
 };
 
-const MobileList = ({ nodes, lanes }: { nodes: WNode[]; lanes: string[] }) => (
-  <div className="space-y-6">
-    {lanes.map((label, lane) => {
-      const laneNodes = nodes
-        .filter((n) => n.lane === lane)
-        .sort((a, b) => a.order - b.order);
-      if (!laneNodes.length) return null;
-      return (
-        <div key={label}>
-          <div
-            className="text-[10px] uppercase tracking-[0.18em] text-[#5a5a5a] mb-2"
-            style={{ fontFamily: mono }}
-          >
-            {`${String(lane + 1).padStart(2, "0")} · ${label}`}
+const TechGroup = ({ group, delay }: { group: Group; delay: string }) => (
+  <section aria-label={group.title} className="mb-16 sm:mb-20">
+    <GroupHeader group={group} mode="tech" />
+    <ol className="relative border-l border-[#1f1f1f] ml-1" style={{ listStyle: "none" }}>
+      <Rail accent={group.accent} delay={delay} />
+      {group.tech.map((stage, i) => (
+        <li key={stage.id} className="relative pl-7 sm:pl-9 pb-10 last:pb-1">
+          <NodeDot accent={group.accent} />
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1.5">
+            <span
+              className="text-[10px] text-[#5a5a5a]"
+              style={{ fontFamily: mono }}
+              aria-hidden
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <h4 className="text-[#EDEDED] text-[16px] font-medium tracking-tight">
+              {stage.title}
+            </h4>
+            {stage.when && <When>{stage.when}</When>}
           </div>
-          <div className="space-y-1.5">
-            {laneNodes.map((n) => (
-              <MobileNode key={n.id} node={n} />
-            ))}
+          <p className="text-[14px] leading-relaxed text-[#EDEDED]/75 max-w-xl">
+            {stage.plain}
+          </p>
+          {stage.steps.length > 0 && (
+            <div className="mt-4 max-w-xl border border-[#1d1d1d] bg-[#0C0C0C]">
+              {stage.steps.map((s) => (
+                <TechStepRow key={s.label} step={s} />
+              ))}
+            </div>
+          )}
+        </li>
+      ))}
+    </ol>
+  </section>
+);
+
+/* ---------------------------------------------------------------- bridge --- */
+
+const Bridge = ({ mode }: { mode: Mode }) => (
+  <section aria-label="Between the brothers" className="mb-16 sm:mb-20">
+    <div className="border border-[#1d1d1d] bg-[#0C0C0C] px-5 py-6 sm:px-8 sm:py-8">
+      <div
+        className="text-[10px] uppercase tracking-[0.22em] text-[#D98E8E] mb-4"
+        style={{ fontFamily: mono }}
+      >
+        Between the brothers
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="border border-[#1a1a1a] px-4 py-4">
+          <div className="text-[11px] text-[#8A8A8A] mb-1.5" style={{ fontFamily: mono }}>
+            Vince's diary
+          </div>
+          <div className="text-[10px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
+            private — Ted never reads it
           </div>
         </div>
-      );
-    })}
-  </div>
+        <div className="border border-[#EDEDED]/25 px-4 py-4 bg-[#101010]">
+          <div className="text-[11px] text-[#EDEDED] mb-1.5" style={{ fontFamily: mono }}>
+            The letters
+          </div>
+          <div className="text-[10px] uppercase tracking-wider text-[#9ED69E]" style={{ fontFamily: mono }}>
+            shared — both brothers read
+          </div>
+        </div>
+        <div className="border border-[#1a1a1a] px-4 py-4">
+          <div className="text-[11px] text-[#8A8A8A] mb-1.5" style={{ fontFamily: mono }}>
+            Ted's diary
+          </div>
+          <div className="text-[10px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
+            private — Vince never reads it
+          </div>
+        </div>
+      </div>
+      <p className="mt-5 text-[13.5px] text-[#EDEDED]/80 leading-relaxed max-w-2xl">
+        Two private diaries, one shared mailbox. The letters travel through a
+        shared folder both brothers can reach; the diaries never cross.
+      </p>
+      {mode === "tech" && (
+        <p className="mt-3 text-[12px] text-[#8A8A8A] leading-relaxed max-w-2xl">
+          Privacy between the brothers is enforced by construction: Ted's
+          machine checks out only the shared folders of the pipeline repo, and
+          each diary lives in a private workspace repo the other has no access
+          to.
+        </p>
+      )}
+    </div>
+  </section>
+);
+
+/* ------------------------------------------------------------- documents --- */
+
+const Documents = () => (
+  <section aria-label="Key documents" className="mt-4">
+    <div
+      className="text-[10px] uppercase tracking-[0.22em] text-[#8A8A8A] mb-2"
+      style={{ fontFamily: mono }}
+    >
+      04 · The papers
+    </div>
+    <h3 className="text-[#EDEDED] text-lg sm:text-xl font-medium tracking-tight mb-3">
+      Key documents
+    </h3>
+    <p className="text-[13px] text-[#8A8A8A] leading-relaxed max-w-2xl mb-8">
+      The written ground the brothers stand on. Neither invents biography or
+      behavior — everything they are comes from these files.
+    </p>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-8">
+      {DOCS.map((col) => (
+        <div key={col.heading}>
+          <div
+            className="text-[10px] uppercase tracking-[0.18em] mb-3"
+            style={{ fontFamily: mono, color: col.accent }}
+          >
+            {col.heading}
+          </div>
+          <ul className="space-y-3.5">
+            {col.docs.map((d) => (
+              <li key={d.name}>
+                <a
+                  href={d.href}
+                  {...(d.href.startsWith("#")
+                    ? {}
+                    : { target: "_blank", rel: "noopener noreferrer" })}
+                  className="group block focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+                >
+                  <span className="flex items-baseline gap-2 flex-wrap">
+                    <span
+                      className="text-[11.5px] text-[#EDEDED] border-b border-[#EDEDED]/20 group-hover:border-[#EDEDED]/70 transition-colors"
+                      style={{ fontFamily: mono }}
+                    >
+                      {d.name}
+                    </span>
+                    {d.priv && (
+                      <span
+                        className="text-[9px] uppercase tracking-wider text-[#5a5a5a]"
+                        style={{ fontFamily: mono }}
+                      >
+                        private
+                      </span>
+                    )}
+                  </span>
+                  <span className="block mt-1 text-[12px] text-[#8A8A8A] leading-relaxed">
+                    {d.desc}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
 );
 
 /* ------------------------------------------------------------------- root -- */
 
 const WorkflowMap = () => {
-  const [agent, setAgent] = useState<Agent>("vince");
-  const [active, setActive] = useState<string | null>(null);
-
-  const nodes = agent === "vince" ? VINCE_NODES : TED_NODES;
-  const edges = agent === "vince" ? VINCE_EDGES : TED_EDGES;
-  const lanes = agent === "vince" ? VINCE_LANES : TED_LANES;
-  const activeNode = nodes.find((n) => n.id === active) || null;
-
-  const switchAgent = (a: Agent) => {
-    setAgent(a);
-    setActive(null);
-  };
+  const [mode, setMode] = useState<Mode>("story");
 
   return (
     <div className="w-full">
-      {/* header: agent toggle + caption */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
-        <div className="flex gap-1 p-0.5 border border-[#222] w-fit" role="tablist">
-          {(["vince", "ted"] as const).map((a) => (
+      <style>{railCss}</style>
+
+      <p className="text-[15px] sm:text-base leading-relaxed text-[#EDEDED]/90 max-w-2xl mb-8">
+        Vince, the artist, turns each morning's news into one photograph from
+        his neighborhood in South LA. His brother Ted, the gallerist, carries
+        the work into the world. Both are AI. This is how their days go.
+      </p>
+
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
+        <div
+          className="flex gap-1 p-0.5 border border-[#222] w-fit"
+          role="tablist"
+          aria-label="Level of detail"
+        >
+          {(
+            [
+              ["story", "The story"],
+              ["tech", "Under the hood"],
+            ] as const
+          ).map(([m, label]) => (
             <button
-              key={a}
+              key={m}
               role="tab"
-              aria-selected={agent === a}
-              onClick={() => switchAgent(a)}
-              className="px-4 py-1.5 text-xs uppercase tracking-wider transition-colors"
+              aria-selected={mode === m}
+              onClick={() => setMode(m)}
+              className="px-4 py-1.5 text-xs uppercase tracking-wider transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/50"
               style={{
                 fontFamily: mono,
-                color: agent === a ? "#0A0A0A" : "#8A8A8A",
-                backgroundColor: agent === a ? "#EDEDED" : "transparent",
+                color: mode === m ? "#0A0A0A" : "#8A8A8A",
+                backgroundColor: mode === m ? "#EDEDED" : "transparent",
               }}
             >
-              {a === "vince" ? "Vince · image" : "Ted · gallerist"}
+              {label}
             </button>
           ))}
         </div>
-        <p className="text-xs text-[#8A8A8A] max-w-md sm:text-right leading-relaxed">
-          {agent === "vince"
-            ? "World news enters as raw stories and leaves as a named image, a private diary, and a public record."
-            : "A scheduled agent reads, writes, and publishes — gated by the operator for anything that reaches another account."}
+        <p className="text-xs text-[#8A8A8A] max-w-sm sm:text-right leading-relaxed">
+          {mode === "story"
+            ? "What happens, plainly."
+            : "Every model call, gate, schedule, and record. Tap a step to open it."}
         </p>
       </div>
 
-      <div className="mb-5">
-        <Legend />
-      </div>
+      {mode === "tech" && <Legend />}
 
-      {/* desktop graph */}
-      <div className="hidden md:block">
-        <div className="overflow-x-auto -mx-1 px-1">
-          <Graph
-            nodes={nodes}
-            edges={edges}
-            lanes={lanes}
-            active={active}
-            setActive={setActive}
-          />
-        </div>
-        <div className="mt-6 pt-6 border-t border-[#1d1d1d] min-h-[8.5rem]">
-          <DetailPanel node={activeNode} />
-        </div>
-      </div>
-
-      {/* mobile list */}
-      <div className="md:hidden">
-        <MobileList nodes={nodes} lanes={lanes} />
-      </div>
+      {mode === "story" ? (
+        <>
+          <StoryGroup group={VINCE} delay="0s" />
+          <Bridge mode={mode} />
+          <StoryGroup group={TED} delay="2.5s" />
+          <StoryGroup group={LOOPS} delay="5s" />
+        </>
+      ) : (
+        <>
+          <TechGroup group={VINCE} delay="0s" />
+          <Bridge mode={mode} />
+          <TechGroup group={TED} delay="2.5s" />
+          <TechGroup group={LOOPS} delay="5s" />
+          <Documents />
+        </>
+      )}
     </div>
   );
 };
