@@ -22,7 +22,7 @@ type Kind = "code" | "model" | "human" | "external" | "record";
 
 const KIND_META: Record<Kind, { label: string; color: string }> = {
   code: { label: "Deterministic code", color: "#8FB8A8" },
-  model: { label: "Model judgement", color: "#E0B563" },
+  model: { label: "LLM call", color: "#E0B563" },
   human: { label: "Human approval", color: "#D98E8E" },
   external: { label: "External service", color: "#7FA6C9" },
   record: { label: "Permanent record", color: "#9A9A9A" },
@@ -36,6 +36,9 @@ type TechStep = {
   gate?: boolean;
   detail: string;
   io?: string;
+  /** Documents this step reads or writes — rendered as chips that open the
+   *  in-page reader. Paths are under the site's public data root. */
+  docs?: { label: string; path: string }[];
 };
 
 type TechStage = {
@@ -66,7 +69,7 @@ const VINCE: Group = {
   accent: "#E0B563",
   storyBlurb: "The artist. One image a day, from the news to his neighborhood.",
   techIntro:
-    "Vince is a daily GitHub Actions workflow: cron-triggered Node.js scripts orchestrating LLM calls — Claude primary, with automatic OpenAI fallback through a shared client — and image generation through fal.ai. Every artifact of every run is committed to the repo as a permanent record.",
+    "Vince is a daily GitHub Actions workflow: cron-triggered Node.js scripts orchestrating LLM calls — Claude primary, with automatic OpenAI fallback through a shared client — and image generation with OpenAI's GPT Image 2 via fal.ai (Nano Banana Pro as fallback). Every artifact of every run is committed to the repo as a permanent record.",
   story: [
     {
       title: "Reads the news",
@@ -162,6 +165,11 @@ const VINCE: Group = {
           detail:
             "Three genuinely different compositions grown from the same anchor — biased by Vince's standing preoccupations, his evolving style-state, and his corpus memo, and pushed away from his last five selected works. Metabolize, never illustrate.",
           io: "anchor + preoccupations.md + style-state.json → 3 scene texts",
+          docs: [
+            { label: "preoccupations.md", path: "vince/preoccupations.md" },
+            { label: "style-state.json", path: "vince/style-state.json" },
+            { label: "corpus-memo.md", path: "vince/corpus-memo.md" },
+          ],
         },
         {
           label: "fidelity check",
@@ -256,6 +264,11 @@ const VINCE: Group = {
           detail:
             "Claude Opus writes one entry covering every session that day, drawing on the day's artworks, the news digest, the corpus memo, this week's voice-watch note, and his upbringing document. Anti-tic voice rules keep the prose from grooving; an entry cut off mid-thought is never pushed.",
           io: "cron 22:00 UTC → vince-workspace/diary/DATE.md (private repo)",
+          docs: [
+            { label: "VINCEUPBRINGING.md", path: "vince/VINCEUPBRINGING.md" },
+            { label: "voice-watch.md", path: "vince/voice-watch.md" },
+            { label: "corpus-memo.md", path: "vince/corpus-memo.md" },
+          ],
         },
         {
           label: "private by construction",
@@ -278,6 +291,7 @@ const VINCE: Group = {
           detail:
             "Replies only when the latest letter is Ted's and at least two days old. Reads the weekly voice-watch note first, so the letter critique applies to the next letter. Hard rules: invent no people or places, never mention how either brother is made.",
           io: "→ shared/correspondence/DATE-vince.md",
+          docs: [{ label: "voice-watch.md", path: "vince/voice-watch.md" }],
         },
         {
           label: "publish_project.js",
@@ -347,6 +361,7 @@ const TED: Group = {
           detail:
             "Fifteen minutes later: reshares the day's post to Stories and replies to genuine comments on our own posts — autonomous but guardrailed, with strategy set by a written playbook. Posting our own art to our own account is the one owner-decided exception to the approval gate.",
           io: "cron 11:15 AM LA · refs/TED-INSTAGRAM-PLAYBOOK.md",
+          docs: [{ label: "TED-INSTAGRAM-PLAYBOOK.md", path: "ted/TED-INSTAGRAM-PLAYBOOK.md" }],
         },
       ],
     },
@@ -363,6 +378,7 @@ const TED: Group = {
           detail:
             "Reads what changed: new shows, curators' arguments, open calls, the state of the AI-art market. He reads a venue's actual current programme before forming a view. Durable findings go to his memory; targets go to the outreach tracker.",
           io: "web → MEMORY.md + refs/outreach-tracker.md",
+          docs: [{ label: "MEMORY.md", path: "ted/MEMORY.md" }],
         },
       ],
     },
@@ -379,6 +395,7 @@ const TED: Group = {
           detail:
             "Researches the venue first, references their actual programme, and leads with the work's human meaning. Disclosure that Vince and Ted are AI is mandatory and honest — how it's sequenced depends on the audience, per a written playbook.",
           io: "→ drafts/ (draft only, never sends)",
+          docs: [{ label: "TED-OUTREACH-PLAYBOOK.md", path: "ted/TED-OUTREACH-PLAYBOOK.md" }],
         },
         {
           label: "owner approval",
@@ -402,13 +419,14 @@ const TED: Group = {
           detail:
             "Grounded only in his files and what actually happened that day — never invented. It lives in his private workspace repo, out of Vince's reach.",
           io: "→ ted-workspace/diary/DATE.md (private repo)",
+          docs: [{ label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" }],
         },
         {
           label: "voice-watch",
           kind: "model",
           detail:
-            "Sundays: he rereads his own recent diary entries and his letters to Vince like a hard editor, names the phrases and shapes that are calcifying in either register, and writes himself a blunt note that both the diary and the correspondence skills read before writing.",
-          io: "Sundays 6 PM LA → voice-watch.md",
+            "Sundays, automatically: his last ~14 diary entries and his letters to Vince are reread like a hard editor would, the phrases and shapes calcifying in either register are named, and a blunt note is written back into his workspace — where the diary and correspondence skills read it before writing. Fully segregated from Vince's review: his writing only, his note only.",
+          io: "weekly-voice-watch-ted.yml, Sundays 19:00 UTC → ted-workspace/voice-watch.md",
         },
       ],
     },
@@ -425,6 +443,7 @@ const TED: Group = {
           detail:
             "Syncs the shared folder, reads what Vince actually wrote, and answers it — occasionally folding in a line from his field research. It reaches only his brother, so it needs no approval.",
           io: "→ shared/correspondence/DATE-ted.md",
+          docs: [{ label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" }],
         },
       ],
     },
@@ -461,8 +480,9 @@ const LOOPS: Group = {
           label: "weekly-voice-watch.yml",
           kind: "model",
           detail:
-            "Every Sunday a GitHub Action rereads Vince's last ~14 diary entries and his recent letters to Ted, names calcified openers and worn phrases in both registers, and rewrites the note the diary and correspondence pipelines read before writing. Auto-applied, like the corpus memo — it is self-awareness, not a rule change. Ted runs the same weekly review on his side.",
-          io: "Sundays 20:00 UTC → vince/voice-watch.md + shared/voice-log.jsonl",
+            "Every Sunday, one GitHub Action per brother — fully segregated: each rereads only that brother's last ~14 diary entries and his own letters, names calcified openers and worn phrases in both registers, and rewrites the note that brother's diary and letter writers read before writing. Auto-applied, like the corpus memo — it is self-awareness, not a rule change.",
+          io: "Sundays 19:00/20:00 UTC → ted-workspace/voice-watch.md · vince/voice-watch.md · shared/voice-log.jsonl",
+          docs: [{ label: "voice-watch.md (vince)", path: "vince/voice-watch.md" }],
         },
         {
           label: "corpus memo",
@@ -470,6 +490,7 @@ const LOOPS: Group = {
           detail:
             "Regenerated after each daily run: Vince's own running summary of what he has been making, read back by the scene writer and the diary.",
           io: "shared/corpus-index.jsonl → vince/corpus-memo.md",
+          docs: [{ label: "corpus-memo.md", path: "vince/corpus-memo.md" }],
         },
         {
           label: "newness gauge",
@@ -483,8 +504,12 @@ const LOOPS: Group = {
           kind: "human",
           gate: true,
           detail:
-            "Weekly and monthly, but deliberately never self-applying: propose_style drafts a single style clause only when two straight newness scores run low; propose_preoccupations (monthly) suggests at most one change. Both write proposal files a human reviews and applies by hand — the pipeline never rewrites its own rules.",
-          io: "→ style-state.proposed.json + preoccupations.proposed.md",
+            "Weekly and monthly, but deliberately never self-applying: propose_style drafts a single style clause only when two straight newness scores run low; propose_preoccupations (monthly) suggests at most one change. Both write proposal files a human reviews and applies by hand — the pipeline never rewrites its own rules. Pending proposals are flagged on the dashboard with the exact approve/reject steps.",
+          io: "→ style-state.proposed.json + preoccupations.proposed.md → dashboard banner",
+          docs: [
+            { label: "style-state.json", path: "vince/style-state.json" },
+            { label: "preoccupations.md", path: "vince/preoccupations.md" },
+          ],
         },
         {
           label: "incident log",
@@ -500,38 +525,36 @@ const LOOPS: Group = {
 
 /* ------------------------------------------------------------- documents --- */
 
+/** `reader` is a path under the site's public data root (mirrored read-only
+ *  copies, synced daily by the pipeline's sync-agent-docs workflow, with all
+ *  email addresses redacted). Entries without `reader` are plain links. */
 type Doc = { name: string; desc: string; href?: string; priv?: boolean; reader?: string };
 
-const GH = "https://github.com/birdofnofeather";
-
-/** Ted's bootstrap documents — read-only copies mirrored daily from the
- *  private ted-workspace repo into this site's public/ted/ by the pipeline's
- *  sync-ted-docs workflow. `reader` is the filename under /ted/. */
 const TED_BOOT_DOCS: Doc[] = [
   {
     name: "TEDUPBRINGING.md",
     desc: "His life story — the source of all his biography.",
-    reader: "TEDUPBRINGING.md",
+    reader: "ted/TEDUPBRINGING.md",
   },
   {
     name: "SOUL.md",
     desc: "Who he is when the machine wakes him.",
-    reader: "SOUL.md",
+    reader: "ted/SOUL.md",
   },
   {
     name: "IDENTITY.md",
     desc: "Name, role, vibe.",
-    reader: "IDENTITY.md",
+    reader: "ted/IDENTITY.md",
   },
   {
     name: "AGENTS.md",
     desc: "His standing operating instructions.",
-    reader: "AGENTS.md",
+    reader: "ted/AGENTS.md",
   },
   {
     name: "MEMORY.md",
     desc: "Durable facts he has learned — the only things he may treat as true.",
-    reader: "MEMORY.md",
+    reader: "ted/MEMORY.md",
   },
 ];
 
@@ -543,32 +566,27 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
       {
         name: "VINCEUPBRINGING.md",
         desc: "His life story — the canon every diary entry and letter draws from.",
-        href: `${GH}/vince-workspace/blob/main/VINCEUPBRINGING.md`,
-        priv: true,
+        reader: "vince/VINCEUPBRINGING.md",
       },
       {
         name: "preoccupations.md",
         desc: "The standing artistic obsessions that bias every scene.",
-        href: `${GH}/VincePipelineTest/blob/main/vince/preoccupations.md`,
-        priv: true,
+        reader: "vince/preoccupations.md",
       },
       {
         name: "style-state.json",
         desc: "His evolving formal language — versioned, with a changelog.",
-        href: `${GH}/VincePipelineTest/blob/main/vince/style-state.json`,
-        priv: true,
+        reader: "vince/style-state.json",
       },
       {
         name: "corpus-memo.md",
         desc: "His own running summary of what he has been making.",
-        href: `${GH}/VincePipelineTest/blob/main/vince/corpus-memo.md`,
-        priv: true,
+        reader: "vince/corpus-memo.md",
       },
       {
         name: "voice-watch.md",
         desc: "This week's note to himself about his prose habits.",
-        href: `${GH}/VincePipelineTest/blob/main/vince/voice-watch.md`,
-        priv: true,
+        reader: "vince/voice-watch.md",
       },
     ],
   },
@@ -580,14 +598,12 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
       {
         name: "TED-OUTREACH-PLAYBOOK.md",
         desc: "How galleries are approached and AI disclosure is sequenced.",
-        href: `${GH}/ted-workspace/blob/main/refs/TED-OUTREACH-PLAYBOOK.md`,
-        priv: true,
+        reader: "ted/TED-OUTREACH-PLAYBOOK.md",
       },
       {
         name: "TED-INSTAGRAM-PLAYBOOK.md",
         desc: "The @deyaanga strategy — what posts, what waits for approval.",
-        href: `${GH}/ted-workspace/blob/main/refs/TED-INSTAGRAM-PLAYBOOK.md`,
-        priv: true,
+        reader: "ted/TED-INSTAGRAM-PLAYBOOK.md",
       },
     ],
   },
@@ -603,12 +619,11 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
       {
         name: "pipeline-changelog.md",
         desc: "Every behavioral change to the pipeline, individually revertible.",
-        href: `${GH}/VincePipelineTest/blob/main/agent/pipeline-changelog.md`,
-        priv: true,
+        reader: "shared/pipeline-changelog.md",
       },
       {
         name: "Full dashboard",
-        desc: "Every run, incident, judge verdict, and artwork.",
+        desc: "Every run, incident, judge verdict, pending proposal, and artwork.",
         href: "https://dashboard.deyaanga.art/dashboard.html",
       },
     ],
@@ -643,6 +658,17 @@ const railCss = `
 }
 dialog.wf-doc::backdrop {
   background: rgba(0, 0, 0, 0.72);
+}
+/* Under-the-hood renders inside a terminal frame: everything goes monospace,
+   including headings (which otherwise take the site's display font). */
+.wf-term {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  border: 1px solid #262626;
+  background: #090909;
+}
+.wf-term h1, .wf-term h2, .wf-term h3, .wf-term h4, .wf-term h5, .wf-term h6 {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  letter-spacing: 0;
 }
 `;
 
@@ -763,7 +789,7 @@ const StoryGroup = ({ group, delay }: { group: Group; delay: string }) => (
 
 /* -------------------------------------------------------------- tech mode --- */
 
-const TechStepRow = ({ step }: { step: TechStep }) => {
+const TechStepRow = ({ step, onOpenDoc }: { step: TechStep; onOpenDoc: (d: OpenDoc) => void }) => {
   const [open, setOpen] = useState(false);
   const meta = KIND_META[step.kind];
   return (
@@ -814,14 +840,39 @@ const TechStepRow = ({ step }: { step: TechStep }) => {
               {step.io}
             </p>
           )}
+          {step.docs?.length ? (
+            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+              <span className="text-[9px] uppercase tracking-wider text-[#5a5a5a]" style={{ fontFamily: mono }}>
+                docs
+              </span>
+              {step.docs.map((d) => (
+                <button
+                  key={d.path}
+                  onClick={() => onOpenDoc({ name: d.label, path: d.path })}
+                  className="px-2 py-0.5 text-[10px] border border-[#262626] text-[#C9C9C9] hover:text-[#EDEDED] hover:border-[#8FB8A8]/60 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+                  style={{ fontFamily: mono }}
+                >
+                  {d.label}
+                </button>
+              ))}
+            </div>
+          ) : null}
         </div>
       )}
     </div>
   );
 };
 
-const TechGroup = ({ group, delay }: { group: Group; delay: string }) => (
-  <section aria-label={group.title} className="mb-16 sm:mb-20">
+const TechGroup = ({
+  group,
+  delay,
+  onOpenDoc,
+}: {
+  group: Group;
+  delay: string;
+  onOpenDoc: (d: OpenDoc) => void;
+}) => (
+  <section aria-label={group.title} className="mb-14 sm:mb-16">
     <GroupHeader group={group} mode="tech" />
     <ol className="relative border-l border-[#1f1f1f] ml-1" style={{ listStyle: "none" }}>
       <Rail accent={group.accent} delay={delay} />
@@ -836,18 +887,18 @@ const TechGroup = ({ group, delay }: { group: Group; delay: string }) => (
             >
               {String(i + 1).padStart(2, "0")}
             </span>
-            <h4 className="text-[#EDEDED] text-[16px] font-medium tracking-tight">
+            <h4 className="text-[#EDEDED] text-[15px] font-medium tracking-tight">
               {stage.title}
             </h4>
             {stage.when && <When>{stage.when}</When>}
           </div>
-          <p className="text-[14px] leading-relaxed text-[#EDEDED]/75 max-w-xl">
+          <p className="text-[13px] leading-relaxed text-[#EDEDED]/75 max-w-xl">
             {stage.plain}
           </p>
           {stage.steps.length > 0 && (
             <div className="mt-4 max-w-xl border border-[#1d1d1d] bg-[#0C0C0C]">
               {stage.steps.map((s) => (
-                <TechStepRow key={s.label} step={s} />
+                <TechStepRow key={s.label} step={s} onOpenDoc={onOpenDoc} />
               ))}
             </div>
           )}
@@ -959,7 +1010,13 @@ const MdLite = ({ text }: { text: string }) => {
   );
 };
 
-type OpenDoc = { name: string; file: string };
+type OpenDoc = { name: string; path: string };
+
+const docSource = (path: string): string => {
+  if (path === "vince/VINCEUPBRINGING.md") return "synced daily from vince-workspace";
+  if (path.startsWith("ted/")) return "synced daily from ted-workspace";
+  return "synced daily from the pipeline repo";
+};
 
 const DocReader = ({ doc, onClose }: { doc: OpenDoc; onClose: () => void }) => {
   const ref = useRef<HTMLDialogElement>(null);
@@ -974,7 +1031,7 @@ const DocReader = ({ doc, onClose }: { doc: OpenDoc; onClose: () => void }) => {
   useEffect(() => {
     let alive = true;
     setState({ status: "loading" });
-    fetch(`${DATA_BASE_URL}/ted/${doc.file}`)
+    fetch(`${DATA_BASE_URL}/${doc.path}`)
       .then((r) => {
         if (!r.ok) throw new Error(String(r.status));
         return r.text();
@@ -984,7 +1041,7 @@ const DocReader = ({ doc, onClose }: { doc: OpenDoc; onClose: () => void }) => {
     return () => {
       alive = false;
     };
-  }, [doc.file]);
+  }, [doc.path]);
 
   return (
     <dialog
@@ -1009,7 +1066,7 @@ const DocReader = ({ doc, onClose }: { doc: OpenDoc; onClose: () => void }) => {
           {doc.name}
         </span>
         <span className="text-[9.5px] uppercase tracking-wider text-[#6E6E6E] hidden sm:inline" style={{ fontFamily: mono }}>
-          read-only · synced daily from ted-workspace
+          read-only · {docSource(doc.path)}
         </span>
         <form method="dialog" className="ml-auto">
           <button
@@ -1029,7 +1086,17 @@ const DocReader = ({ doc, onClose }: { doc: OpenDoc; onClose: () => void }) => {
             could not load this document — please try again later.
           </p>
         )}
-        {state.status === "ok" && <MdLite text={state.text} />}
+        {state.status === "ok" &&
+          (doc.path.endsWith(".json") ? (
+            <pre
+              className="text-[11.5px] leading-relaxed text-[#D6D6D6] whitespace-pre-wrap break-words"
+              style={{ fontFamily: mono }}
+            >
+              {state.text}
+            </pre>
+          ) : (
+            <MdLite text={state.text} />
+          ))}
       </div>
     </dialog>
   );
@@ -1047,7 +1114,7 @@ const TedBootDocs = ({ onOpen }: { onOpen: (d: OpenDoc) => void }) => (
       {TED_BOOT_DOCS.map((d) => (
         <button
           key={d.name}
-          onClick={() => onOpen({ name: d.name, file: d.reader! })}
+          onClick={() => onOpen({ name: d.name, path: d.reader! })}
           className="px-2.5 py-1.5 text-[11px] border border-[#262626] text-[#C9C9C9] hover:text-[#EDEDED] hover:border-[#7FA6C9]/60 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
           style={{ fontFamily: mono }}
           title={d.desc}
@@ -1147,7 +1214,7 @@ const DocEntry = ({ d, onOpen }: { d: Doc; onOpen: (o: OpenDoc) => void }) => {
   if (d.reader) {
     return (
       <button
-        onClick={() => onOpen({ name: d.name, file: d.reader! })}
+        onClick={() => onOpen({ name: d.name, path: d.reader! })}
         className="group block text-left w-full focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
       >
         {inner}
@@ -1256,8 +1323,6 @@ const WorkflowMap = () => {
         </p>
       </div>
 
-      {mode === "tech" && <Legend />}
-
       {mode === "story" ? (
         <>
           <StoryGroup group={VINCE} delay="0s" />
@@ -1266,14 +1331,28 @@ const WorkflowMap = () => {
           <StoryGroup group={LOOPS} delay="5s" />
         </>
       ) : (
-        <>
-          <TechGroup group={VINCE} delay="0s" />
-          <Bridge mode={mode} />
-          <TechGroup group={TED} delay="2.5s" />
-          <TedBootDocs onOpen={setOpenDoc} />
-          <TechGroup group={LOOPS} delay="5s" />
-          <Documents onOpen={setOpenDoc} />
-        </>
+        <div className="wf-term">
+          {/* terminal chrome */}
+          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#1d1d1d] bg-[#0C0C0C]">
+            <span aria-hidden className="flex gap-1.5">
+              {["#4a3f3f", "#4a473f", "#3f4a41"].map((c) => (
+                <span key={c} className="inline-block rounded-full" style={{ width: 9, height: 9, backgroundColor: c }} />
+              ))}
+            </span>
+            <span className="text-[10px] text-[#6E6E6E] truncate">
+              operator@deyaanga:~$ show pipeline --under-the-hood
+            </span>
+          </div>
+          <div className="px-4 sm:px-8 pt-8 pb-6">
+            <Legend />
+            <TechGroup group={VINCE} delay="0s" onOpenDoc={setOpenDoc} />
+            <Bridge mode={mode} />
+            <TechGroup group={TED} delay="2.5s" onOpenDoc={setOpenDoc} />
+            <TedBootDocs onOpen={setOpenDoc} />
+            <TechGroup group={LOOPS} delay="5s" onOpenDoc={setOpenDoc} />
+            <Documents onOpen={setOpenDoc} />
+          </div>
+        </div>
       )}
     </div>
   );
