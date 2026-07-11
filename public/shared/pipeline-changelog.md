@@ -4,6 +4,15 @@ Every behavioral change to the pipeline gets one entry here, newest first.
 This file is the reversibility record: each entry names its commit and its revert path.
 Append an entry in the same commit as the change itself.
 
+## 2026-07-10 — Struck the 2026-07-10 "one-million-women-lost" run (six-fingered hand)
+- What happened: the selected keeper (`vince_20260710_004_one-million-women-lost`) had a visible AI tell — the hand reaching through the gate has six fingers. No diary entry had been written yet for 2026-07-10, so only the image pipeline's output needed reverting.
+- What changed: removed all six candidate images + JSON for the run from `shared/artworks/`, dropped the corresponding lines from `shared/corpus-index.jsonl`, `shared/preference-ledger.jsonl`, and `shared/run-log.jsonl`, removed the fetched digest `shared/digest/raw-2026-07-10.json`, removed the `one-million-women-lost` entry from `agent/covered-stories.md` (so the story is eligible again), regenerated `vince/corpus-memo.md` (`npm run memo`) and `docs/index.html` (`npm run build-log`) from the corrected data.
+- Why: not a code/behavior change — a content correction. The run must be redone from `npm run fetch` onward before today's diary entry is written.
+- Files: `agent/covered-stories.md`, `docs/index.html`, `shared/corpus-index.jsonl`, `shared/preference-ledger.jsonl`, `shared/run-log.jsonl`, `vince/corpus-memo.md`, plus deletions under `shared/artworks/` and `shared/digest/`.
+- Commit: (this commit)
+- Revert: not applicable — this is itself the revert of the 2026-07-10 run (`0e334ef` + the corpus-memo half of `efed54f`).
+- Verified: `npm run memo` and `npm run build-log` ran clean; dashboard artwork/run counts dropped by one run.
+
 ## 2026-07-10 — Ted's weekly voice-watch automated; proposals surfaced on dashboard; doc sync extended to all key documents with email redaction
 - What changed: (1) New `vince/pipelines/evolve/gauge_voice_ted.js` (`npm run gauge-voice-ted`) + `.github/workflows/weekly-voice-watch-ted.yml` (Sundays 19:00 UTC): Ted's weekly voice self-check now runs from this repo's Actions, fully segregated per brother — reads only Ted's diary (ted-workspace, via TED_DIARY_TOKEN) and his own `-ted.md` letters (shared/correspondence), and PUTs `voice-watch.md` back into ted-workspace where his diary/correspondence skills read it. Run records append to shared/voice-log.jsonl with `agent:"ted"`. `gauge_voice.js` exports its scan helpers (normalize/watchListCounts/repeatedTrigrams, watch-list now parameterized) and gained a direct-execution guard so importing it doesn't run Vince's gauge. (2) `build_log.js` gains a "Proposals awaiting review" panel: when `vince/style-state.proposed.json` or `vince/preoccupations.proposed.md` exists, the dashboard shows a banner with the proposal summary and exact approve/reject steps — the operator no longer has to remember to check the repo. (3) `sync-ted-docs.yml` replaced by `sync-agent-docs.yml`: now also mirrors VINCEUPBRINGING.md (vince-workspace), Vince's preoccupations/style-state/corpus-memo/voice-watch and the pipeline changelog (this repo), plus Ted's two refs/ playbooks, into the showcase's public/ted|vince|shared folders; every copy passes an email-redaction step (name@domain → name (at) domain) so no plaintext address is scrapable.
 - Why: operator decisions — Ted's self-check must run on schedule with no manual step; pending proposals must be visible to the human who has to approve them; all key documents should be readable on the site without exposing harvestable email addresses.
@@ -19,6 +28,46 @@ Append an entry in the same commit as the change itself.
 - Commit: (this commit)
 - Revert: `git revert <hash>` — voice-log rows with the new `letters` field are inert; deleting the three new workflow files alone disables the crons.
 - Verified: `node --check` on both touched scripts passes; gauge-voice run without API keys logs counts and leaves voice-watch.md untouched (existing contract); workflow YAML mirrors the existing weekly-voice-watch.yml patterns. Live LLM passes not run here (no API keys in this environment).
+
+## 2026-07-08 — Correspondence: every-other-day cadence guard (Vince side)
+- What changed: `write_correspondence.js` now checks the date of the latest letter in `shared/correspondence/` before writing; Vince only replies if the latest letter is Ted's and at least two days old (matches the guard already documented for Ted's side).
+- Why: without a cadence guard the two-brother letter exchange could volley same-day, which reads as unnatural and burns API calls.
+- Files: `vince/pipelines/diary/write_correspondence.js`.
+- Commit: `6622ecd`.
+- Revert: `git revert 6622ecd` — removes the guard, restoring unconditional replies.
+- Verified: not recorded at the time (backfilled entry, 2026-07-11).
+
+## 2026-07-07 — Portfolio: strip trailing "as it happened" from headlines
+- What changed: `build_portfolio.js` now strips a trailing "- as it happened" (or "as it happens"/"as it happening") suffix from the Guardian headline before it's written to `portfolio.json`'s `headline` field, since the showcase displays it as the artwork's subtitle.
+- Why: Guardian live-blog headlines carry that suffix, which read oddly out of context as a static subtitle on the site.
+- Files: `vince/pipelines/publish/build_portfolio.js`.
+- Commit: `a693d1c`.
+- Revert: `git revert a693d1c`.
+- Verified: not recorded at the time (backfilled entry, 2026-07-11).
+
+## 2026-07-07 — Correspondence: write letter to local checkout too; add Vince's turn-based letter writer
+- What changed: (1) New `write_correspondence.js` — Vince's turn-based counterpart to Ted's letter writer: replies only when the latest letter is Ted's and at least two days old, reads `vince/voice-watch.md` first, and follows the shared hard rules (invent no people/places, never mention how either brother is made). (2) The script now also writes the new letter into the local checkout (not just pushed to the remote), so the same pipeline run's `publish_project.js` step picks it up immediately instead of waiting for the next run.
+- Why: Vince's side of the correspondence pipeline didn't exist yet; the local-checkout write closes a same-run publish gap.
+- Files: `vince/pipelines/diary/write_correspondence.js`.
+- Commits: `9b7a489`, `fdc12c1`.
+- Revert: `git revert fdc12c1 9b7a489`.
+- Verified: not recorded at the time (backfilled entry, 2026-07-11).
+
+## 2026-07-06 — publish_project: read and publish the brothers' correspondence
+- What changed: `publish_project.js` now reads `shared/correspondence/` and includes the letter exchange in what it publishes to the showcase, alongside artworks and diary content.
+- Why: correspondence existed as a pipeline output but wasn't surfaced anywhere public.
+- Files: `vince/pipelines/diary/publish_project.js`.
+- Commit: `1bdc37a`.
+- Revert: `git revert 1bdc37a`.
+- Verified: not recorded at the time (backfilled entry, 2026-07-11).
+
+## 2026-07-03 — Diary: fetch Ted's diary with a dedicated read-only token
+- What changed: `publish_project.js` now fetches Ted's diary from ted-workspace using a dedicated `TED_DIARY_TOKEN` (read-only) instead of reusing a broader-scoped token.
+- Why: least-privilege — the pipeline only needs read access to Ted's diary for publishing, not the write scope of other tokens.
+- Files: `vince/pipelines/diary/publish_project.js`.
+- Commit: `794100d`.
+- Revert: `git revert 794100d`.
+- Verified: not recorded at the time (backfilled entry, 2026-07-11).
 
 ## 2026-06-28 — Dashboard: surface content-filter story refusals as incidents
 - What changed: (1) `assemble_prompt.js` now calls `logIncident` (imported from `lib/llm.js`) for each story the content filter refuses, writing a `type: 'story-refused'` entry to `shared/incident-log.jsonl`. (2) `build_log.js` normalises existing `llm.js` entries whose field is named `severity` rather than `type`, fixing a pre-existing bug where provider fallbacks were silently invisible on the dashboard. (3) `renderIncidentSection` now handles the `story-refused` type: a blue info banner when only refusals are present ("run completed normally — pipeline fell back to next candidate"), with the refused story title shown in the incident table. CSS added for `.incident-banner.info` and `.badge-info`.
