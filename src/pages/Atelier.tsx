@@ -189,18 +189,41 @@ const DiaryList = ({ entries }: { entries: DiaryEntry[] }) => {
 
 const LetterBlock = ({ letter }: { letter: Letter }) => {
   const fromVince = letter.from === "vince";
+  const [open, setOpen] = useState(false);
   return (
     <article
       className={`border-l ${
         fromVince ? "border-[#EDEDED]/40" : "border-[#8A8A8A]/40"
       } pl-6 ${fromVince ? "" : "md:ml-12"}`}
     >
-      <div className="font-mono text-xs text-[#8A8A8A] mb-3 uppercase tracking-wider">
-        {letter.from} → {letter.to} · {fmtDate(letter.date)}
-      </div>
-      <div className={`text-[15px] ${fromVince ? "text-[#EDEDED]" : "text-[#EDEDED]/85"}`}>
-        <Paragraphs body={letter.body} />
-      </div>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center gap-2 w-full text-left group"
+        aria-expanded={open}
+      >
+        <span
+          className="text-[#8A8A8A] transition-transform duration-200 text-[10px]"
+          style={{
+            display: "inline-block",
+            transform: open ? "rotate(90deg)" : "rotate(0deg)",
+            fontFamily: "'JetBrains Mono', ui-monospace, monospace",
+          }}
+        >
+          &#9654;
+        </span>
+        <span
+          className="font-mono text-xs text-[#8A8A8A] group-hover:text-[#EDEDED] transition-colors uppercase tracking-wider"
+          style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
+        >
+          {letter.from} → {letter.to} · {fmtDate(letter.date)}
+        </span>
+      </button>
+
+      {open && (
+        <div className={`mt-5 text-[15px] ${fromVince ? "text-[#EDEDED]" : "text-[#EDEDED]/85"}`}>
+          <Paragraphs body={letter.body} />
+        </div>
+      )}
     </article>
   );
 };
