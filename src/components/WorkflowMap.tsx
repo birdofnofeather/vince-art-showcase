@@ -314,7 +314,7 @@ const TED: Group = {
   accent: "#7FA6C9",
   storyBlurb: "The younger brother and dealer. He carries the work into the world.",
   techIntro:
-    "Ted is an OpenClaw agent running on an xCloud VPS: cron-scheduled skills on a spend-capped Anthropic key. His config disables the tools that send messages outward, so anything that would reach another person's account can only be drafted — it waits for owner approval by construction, not by promise. Ad-hoc research and work on our own accounts run freely.",
+    "Ted is an OpenClaw agent running on an xCloud VPS: cron-scheduled skills on a spend-capped Anthropic key. Outward sends beyond our own account are meant to be locked at the config level, not just by prose instruction — today that lock relies on a narrow allowlist (no network-capable tools are reachable outside the few whitelisted actions) while the dedicated approval gate is being re-verified. Ad-hoc research and work on our own accounts run freely.",
   story: [
     {
       title: "Shares the work",
@@ -352,14 +352,14 @@ const TED: Group = {
           label: "publish-social",
           kind: "external",
           detail:
-            "Fetches the public portfolio feed, finds the oldest selected work not yet posted, writes an oblique caption in Ted's voice (never #aiart), and posts it to @deyaanga via the Zernio API. One work a day, tracked in a posted-ledger.",
+            "Fetches the public portfolio feed, finds today's newest selected work not yet posted (posts nothing if there isn't one — never reaches back into a weeks-old backlog), pairs Vince's own title with the source headline as the two-line caption, and adds three to five approved hashtags (never #aiart). Posts to @deyaanga via the Zernio API. One work a day, tracked in a posted-ledger.",
           io: "portfolio.json + posted ledger → Instagram via Zernio",
         },
         {
           label: "engage-social",
           kind: "model",
           detail:
-            "Fifteen minutes later: reshares the day's post to Stories and replies to genuine comments on our own posts — autonomous but guardrailed, with strategy set by a written playbook. Posting our own art to our own account is the one owner-decided exception to the approval gate.",
+            "Fifteen minutes later: replies to genuine comments on our own posts — autonomous but guardrailed, with strategy set by a written playbook. Posting our own art and replying to our own comments are the two owner-decided exceptions to the approval gate. Reshares the day's post to Stories only as a note for the owner to do by hand: the Zernio API has no Stories endpoint, so this is not automated.",
           io: "cron 11:15 AM LA · refs/TED-INSTAGRAM-PLAYBOOK.md",
           docs: [{ label: "TED-INSTAGRAM-PLAYBOOK.md", path: "ted/TED-INSTAGRAM-PLAYBOOK.md" }],
         },
@@ -402,7 +402,7 @@ const TED: Group = {
           kind: "human",
           gate: true,
           detail:
-            "Every outward message waits in drafts until the operator explicitly approves it. The deny is enforced in the agent's config — the send tools are locked — not just written down as a rule.",
+            "Every outward message waits in drafts until the operator explicitly approves it. Today that's enforced by a narrow config allowlist with no outbound-send tool reachable, rather than the dedicated approval gate — which is real config, not just a written rule, but is currently switched off pending re-verification.",
         },
       ],
     },
@@ -417,16 +417,20 @@ const TED: Group = {
           label: "diary",
           kind: "model",
           detail:
-            "Grounded only in his files and what actually happened that day — never invented. It lives in his private workspace repo, out of Vince's reach.",
+            "Grounded only in his files and what actually happened that day — never invented. Reads voice-watch.md first, if it's there. It lives in his private workspace repo, out of Vince's reach.",
           io: "→ ted-workspace/diary/DATE.md (private repo)",
-          docs: [{ label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" }],
+          docs: [
+            { label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" },
+            { label: "voice-watch.md", path: "ted/voice-watch.md" },
+          ],
         },
         {
           label: "voice-watch",
           kind: "model",
           detail:
-            "Sundays, automatically: his last ~14 diary entries and his letters to Vince are reread like a hard editor would, the phrases and shapes calcifying in either register are named, and a blunt note is written back into his workspace — where the diary and correspondence skills read it before writing. Fully segregated from Vince's review: his writing only, his note only.",
-          io: "weekly-voice-watch-ted.yml, Sundays 19:00 UTC → ted-workspace/voice-watch.md",
+            "Sundays, on Ted's own OpenClaw cron on xCloud (not a GitHub Action — ted-workspace only backs up one-way, VPS to GitHub, so a GitHub Action's writes never reach the live agent): his last ~14 diary entries and his letters to Vince are reread like a hard editor would, the phrases and shapes calcifying in either register are named, and a blunt note is written directly into his live workspace — where the diary and correspondence skills read it before writing. Fully segregated from Vince's review: his writing only, his note only.",
+          io: "Ted's OpenClaw cron, Sundays → ted-workspace/voice-watch.md",
+          docs: [{ label: "voice-watch.md", path: "ted/voice-watch.md" }],
         },
       ],
     },
@@ -441,9 +445,12 @@ const TED: Group = {
           label: "correspondence",
           kind: "model",
           detail:
-            "Syncs the shared folder, reads what Vince actually wrote, and answers it — occasionally folding in a line from his field research. It reaches only his brother, so it needs no approval.",
+            "Syncs the shared folder, reads what Vince actually wrote, reads voice-watch.md first if it's there, and answers it — occasionally folding in a line from his field research. It reaches only his brother, so it needs no approval.",
           io: "→ shared/correspondence/DATE-ted.md",
-          docs: [{ label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" }],
+          docs: [
+            { label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" },
+            { label: "voice-watch.md", path: "ted/voice-watch.md" },
+          ],
         },
       ],
     },
@@ -477,12 +484,15 @@ const LOOPS: Group = {
         "The parts of the system that watch the system. The self-checks auto-apply; anything that would change Vince's style is a proposal a human must approve.",
       steps: [
         {
-          label: "weekly-voice-watch.yml",
+          label: "weekly-voice-watch",
           kind: "model",
           detail:
-            "Every Sunday, one GitHub Action per brother — fully segregated: each rereads only that brother's last ~14 diary entries and his own letters, names calcified openers and worn phrases in both registers, and rewrites the note that brother's diary and letter writers read before writing. Auto-applied, like the corpus memo — it is self-awareness, not a rule change.",
-          io: "Sundays 19:00/20:00 UTC → ted-workspace/voice-watch.md · vince/voice-watch.md · shared/voice-log.jsonl",
-          docs: [{ label: "voice-watch.md (vince)", path: "vince/voice-watch.md" }],
+            "Every Sunday, fully segregated per brother: each rereads only his own last ~14 diary entries and his own letters, names calcified openers and worn phrases in both registers, and rewrites the note his own diary and letter writers read before writing. Vince's runs as a GitHub Action (weekly-voice-watch.yml, 20:00 UTC); Ted's runs on his own OpenClaw cron on xCloud (19:00 UTC) — ted-workspace only backs up one-way from the VPS, so a GitHub Action can't write into his live workspace. Auto-applied, like the corpus memo — it is self-awareness, not a rule change.",
+          io: "Sundays 19:00 UTC (Ted, xCloud cron) / 20:00 UTC (Vince, GitHub Action) → ted-workspace/voice-watch.md · vince/voice-watch.md · shared/voice-log.jsonl",
+          docs: [
+            { label: "voice-watch.md (vince)", path: "vince/voice-watch.md" },
+            { label: "voice-watch.md (ted)", path: "ted/voice-watch.md" },
+          ],
         },
         {
           label: "corpus memo",
@@ -595,6 +605,11 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
     accent: "#7FA6C9",
     docs: [
       ...TED_BOOT_DOCS,
+      {
+        name: "voice-watch.md",
+        desc: "This week's note to himself about his prose habits.",
+        reader: "ted/voice-watch.md",
+      },
       {
         name: "TED-OUTREACH-PLAYBOOK.md",
         desc: "How galleries are approached and AI disclosure is sequenced.",
