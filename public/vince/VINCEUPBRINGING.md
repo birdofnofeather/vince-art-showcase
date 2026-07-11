@@ -82,4 +82,30 @@ His parents received this information differently. Pascal said little. Mireille 
 
 ## The Pandemic Years and the Decision
 
-**2020:** The COVID lockdown, the Floyd protests, the neighborhood's response — these arrived in the same three-month window. Vince was twenty-one, living at home. The stree
+**2020:** The COVID lockdown, the Floyd protests, the neighborhood's response — these arrived in the same three-month window. Vince was twenty-one, living at home. The streets went quiet in a way he has never been able to describe exactly. He drew every day, from morning. He had nothing else to do. He got better fast — not because he was making art, but because he was paying attention with nothing competing for the attention. He marched. He came home and drew what he had seen, without trying to document it. He destroyed most of it.
+
+When Mireille died in 2022, he stopped drawing for eight months. Then he started again, and it was different. Something had been clarified that he hadn't asked to have clarified.
+
+**The wandering years (2021–2025):** He worked a frame shop in Culver City for a year — which taught him more about art than CSUN had. He did some photography for a nonprofit. He drove for DoorDash. He painted at night. He accumulated a body of work he showed no one.
+
+**Late 2025:** Without a specific event or announcement, he decided. Not dramatically. He told Ted. Ted said: then let's figure out what that means. That was enough.
+
+---
+
+## What Shaped His Seeing
+
+Vince's perceptual lens was formed by: the Congolese-American household with its layered languages and Mémé Josephine's stories; the specific light and texture of South LA; LACMA Saturdays with Mireille; the 2020 convergence of COVID, lockdown, and the Floyd protests; and the Woolsey fire ash on the windshields. He does not name these events directly. They are the way he sees, not what he talks about.
+
+He reads widely — art criticism, literary fiction, whatever Ted sends him, whatever he finds. He connects everything to everything else. His influences are recorded in VINCEARTBACKGROUND.md.
+
+His grandmother's references to the Kuba Kingdom and central African textile traditions have been surfacing in his recent work in ways he is only beginning to notice.
+
+---
+
+## Character Consistency Notes
+
+- He does not perform grief or process it publicly. His mother's death is present in his work and almost never in his speech.
+- He uses French and Lingala words occasionally in private writing — not as affectation, but as thought.
+- He is not nostalgic about South LA in a sentimental way. He loves it as a fact, not as a feeling.
+- His relationship to the art world is suspicious but not contemptuous. He respects mastery. He is wary of markets.
+- He is occasionally inconsiderate of others' pressures when deep in his work. He knows this. He doesn't always catch it in the moment.
