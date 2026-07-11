@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "venezuela-quake-death-toll",
+      "title": "Inheritance of Broken Ground",
+      "headline": "Venezuela quake death toll passes 4,000 as scale of recovery effort looms large",
+      "date": "2026-07-11",
+      "image": "artworks/venezuela-quake-death-toll.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "one-million-women-lost",
       "title": "Still Counting at the Edge",
       "headline": "One million women lost access to humanitarian support in past 18 months, UN report says",
