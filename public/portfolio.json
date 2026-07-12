@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "protests-engulf-indian-state",
+      "title": "After the Emptying",
+      "headline": "Protests engulf Indian state after rape and murder of 11-year-old girl",
+      "date": "2026-07-12",
+      "image": "artworks/protests-engulf-indian-state.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "venezuela-quake-death-toll",
       "title": "Inheritance of Broken Ground",
       "headline": "Venezuela quake death toll passes 4,000 as scale of recovery effort looms large",
