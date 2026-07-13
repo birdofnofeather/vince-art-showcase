@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "least-killed-fire-bangkok",
+      "title": "Every Exit, Unreachable",
+      "headline": "At least 27 killed in fire at Bangkok pub with another 22 critically injured",
+      "date": "2026-07-13",
+      "image": "artworks/least-killed-fire-bangkok.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "protests-engulf-indian-state",
       "title": "After the Emptying",
       "headline": "Protests engulf Indian state after rape and murder of 11-year-old girl",
