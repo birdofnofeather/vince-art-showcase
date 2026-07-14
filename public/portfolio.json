@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "firefighting-planes-scrambled-",
+      "title": "What the Continent Sent",
+      "headline": "Firefighting planes scrambled from south of France to tackle huge wildfire near Paris",
+      "date": "2026-07-14",
+      "image": "artworks/firefighting-planes-scrambled-.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "least-killed-fire-bangkok",
       "title": "Every Exit, Unreachable",
       "headline": "At least 27 killed in fire at Bangkok pub with another 22 critically injured",
