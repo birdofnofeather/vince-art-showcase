@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "they-want-break-our",
+      "title": "Silence Made Flesh",
+      "headline": "‘They want to break our will’: Gaza flotilla activist tells of rape in Israeli detention",
+      "date": "2026-07-15",
+      "image": "artworks/they-want-break-our.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "firefighting-planes-scrambled-",
       "title": "What the Continent Sent",
       "headline": "Firefighting planes scrambled from south of France to tackle huge wildfire near Paris",
