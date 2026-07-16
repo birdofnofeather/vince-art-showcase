@@ -357,7 +357,7 @@ const Atelier = () => {
                   Full Dashboard ↗
                 </a>
               </div>
-              <WorkflowMap />
+              <WorkflowMap diaries={data.diaries.vince} />
             </section>
 
             <hr style={{ borderColor: "#222" }} />

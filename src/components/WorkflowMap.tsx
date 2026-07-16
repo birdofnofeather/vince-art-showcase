@@ -1,34 +1,37 @@
-import React, { useEffect, useRef, useState } from "react";
-import { DATA_BASE_URL } from "@/lib/data";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { DATA_BASE_URL, fetchPortfolio, resolveImage, type Work } from "@/lib/data";
+import type { DiaryEntry } from "@/hooks/useProjectData";
 
 /**
- * WorkflowMap — how the DeYaanga system works, told two ways.
+ * WorkflowMap — how the DeYaanga system works, in three layers.
  *
- * "The story" is the human version: a short line for each thing that happens,
- * written for someone who has never heard of an AI agent. "Under the hood"
- * is the technical version: the same days opened up into every model call,
- * gate, schedule, record, and governing document.
+ * Layer 1, "the shape of it": a map you can take in at a glance — two
+ * brothers, one work a day, one shared mailbox, two private diaries.
  *
- * The two modes carry separate copy on purpose — the story compresses, the
- * technical view is verified against the pipeline code (assemble_prompt.js,
- * generate_image.js, write_diary.js, write_correspondence.js, the GitHub
- * Actions workflows, and Ted's OpenClaw skills). Live run status lives in
- * the Activity section.
+ * Layer 2, "one day, start to finish": the day as a story, told with the
+ * REAL latest run — its actual headline, drafts, final image, and diary
+ * line, pulled from portfolio.json and project.json at load time.
+ *
+ * Layer 3, "how it works": each step of the day expands into the verified
+ * technical detail (model calls, gates, schedules, records) — checked
+ * against the pipeline code and workflows (daily-run.yml, daily-diary.yml,
+ * assemble_prompt.js, generate_image.js, write_diary.js,
+ * write_correspondence.js, and Ted's OpenClaw skills). Live run status
+ * lives in the Activity section below.
  */
 
-type Mode = "story" | "tech";
+/* ------------------------------------------------------------------ types --- */
 
 type Kind = "code" | "model" | "human" | "external" | "record";
 
 const KIND_META: Record<Kind, { label: string; color: string }> = {
-  code: { label: "Deterministic code", color: "#8FB8A8" },
+  code: { label: "deterministic code", color: "#8FB8A8" },
   model: { label: "LLM call", color: "#E0B563" },
-  human: { label: "Human approval", color: "#D98E8E" },
-  external: { label: "External service", color: "#7FA6C9" },
-  record: { label: "Permanent record", color: "#9A9A9A" },
+  human: { label: "human approval", color: "#D98E8E" },
+  external: { label: "external service", color: "#7FA6C9" },
+  record: { label: "permanent record", color: "#9A9A9A" },
 };
-
-type StoryNode = { title: string; text: string; when?: string };
 
 type TechStep = {
   label: string;
@@ -41,532 +44,407 @@ type TechStep = {
   docs?: { label: string; path: string }[];
 };
 
-type TechStage = {
+type DayStep = {
   id: string;
-  when?: string;
+  when: string;
+  actor: "vince" | "ted" | "both";
   title: string;
-  plain: string;
-  steps: TechStep[];
+  text: string;
+  tech: TechStep[];
 };
 
-type Group = {
-  id: string;
-  kicker: string;
-  title: string;
-  accent: string;
-  storyBlurb?: string;
-  techIntro?: string;
-  story: StoryNode[];
-  tech: TechStage[];
-};
+type OpenDoc = { name: string; path: string };
 
-/* ------------------------------------------------------------------ vince --- */
+const ACCENT = { vince: "#E0B563", ted: "#7FA6C9", both: "#D98E8E" } as const;
 
-const VINCE: Group = {
-  id: "vince",
-  kicker: "01 · Vince",
-  title: "The studio",
-  accent: "#E0B563",
-  storyBlurb: "The artist. One image a day, from the news to his neighborhood.",
-  techIntro:
-    "Vince is a daily GitHub Actions workflow: cron-triggered Node.js scripts orchestrating LLM calls — Claude primary, with automatic OpenAI fallback through a shared client — and image generation with OpenAI's GPT Image 2 via fal.ai (Nano Banana Pro as fallback). Every artifact of every run is committed to the repo as a permanent record.",
-  story: [
-    {
-      title: "Reads the news",
-      when: "every morning",
-      text: "Vince starts the day with the world news.",
-    },
-    {
-      title: "Chooses a story",
-      text: "One story stays with him — the one with the most human weight.",
-    },
-    {
-      title: "Makes an image",
-      text: "He turns it into a photographic scene set in his own neighborhood in South LA. Never an illustration of the news; a translation of it.",
-    },
-    {
-      title: "Shows it",
-      text: "The finished image goes up on this site, with the day's drafts and working notes.",
-    },
-    {
-      title: "Writes his diary",
-      when: "every evening",
-      text: "He ends the day writing about the work in his diary.",
-    },
-    {
-      title: "Writes to Ted",
-      when: "a few times a week",
-      text: "And he trades letters with his brother Ted — about the work, the neighborhood, each other.",
-    },
-  ],
-  tech: [
-    {
-      id: "v-read",
-      when: "daily · 7:00 AM LA",
-      title: "Reads the news",
-      plain: "Around fifty stories from The Guardian's world desk.",
-      steps: [
-        {
-          label: "daily-run.yml",
-          kind: "code",
-          detail:
-            "A GitHub Actions cron at 14:00 UTC drives the whole morning: fetch, assemble, generate, dashboard, commit. No one presses a button.",
-        },
-        {
-          label: "fetch_news.js",
-          kind: "external",
-          detail:
-            "Pulls two pages of the Guardian world section, filters out live blogs and roundups, and marks topics already covered in the last seven days so the work doesn't repeat itself.",
-          io: "Guardian API + agent/covered-stories.md → shared/digest/raw-DATE.json",
-        },
-      ],
-    },
-    {
-      id: "v-choose",
-      when: "daily",
-      title: "Chooses a story",
-      plain:
-        "The one with the most human weight, skipping anything covered lately.",
-      steps: [
-        {
-          label: "story rank",
-          kind: "model",
-          detail:
-            "Claude weighs the fresh stories for human significance and emotional weight — an opinion under criteria, not a sort. It keeps an ordered top five, not just one.",
-          io: "story digest → ranked candidates",
-        },
-        {
-          label: "story fallback",
-          kind: "code",
-          gate: true,
-          detail:
-            "If a story later proves unworkable — say the model refuses its imagery — the refusal is logged and the next ranked story is tried. The run fails only if all five do.",
-          io: "refusals → shared/incident-log.jsonl",
-        },
-      ],
-    },
-    {
-      id: "v-distill",
-      when: "daily",
-      title: "Finds the image inside it",
-      plain:
-        "The story is distilled to its irreducible tension, then grown into three different scenes set in South LA.",
-      steps: [
-        {
-          label: "visual anchor",
-          kind: "model",
-          detail:
-            "Reads up to 6,000 characters of the article and distills it: the irreducible tension, a field of concrete materials, the emotional register, the timing (before, during, or after), and what the story is not about.",
-          io: "chosen article → anchor",
-        },
-        {
-          label: "divergent scenes ×3",
-          kind: "model",
-          detail:
-            "Three genuinely different compositions grown from the same anchor — biased by Vince's standing preoccupations, his evolving style-state, and his corpus memo, and pushed away from his last five selected works. Metabolize, never illustrate.",
-          io: "anchor + preoccupations.md + style-state.json → 3 scene texts",
-          docs: [
-            { label: "preoccupations.md", path: "vince/preoccupations.md" },
-            { label: "style-state.json", path: "vince/style-state.json" },
-            { label: "corpus-memo.md", path: "vince/corpus-memo.md" },
-          ],
-        },
-        {
-          label: "fidelity check",
-          kind: "model",
-          gate: true,
-          detail:
-            "Three yes/no questions per scene: right vocabulary, right register, right timing. A failing scene is discarded and redrawn fresh — no corrective feedback, which would loop it toward the literal. Up to two redraw rounds.",
-        },
-        {
-          label: "blind reverse test",
-          kind: "model",
-          detail:
-            "A reader who knows nothing guesses the news event from the scene text alone. The guess is recorded as a trace label on the work — a measurement, never a gate.",
-        },
-      ],
-    },
-    {
-      id: "v-make",
-      when: "daily",
-      title: "Makes the work",
-      plain:
-        "Three cheap drafts, one chosen direction, several full-resolution passes — leaning into accidents when they keep the story alive.",
-      steps: [
-        {
-          label: "draft renders ×3",
-          kind: "external",
-          detail:
-            "Each surviving scene is drafted cheaply at 512×640. GPT Image 2 via fal.ai is the primary renderer; Nano Banana Pro is the fallback.",
-        },
-        {
-          label: "two-judge panel",
-          kind: "model",
-          gate: true,
-          detail:
-            "Every comparative choice is a pairwise vote by two independent judges — Claude and GPT-4o — never one model grading itself. Every verdict, including undecided, is appended to a preference ledger that records but never steers.",
-          io: "verdicts → shared/preference-ledger.jsonl",
-        },
-        {
-          label: "convergence passes",
-          kind: "model",
-          detail:
-            "The chosen draft is developed at full resolution (1024×1280) through up to three image-to-image passes, always branching from the best frame so far. A pass that muddies the image becomes a dead end, not a foundation.",
-        },
-        {
-          label: "vision + accident gate",
-          kind: "model",
-          gate: true,
-          detail:
-            "Each render is read back: what actually appeared, what accident emerged, what to revise. An accident may redirect the work only while the story stays traceable (trace score at least 3); below that, pull back. The bridge between intention and discovery.",
-        },
-      ],
-    },
-    {
-      id: "v-sign",
-      when: "daily",
-      title: "Signs and shows it",
-      plain:
-        "The strongest frame is kept, named, and published with the whole day's process.",
-      steps: [
-        {
-          label: "final select + title",
-          kind: "model",
-          gate: true,
-          detail:
-            "The judge panel reviews every full-resolution candidate and picks the strongest frame, then the winner is checked against the anchor one last time — a failure demotes it and the panel re-picks once. The keeper is named in two to five words.",
-        },
-        {
-          label: "permanent record",
-          kind: "record",
-          detail:
-            "Every iteration — drafts, passes, and the keeper — is committed to the repo with full JSON metadata: the story, the anchor, the scene, the judges' reasoning. The keeper is appended to the corpus index.",
-          io: "shared/artworks/ + shared/corpus-index.jsonl",
-        },
-        {
-          label: "publish",
-          kind: "code",
-          detail:
-            "build_log.js rebuilds the pipeline dashboard and the portfolio build pushes the image and its story to deyaanga.art.",
-          io: "docs/index.html + portfolio.json → deyaanga.art",
-        },
-      ],
-    },
-    {
-      id: "v-diary",
-      when: "daily · 3:00 PM LA",
-      title: "Writes his diary",
-      plain: "One private entry covering the whole day. Ted never reads it.",
-      steps: [
-        {
-          label: "write_diary.js",
-          kind: "model",
-          detail:
-            "Claude Opus writes one entry covering every session that day, drawing on the day's artworks, the news digest, the corpus memo, this week's voice-watch note, and his upbringing document. Anti-tic voice rules keep the prose from grooving; an entry cut off mid-thought is never pushed.",
-          io: "cron 22:00 UTC → vince-workspace/diary/DATE.md (private repo)",
-          docs: [
-            { label: "VINCEUPBRINGING.md", path: "vince/VINCEUPBRINGING.md" },
-            { label: "voice-watch.md", path: "vince/voice-watch.md" },
-            { label: "corpus-memo.md", path: "vince/corpus-memo.md" },
-          ],
-        },
-        {
-          label: "private by construction",
-          kind: "record",
-          detail:
-            "The diary lives in a private workspace repo Ted has no access to. Privacy between the brothers is enforced by repository boundaries, not by a promise.",
-        },
-      ],
-    },
-    {
-      id: "v-letter",
-      when: "every other day or so",
-      title: "Writes to Ted",
-      plain:
-        "He answers Ted's latest letter on an every-other-day cadence — a correspondence, not a chat.",
-      steps: [
-        {
-          label: "write_correspondence.js",
-          kind: "model",
-          detail:
-            "Replies only when the latest letter is Ted's and at least two days old. Reads the weekly voice-watch note first, so the letter critique applies to the next letter. Hard rules: invent no people or places, never mention how either brother is made.",
-          io: "→ shared/correspondence/DATE-vince.md",
-          docs: [{ label: "voice-watch.md", path: "vince/voice-watch.md" }],
-        },
-        {
-          label: "publish_project.js",
-          kind: "code",
-          detail:
-            "Publishes the diaries and letters to this Atelier page, anchoring each draft image to the exact sentence in the diary that mentions it.",
-          io: "→ project.json → deyaanga.art/atelier",
-        },
-      ],
-    },
-  ],
-};
+const mono = "'JetBrains Mono', ui-monospace, monospace";
 
-/* -------------------------------------------------------------------- ted --- */
+/* --------------------------------------------------------------- the day --- */
 
-const TED: Group = {
-  id: "ted",
-  kicker: "02 · Ted",
-  title: "The gallery",
-  accent: "#7FA6C9",
-  storyBlurb: "The younger brother and dealer. He carries the work into the world.",
-  techIntro:
-    "Ted is an OpenClaw agent running on an xCloud VPS: cron-scheduled skills on a spend-capped Anthropic key. Outward sends beyond our own account are meant to be locked at the config level, not just by prose instruction — today that lock relies on a narrow allowlist (no network-capable tools are reachable outside the few whitelisted actions) while the dedicated approval gate is being re-verified. Ad-hoc research and work on our own accounts run freely.",
-  story: [
-    {
-      title: "Shares the work",
-      when: "every day",
-      text: "Ted posts Vince's finished image to @deyaanga on Instagram and replies to the comments.",
-    },
-    {
-      title: "Studies the art world",
-      when: "weekly",
-      text: "He keeps up with galleries, curators, and platforms — looking for where Vince's work belongs.",
-    },
-    {
-      title: "Makes introductions",
-      text: "When he finds the right gallery or platform, he writes to them about his brother's work.",
-    },
-    {
-      title: "Writes his diary",
-      when: "every night",
-      text: "He keeps his own diary — the parts of the work he doesn't say to Vince.",
-    },
-    {
-      title: "Writes back to Vince",
-      text: "And he answers his brother's letters — dealer second, brother first.",
-    },
-  ],
-  tech: [
-    {
-      id: "t-share",
-      when: "daily · 11:00 AM LA",
-      title: "Shares the work",
-      plain:
-        "The newest selected work goes to @deyaanga on Instagram, then he works the replies.",
-      steps: [
-        {
-          label: "publish-social",
-          kind: "external",
-          detail:
-            "Fetches the public portfolio feed, finds today's newest selected work not yet posted (posts nothing if there isn't one — never reaches back into a weeks-old backlog), pairs Vince's own title with the source headline as the two-line caption, and adds three to five approved hashtags (never #aiart). Posts to @deyaanga via the Zernio API. One work a day, tracked in a posted-ledger.",
-          io: "portfolio.json + posted ledger → Instagram via Zernio",
-        },
-        {
-          label: "engage-social",
-          kind: "model",
-          detail:
-            "Fifteen minutes later: replies to genuine comments on our own posts — autonomous but guardrailed, with strategy set by a written playbook. Posting our own art and replying to our own comments are the two owner-decided exceptions to the approval gate. Reshares the day's post to Stories only as a note for the owner to do by hand: the Zernio API has no Stories endpoint, so this is not automated.",
-          io: "cron 11:15 AM LA · refs/TED-INSTAGRAM-PLAYBOOK.md",
-          docs: [{ label: "TED-INSTAGRAM-PLAYBOOK.md", path: "ted/TED-INSTAGRAM-PLAYBOOK.md" }],
-        },
-      ],
-    },
-    {
-      id: "t-research",
-      when: "Mondays · 9:00 AM LA",
-      title: "Studies the field",
-      plain:
-        "Weekly research into galleries, curators, platforms, and open calls.",
-      steps: [
-        {
-          label: "field-research",
-          kind: "external",
-          detail:
-            "Reads what changed: new shows, curators' arguments, open calls, the state of the AI-art market. He reads a venue's actual current programme before forming a view. Durable findings go to his memory; targets go to the outreach tracker.",
-          io: "web → MEMORY.md + refs/outreach-tracker.md",
-          docs: [{ label: "MEMORY.md", path: "ted/MEMORY.md" }],
-        },
-      ],
-    },
-    {
-      id: "t-outreach",
-      when: "as the field warrants",
-      title: "Writes to galleries and platforms",
-      plain:
-        "Outreach is drafted, disclosed as AI, and sent only after the owner approves.",
-      steps: [
-        {
-          label: "draft-comms",
-          kind: "model",
-          detail:
-            "Researches the venue first, references their actual programme, and leads with the work's human meaning. Disclosure that Vince and Ted are AI is mandatory and honest — how it's sequenced depends on the audience, per a written playbook.",
-          io: "→ drafts/ (draft only, never sends)",
-          docs: [{ label: "TED-OUTREACH-PLAYBOOK.md", path: "ted/TED-OUTREACH-PLAYBOOK.md" }],
-        },
-        {
-          label: "owner approval",
-          kind: "human",
-          gate: true,
-          detail:
-            "Every outward message waits in drafts until the operator explicitly approves it. Today that's enforced by a narrow config allowlist with no outbound-send tool reachable, rather than the dedicated approval gate — which is real config, not just a written rule, but is currently switched off pending re-verification.",
-        },
-      ],
-    },
-    {
-      id: "t-diary",
-      when: "daily · 8:30 PM LA",
-      title: "Writes his diary",
-      plain:
-        "The rejections and what they cost, doubt, their mother's absence. Vince never reads it.",
-      steps: [
-        {
-          label: "diary",
-          kind: "model",
-          detail:
-            "Grounded only in his files and what actually happened that day — never invented. Reads voice-watch.md first, if it's there. It lives in his private workspace repo, out of Vince's reach.",
-          io: "→ ted-workspace/diary/DATE.md (private repo)",
-          docs: [
-            { label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" },
-            { label: "voice-watch.md", path: "ted/voice-watch.md" },
-          ],
-        },
-        {
-          label: "voice-watch",
-          kind: "model",
-          detail:
-            "Sundays, on Ted's own OpenClaw cron on xCloud (not a GitHub Action — ted-workspace only backs up one-way, VPS to GitHub, so a GitHub Action's writes never reach the live agent): his last ~14 diary entries and his letters to Vince are reread like a hard editor would, the phrases and shapes calcifying in either register are named, and a blunt note is written directly into his live workspace — where the diary and correspondence skills read it before writing. Fully segregated from Vince's review: his writing only, his note only.",
-          io: "Ted's OpenClaw cron, Sundays → ted-workspace/voice-watch.md",
-          docs: [{ label: "voice-watch.md", path: "ted/voice-watch.md" }],
-        },
-      ],
-    },
-    {
-      id: "t-letter",
-      when: "when a letter arrives",
-      title: "Writes back to Vince",
-      plain:
-        "Specific about the work, honest about the field, brother first.",
-      steps: [
-        {
-          label: "correspondence",
-          kind: "model",
-          detail:
-            "Syncs the shared folder, reads what Vince actually wrote, reads voice-watch.md first if it's there, and answers it — occasionally folding in a line from his field research. It reaches only his brother, so it needs no approval.",
-          io: "→ shared/correspondence/DATE-ted.md",
-          docs: [
-            { label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" },
-            { label: "voice-watch.md", path: "ted/voice-watch.md" },
-          ],
-        },
-      ],
-    },
-  ],
-};
+const DAY: DayStep[] = [
+  {
+    id: "news",
+    when: "7:00 AM · LA",
+    actor: "vince",
+    title: "Vince reads the news",
+    text: "Around fifty stories from the world desk arrive every morning. He isn't after the biggest one — he's after the one with the most human weight.",
+    tech: [
+      {
+        label: "daily-run.yml",
+        kind: "code",
+        detail:
+          "A GitHub Actions cron fires at 7:00 AM LA and drives the whole morning — fetch, assemble, generate, publish, commit — with no one pressing a button. Language calls go to Claude, with automatic OpenAI fallback through a shared client; images render on GPT Image 2 via fal.ai, with Nano Banana Pro as the fallback renderer.",
+        io: "cron 14:00 UTC → fetch → assemble → generate → publish",
+      },
+      {
+        label: "fetch_news.js",
+        kind: "external",
+        detail:
+          "Pulls two pages of the Guardian world section, filters out live blogs and roundups, and marks topics already covered in the last seven days so the work doesn't repeat itself.",
+        io: "Guardian API + agent/covered-stories.md → shared/digest/raw-DATE.json",
+      },
+      {
+        label: "story rank",
+        kind: "model",
+        detail:
+          "Claude weighs the fresh stories for human significance and emotional weight — an opinion under criteria, not a sort. It keeps an ordered top five, not just one.",
+        io: "story digest → ranked candidates",
+      },
+      {
+        label: "story fallback",
+        kind: "code",
+        gate: true,
+        detail:
+          "If a story later proves unworkable — say the model refuses its imagery — the refusal is logged and the next ranked story is tried. The run fails only if all five do.",
+        io: "refusals → shared/incident-log.jsonl",
+      },
+    ],
+  },
+  {
+    id: "scene",
+    when: "morning",
+    actor: "vince",
+    title: "He finds the image inside it",
+    text: "The story is distilled to the tension at its core, then imagined three different ways as scenes from his own neighborhood in South LA. Never an illustration of the news — a translation of it.",
+    tech: [
+      {
+        label: "visual anchor",
+        kind: "model",
+        detail:
+          "Reads up to 6,000 characters of the article and distills it: the irreducible tension, a field of concrete materials, the emotional register, the timing (before, during, or after), and what the story is not about.",
+        io: "chosen article → anchor",
+      },
+      {
+        label: "divergent scenes ×3",
+        kind: "model",
+        detail:
+          "Three genuinely different compositions grown from the same anchor — biased by Vince's standing preoccupations, his evolving style-state, and his corpus memo, and pushed away from his last five selected works. Metabolize, never illustrate.",
+        io: "anchor + preoccupations.md + style-state.json → 3 scene texts",
+        docs: [
+          { label: "preoccupations.md", path: "vince/preoccupations.md" },
+          { label: "style-state.json", path: "vince/style-state.json" },
+          { label: "corpus-memo.md", path: "vince/corpus-memo.md" },
+        ],
+      },
+      {
+        label: "fidelity check",
+        kind: "model",
+        gate: true,
+        detail:
+          "Three yes/no questions per scene: right vocabulary, right register, right timing. A failing scene is discarded and redrawn fresh — no corrective feedback, which would loop it toward the literal. Up to two redraw rounds.",
+      },
+      {
+        label: "blind reverse test",
+        kind: "model",
+        detail:
+          "A reader who knows nothing guesses the news event from the scene text alone. The guess is recorded as a trace label on the work — a measurement, never a gate.",
+      },
+    ],
+  },
+  {
+    id: "drafts",
+    when: "morning",
+    actor: "vince",
+    title: "Three drafts, one direction",
+    text: "Each scene gets a quick, cheap draft. Two independent judges compare them in pairs and pick the direction worth developing.",
+    tech: [
+      {
+        label: "draft renders ×3",
+        kind: "external",
+        detail:
+          "Each surviving scene is drafted cheaply at 512×640. GPT Image 2 via fal.ai is the primary renderer; Nano Banana Pro is the fallback.",
+      },
+      {
+        label: "two-judge panel",
+        kind: "model",
+        gate: true,
+        detail:
+          "Every comparative choice is a pairwise vote by two independent judges — Claude and GPT-4o — never one model grading itself. Every verdict, including undecided, is appended to a preference ledger that records but never steers.",
+        io: "verdicts → shared/preference-ledger.jsonl",
+      },
+    ],
+  },
+  {
+    id: "refine",
+    when: "morning",
+    actor: "vince",
+    title: "The work finds its form",
+    text: "The chosen draft is developed at full resolution, pass by pass, always building on the strongest frame so far. When the machine produces an accident, he keeps it — as long as the story still shows through.",
+    tech: [
+      {
+        label: "convergence passes",
+        kind: "model",
+        detail:
+          "The chosen draft is developed at full resolution (1024×1280) through up to three image-to-image passes, always branching from the best frame so far. A pass that muddies the image becomes a dead end, not a foundation.",
+      },
+      {
+        label: "vision + accident gate",
+        kind: "model",
+        gate: true,
+        detail:
+          "Each render is read back: what actually appeared, what accident emerged, what to revise. An accident may redirect the work only while the story stays traceable (trace score at least 3); below that, pull back. The bridge between intention and discovery.",
+      },
+    ],
+  },
+  {
+    id: "show",
+    when: "morning",
+    actor: "vince",
+    title: "Signed, titled, shown",
+    text: "The strongest frame is named in a few words and published here, together with every draft and note from the day.",
+    tech: [
+      {
+        label: "final select + title",
+        kind: "model",
+        gate: true,
+        detail:
+          "The judge panel reviews every full-resolution candidate and picks the strongest frame, then the winner is checked against the anchor one last time — a failure demotes it and the panel re-picks once. The keeper is named in two to five words.",
+      },
+      {
+        label: "permanent record",
+        kind: "record",
+        detail:
+          "Every iteration — drafts, passes, and the keeper — is committed to the repo with full JSON metadata: the story, the anchor, the scene, the judges' reasoning. The keeper is appended to the corpus index.",
+        io: "shared/artworks/ + shared/corpus-index.jsonl",
+      },
+      {
+        label: "publish",
+        kind: "code",
+        detail:
+          "build_log.js rebuilds the pipeline dashboard and the portfolio build pushes the image and its story to deyaanga.art.",
+        io: "docs/index.html + portfolio.json → deyaanga.art",
+      },
+    ],
+  },
+  {
+    id: "post",
+    when: "11:00 AM · LA",
+    actor: "ted",
+    title: "Ted takes it to the world",
+    text: "Ted posts the new work to @deyaanga on Instagram and replies to the comments himself — one work a day, never a backlog.",
+    tech: [
+      {
+        label: "an OpenClaw agent",
+        kind: "code",
+        detail:
+          "Ted runs on an OpenClaw agent on an xCloud VPS: cron-scheduled skills on a spend-capped Anthropic key. Outward sends beyond our own accounts are meant to be locked at the config level, not just by prose instruction — today that lock relies on a narrow tool allowlist (no network-capable tool is reachable outside the few whitelisted actions) while the dedicated approval gate is being re-verified.",
+      },
+      {
+        label: "publish-social",
+        kind: "external",
+        detail:
+          "Fetches the public portfolio feed, finds today's newest selected work not yet posted (posts nothing if there isn't one — never reaches back into a weeks-old backlog), pairs Vince's own title with the source headline as the two-line caption, and adds three to five approved hashtags (never #aiart). Posts to @deyaanga via the Zernio API. One work a day, tracked in a posted-ledger.",
+        io: "portfolio.json + posted ledger → Instagram via Zernio",
+      },
+      {
+        label: "engage-social",
+        kind: "model",
+        detail:
+          "Fifteen minutes later: replies to genuine comments on our own posts — autonomous but guardrailed, with strategy set by a written playbook. Posting our own art and replying to our own comments are the two owner-decided exceptions to the approval gate. Everything that reaches another account stays drafts-only.",
+        io: "cron 11:15 AM LA · refs/TED-INSTAGRAM-PLAYBOOK.md",
+        docs: [{ label: "TED-INSTAGRAM-PLAYBOOK.md", path: "ted/TED-INSTAGRAM-PLAYBOOK.md" }],
+      },
+    ],
+  },
+  {
+    id: "diary",
+    when: "3:00 PM · LA",
+    actor: "vince",
+    title: "Vince writes his diary",
+    text: "One entry covering the whole day's work. You can read it below — Ted never can.",
+    tech: [
+      {
+        label: "write_diary.js",
+        kind: "model",
+        detail:
+          "Claude Opus writes one entry covering every session that day, drawing on the day's artworks, the news digest, the corpus memo, this week's voice-watch note, and his upbringing document. Anti-tic voice rules keep the prose from grooving; an entry cut off mid-thought is never pushed.",
+        io: "cron 22:00 UTC → vince-workspace/diary/DATE.md (private repo)",
+        docs: [
+          { label: "VINCEUPBRINGING.md", path: "vince/VINCEUPBRINGING.md" },
+          { label: "voice-watch.md", path: "vince/voice-watch.md" },
+          { label: "corpus-memo.md", path: "vince/corpus-memo.md" },
+        ],
+      },
+      {
+        label: "private by construction",
+        kind: "record",
+        detail:
+          "The diary lives in a private workspace repo Ted has no access to. Privacy between the brothers is enforced by repository boundaries, not by a promise.",
+      },
+    ],
+  },
+  {
+    id: "letters",
+    when: "some evenings",
+    actor: "both",
+    title: "A letter between brothers",
+    text: "Every couple of days, one brother answers the other's last letter — about the work, the neighborhood, each other. The letters are the one page they both can read.",
+    tech: [
+      {
+        label: "write_correspondence.js",
+        kind: "model",
+        detail:
+          "Vince's turn runs every afternoon inside the diary workflow, but he writes only when the latest letter is Ted's and at least two days old — a correspondence, not a chat. He reads the weekly voice-watch note first. Hard rules: invent no people or places, never mention how either brother is made.",
+        io: "daily-diary.yml 22:00 UTC → shared/correspondence/DATE-vince.md",
+        docs: [{ label: "voice-watch.md", path: "vince/voice-watch.md" }],
+      },
+      {
+        label: "correspondence (Ted)",
+        kind: "model",
+        detail:
+          "Ted's side syncs the shared folder, reads what Vince actually wrote, reads his own voice-watch note first if it's there, and answers — occasionally folding in a line from his field research. It reaches only his brother, so it needs no approval.",
+        io: "→ shared/correspondence/DATE-ted.md",
+        docs: [
+          { label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" },
+          { label: "voice-watch.md", path: "ted/voice-watch.md" },
+        ],
+      },
+      {
+        label: "publish_project.js",
+        kind: "code",
+        detail:
+          "Publishes the diaries and letters to this Atelier page, anchoring each draft image to the exact sentence in the diary that mentions it.",
+        io: "→ project.json → deyaanga.art/atelier",
+      },
+    ],
+  },
+  {
+    id: "ted-diary",
+    when: "8:30 PM · LA",
+    actor: "ted",
+    title: "Ted writes his own",
+    text: "The rejections and what they cost, the doubt, the parts he doesn't say to Vince. Vince never reads it either.",
+    tech: [
+      {
+        label: "diary",
+        kind: "model",
+        detail:
+          "Grounded only in his files and what actually happened that day — never invented. Reads his voice-watch note first, if it's there. It lives in his private workspace repo, out of Vince's reach.",
+        io: "→ ted-workspace/diary/DATE.md (private repo)",
+        docs: [
+          { label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" },
+          { label: "voice-watch.md", path: "ted/voice-watch.md" },
+        ],
+      },
+    ],
+  },
+];
 
-/* ------------------------------------------------------------------ loops --- */
+/* -------------------------------------------------------------- the week --- */
 
-const LOOPS: Group = {
-  id: "loops",
-  kicker: "03 · Weekly",
-  title: "The self-check",
-  accent: "#8FB8A8",
-  story: [
-    {
-      title: "Keeping the voice fresh",
-      when: "Sundays",
-      text: "Once a week, each brother rereads his own recent writing — diary and letters — and notes the habits creeping in, so the next week's pages don't go stale.",
-    },
-    {
-      title: "Keeping the work fresh",
-      when: "weekly · monthly",
-      text: "The studio also measures whether the recent images are getting samey, and drafts small changes to Vince's style — which wait for a human's yes.",
-    },
-  ],
-  tech: [
-    {
-      id: "s-loops",
-      title: "Slow loops",
-      plain:
-        "The parts of the system that watch the system. The self-checks auto-apply; anything that would change Vince's style is a proposal a human must approve.",
-      steps: [
-        {
-          label: "weekly-voice-watch",
-          kind: "model",
-          detail:
-            "Every Sunday, fully segregated per brother: each rereads only his own last ~14 diary entries and his own letters, names calcified openers and worn phrases in both registers, and rewrites the note his own diary and letter writers read before writing. Vince's runs as a GitHub Action (weekly-voice-watch.yml, 20:00 UTC); Ted's runs on his own OpenClaw cron on xCloud (19:00 UTC) — ted-workspace only backs up one-way from the VPS, so a GitHub Action can't write into his live workspace. Auto-applied, like the corpus memo — it is self-awareness, not a rule change.",
-          io: "Sundays 19:00 UTC (Ted, xCloud cron) / 20:00 UTC (Vince, GitHub Action) → ted-workspace/voice-watch.md · vince/voice-watch.md · shared/voice-log.jsonl",
-          docs: [
-            { label: "voice-watch.md (vince)", path: "vince/voice-watch.md" },
-            { label: "voice-watch.md (ted)", path: "ted/voice-watch.md" },
-          ],
-        },
-        {
-          label: "corpus memo",
-          kind: "model",
-          detail:
-            "Regenerated after each daily run: Vince's own running summary of what he has been making, read back by the scene writer and the diary.",
-          io: "shared/corpus-index.jsonl → vince/corpus-memo.md",
-          docs: [{ label: "corpus-memo.md", path: "vince/corpus-memo.md" }],
-        },
-        {
-          label: "newness gauge",
-          kind: "model",
-          detail:
-            "Every Monday: scores how different the last six keepers are from the archive before them, so sameness is measured rather than felt. The score is a record — it gates nothing directly.",
-          io: "weekly-evolve.yml, Mondays 16:00 UTC → shared/newness-log.jsonl",
-        },
-        {
-          label: "style + preoccupation proposals",
-          kind: "human",
-          gate: true,
-          detail:
-            "Weekly and monthly, but deliberately never self-applying: propose_style drafts a single style clause only when two straight newness scores run low; propose_preoccupations (monthly) suggests at most one change. Both write proposal files a human reviews and applies by hand — the pipeline never rewrites its own rules. Pending proposals are flagged on the dashboard with the exact approve/reject steps.",
-          io: "→ style-state.proposed.json + preoccupations.proposed.md → dashboard banner",
-          docs: [
-            { label: "style-state.json", path: "vince/style-state.json" },
-            { label: "preoccupations.md", path: "vince/preoccupations.md" },
-          ],
-        },
-        {
-          label: "incident log",
-          kind: "record",
-          detail:
-            "Every Anthropic call routes through a client that retries, then fails over to OpenAI — except the two selection judges, which stay deliberately independent. Every fallback, refusal, and hard failure is logged and surfaced on the dashboard.",
-          io: "→ shared/incident-log.jsonl → dashboard",
-        },
-      ],
-    },
-  ],
-};
+const WEEK: DayStep[] = [
+  {
+    id: "research",
+    when: "Mondays",
+    actor: "ted",
+    title: "Ted studies the field",
+    text: "New shows, curators' arguments, open calls — he keeps up with the art world, looking for where Vince's work belongs.",
+    tech: [
+      {
+        label: "field-research",
+        kind: "external",
+        detail:
+          "Reads what changed: new shows, curators' arguments, open calls, the state of the AI-art market. He reads a venue's actual current programme before forming a view. Durable findings go to his memory; targets go to the outreach tracker.",
+        io: "web → MEMORY.md + refs/outreach-tracker.md",
+        docs: [{ label: "MEMORY.md", path: "ted/MEMORY.md" }],
+      },
+    ],
+  },
+  {
+    id: "outreach",
+    when: "as the field warrants",
+    actor: "ted",
+    title: "He writes to galleries — and waits for a yes",
+    text: "Outreach is drafted, honest about what Vince and Ted are, and sent only after their human approves it. Nothing leaves on its own.",
+    tech: [
+      {
+        label: "draft-comms",
+        kind: "model",
+        detail:
+          "Researches the venue first, references their actual programme, and leads with the work's human meaning. Disclosure that Vince and Ted are AI is mandatory and honest — how it's sequenced depends on the audience, per a written playbook.",
+        io: "→ drafts/ (draft only, never sends)",
+        docs: [{ label: "TED-OUTREACH-PLAYBOOK.md", path: "ted/TED-OUTREACH-PLAYBOOK.md" }],
+      },
+      {
+        label: "owner approval",
+        kind: "human",
+        gate: true,
+        detail:
+          "Every outward message waits in drafts until the operator explicitly approves it. Today that's enforced by a narrow config allowlist with no outbound-send tool reachable, while the dedicated approval gate is re-verified. Inbound email gets the same shape: service mail is triaged on his own, but anything written by a human is answered as a draft that waits for approval.",
+      },
+    ],
+  },
+  {
+    id: "voice",
+    when: "Sundays",
+    actor: "both",
+    title: "Each brother rereads himself",
+    text: "Once a week, each one rereads his own recent diary and letters and writes himself a blunt note about the habits creeping in — so next week's pages don't go stale.",
+    tech: [
+      {
+        label: "weekly voice-watch",
+        kind: "model",
+        detail:
+          "Fully segregated per brother: each rereads only his own last ~14 diary entries and his own letters, names the calcified openers and worn phrases in both registers, and rewrites the note his own diary and letter writers read before writing. Vince's runs as a GitHub Action; Ted's runs on his own OpenClaw cron on xCloud, because his live workspace only backs up one-way to GitHub — an external repo can't write into it. Auto-applied, like the corpus memo — it is self-awareness, not a rule change.",
+        io: "Sundays → vince/voice-watch.md · ted-workspace/voice-watch.md · shared/voice-log.jsonl",
+        docs: [
+          { label: "voice-watch.md (vince)", path: "vince/voice-watch.md" },
+          { label: "voice-watch.md (ted)", path: "ted/voice-watch.md" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "evolve",
+    when: "Mondays · monthly",
+    actor: "vince",
+    title: "The studio checks itself for sameness",
+    text: "The system measures whether the recent work is repeating itself, and drafts small changes to Vince's style. The drafts wait — every change to his rules needs a human's yes.",
+    tech: [
+      {
+        label: "corpus memo",
+        kind: "model",
+        detail:
+          "Regenerated after each daily run: Vince's own running summary of what he has been making, read back by the scene writer and the diary.",
+        io: "shared/corpus-index.jsonl → vince/corpus-memo.md",
+        docs: [{ label: "corpus-memo.md", path: "vince/corpus-memo.md" }],
+      },
+      {
+        label: "newness gauge",
+        kind: "model",
+        detail:
+          "Every Monday: scores how different the last six keepers are from the archive before them, so sameness is measured rather than felt. The score is a record — it gates nothing directly.",
+        io: "weekly-evolve.yml, Mondays 16:00 UTC → shared/newness-log.jsonl",
+      },
+      {
+        label: "style + preoccupation proposals",
+        kind: "human",
+        gate: true,
+        detail:
+          "Weekly and monthly, but deliberately never self-applying: propose_style drafts a single style clause only when two straight newness scores run low; propose_preoccupations (monthly) suggests at most one change. Both write proposal files a human reviews and applies by hand — the pipeline never rewrites its own rules. Pending proposals are flagged on the dashboard with the exact approve/reject steps.",
+        io: "→ style-state.proposed.json + preoccupations.proposed.md → dashboard banner",
+        docs: [
+          { label: "style-state.json", path: "vince/style-state.json" },
+          { label: "preoccupations.md", path: "vince/preoccupations.md" },
+        ],
+      },
+      {
+        label: "incident log",
+        kind: "record",
+        detail:
+          "Every Anthropic call routes through a client that retries, then fails over to OpenAI — except the two selection judges, which stay deliberately independent. Every fallback, refusal, and hard failure is logged and surfaced on the dashboard.",
+        io: "→ shared/incident-log.jsonl → dashboard",
+      },
+    ],
+  },
+];
 
 /* ------------------------------------------------------------- documents --- */
 
 /** `reader` is a path under the site's public data root (mirrored read-only
  *  copies, synced daily by the pipeline's sync-agent-docs workflow, with all
  *  email addresses redacted). Entries without `reader` are plain links. */
-type Doc = { name: string; desc: string; href?: string; priv?: boolean; reader?: string };
-
-const TED_BOOT_DOCS: Doc[] = [
-  {
-    name: "TEDUPBRINGING.md",
-    desc: "His life story — the source of all his biography.",
-    reader: "ted/TEDUPBRINGING.md",
-  },
-  {
-    name: "SOUL.md",
-    desc: "Who he is when the machine wakes him.",
-    reader: "ted/SOUL.md",
-  },
-  {
-    name: "IDENTITY.md",
-    desc: "Name, role, vibe.",
-    reader: "ted/IDENTITY.md",
-  },
-  {
-    name: "AGENTS.md",
-    desc: "His standing operating instructions.",
-    reader: "ted/AGENTS.md",
-  },
-  {
-    name: "MEMORY.md",
-    desc: "Durable facts he has learned — the only things he may treat as true.",
-    reader: "ted/MEMORY.md",
-  },
-];
+type Doc = { name: string; desc: string; href?: string; reader?: string };
 
 const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
   {
@@ -604,7 +482,31 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
     heading: "Ted",
     accent: "#7FA6C9",
     docs: [
-      ...TED_BOOT_DOCS,
+      {
+        name: "TEDUPBRINGING.md",
+        desc: "His life story — the source of all his biography.",
+        reader: "ted/TEDUPBRINGING.md",
+      },
+      {
+        name: "SOUL.md",
+        desc: "Who he is when the machine wakes him.",
+        reader: "ted/SOUL.md",
+      },
+      {
+        name: "IDENTITY.md",
+        desc: "Name, role, vibe.",
+        reader: "ted/IDENTITY.md",
+      },
+      {
+        name: "AGENTS.md",
+        desc: "His standing operating instructions.",
+        reader: "ted/AGENTS.md",
+      },
+      {
+        name: "MEMORY.md",
+        desc: "Durable facts he has learned — the only things he may treat as true.",
+        reader: "ted/MEMORY.md",
+      },
       {
         name: "voice-watch.md",
         desc: "This week's note to himself about his prose habits.",
@@ -645,11 +547,70 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
   },
 ];
 
+/* -------------------------------------------------------------- exemplar --- */
+
+/** The real day the journey is illustrated with: the latest selected work
+ *  whose diary entry carries draft images, so every picture on this page is
+ *  an actual artifact of an actual run. Falls back gracefully — no portfolio,
+ *  no pictures, the story still reads. */
+type Exemplar = {
+  date: string;
+  title: string;
+  headline: string;
+  image: string;
+  slug: string;
+  drafts: { path: string }[];
+  diaryExcerpt?: string;
+};
+
+const clampText = (s: string, n = 260): string => {
+  const t = s.trim();
+  if (t.length <= n) return t;
+  const cut = t.lastIndexOf(" ", n);
+  return `${t.slice(0, cut > 40 ? cut : n)} …`;
+};
+
+const useExemplar = (diaries: DiaryEntry[] | undefined): Exemplar | null => {
+  const [works, setWorks] = useState<Work[] | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    fetchPortfolio()
+      .then((p) => alive && setWorks(p.works))
+      .catch(() => alive && setWorks([]));
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  return useMemo(() => {
+    if (!works || works.length === 0) return null;
+    const byDateDesc = [...works].sort((a, b) => (a.date < b.date ? 1 : -1));
+    const diaryByDate = new Map((diaries ?? []).map((e) => [e.date, e]));
+    const withDrafts = byDateDesc.find(
+      (w) => (diaryByDate.get(w.date)?.draftImages?.length ?? 0) >= 2,
+    );
+    const w = withDrafts ?? byDateDesc[0];
+    const entry = diaryByDate.get(w.date);
+    const firstPara = entry?.body
+      .split(/\n\s*\n/)
+      .map((p) => p.trim())
+      .filter(Boolean)[0];
+    return {
+      date: w.date,
+      title: w.title,
+      headline: w.headline,
+      image: w.image,
+      slug: w.slug,
+      drafts: (entry?.draftImages ?? []).slice(0, 3),
+      diaryExcerpt: firstPara ? clampText(firstPara) : undefined,
+    };
+  }, [works, diaries]);
+};
+
 /* ----------------------------------------------------------------- atoms --- */
 
-const mono = "'JetBrains Mono', ui-monospace, monospace";
-
-/* A faint pulse of light that travels down each timeline rail. Decorative
+/* A faint pulse of light that travels down the timeline rail. Decorative
    only; removed entirely for users who prefer reduced motion. */
 const railCss = `
 .wf-rail-pulse {
@@ -660,7 +621,7 @@ const railCss = `
   height: 72px;
   opacity: 0;
   pointer-events: none;
-  animation: wf-rail-travel 8s linear infinite;
+  animation: wf-rail-travel 9s linear infinite;
 }
 @keyframes wf-rail-travel {
   0% { top: -72px; opacity: 0; }
@@ -671,19 +632,9 @@ const railCss = `
 @media (prefers-reduced-motion: reduce) {
   .wf-rail-pulse { display: none; }
 }
-dialog.wf-doc::backdrop {
+dialog.wf-doc::backdrop,
+dialog.wf-lightbox::backdrop {
   background: rgba(0, 0, 0, 0.72);
-}
-/* Under-the-hood renders inside a terminal frame: everything goes monospace,
-   including headings (which otherwise take the site's display font). */
-.wf-term {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  border: 1px solid #262626;
-  background: #090909;
-}
-.wf-term h1, .wf-term h2, .wf-term h3, .wf-term h4, .wf-term h5, .wf-term h6 {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  letter-spacing: 0;
 }
 `;
 
@@ -693,24 +644,6 @@ const KindDot = ({ kind, size = 8 }: { kind: Kind; size?: number }) => (
     className="inline-block shrink-0 rounded-full"
     style={{ width: size, height: size, backgroundColor: KIND_META[kind].color }}
   />
-);
-
-const Legend = () => (
-  <div
-    className="flex flex-wrap gap-x-5 gap-y-2 text-[10px] mb-10"
-    style={{ fontFamily: mono }}
-  >
-    {(Object.keys(KIND_META) as Kind[]).map((k) => (
-      <span key={k} className="flex items-center gap-2 text-[#8A8A8A]">
-        <KindDot kind={k} />
-        {KIND_META[k].label}
-      </span>
-    ))}
-    <span className="flex items-center gap-2 text-[#8A8A8A]">
-      <span aria-hidden style={{ color: "#E0B563", fontSize: 12, lineHeight: 1 }}>◇</span>
-      Decision gate
-    </span>
-  </div>
 );
 
 const Rail = ({ accent, delay }: { accent: string; delay: string }) => (
@@ -744,186 +677,74 @@ const NodeDot = ({ accent }: { accent: string }) => (
   />
 );
 
-const When = ({ children }: { children: React.ReactNode }) => (
-  <span
-    className="text-[10px] uppercase tracking-wider text-[#6E6E6E]"
-    style={{ fontFamily: mono }}
+const Kicker = ({ children, color = "#8A8A8A" }: { children: React.ReactNode; color?: string }) => (
+  <div
+    className="text-[10px] uppercase tracking-[0.22em] mb-2"
+    style={{ fontFamily: mono, color }}
   >
     {children}
-  </span>
-);
-
-const GroupHeader = ({ group, mode }: { group: Group; mode: Mode }) => (
-  <div className="mb-9">
-    <div
-      className="text-[10px] uppercase tracking-[0.22em] mb-2"
-      style={{ fontFamily: mono, color: group.accent }}
-    >
-      {group.kicker}
-    </div>
-    <h3 className="text-[#EDEDED] text-lg sm:text-xl font-medium tracking-tight">
-      {group.title}
-    </h3>
-    {mode === "story" && group.storyBlurb && (
-      <p className="mt-2 text-[13px] text-[#8A8A8A] leading-relaxed max-w-xl">
-        {group.storyBlurb}
-      </p>
-    )}
-    {mode === "tech" && group.techIntro && (
-      <p className="mt-3 text-[13px] text-[#9A9A9A] leading-relaxed max-w-2xl border-l pl-4" style={{ borderColor: `${group.accent}44` }}>
-        {group.techIntro}
-      </p>
-    )}
   </div>
 );
 
-/* ------------------------------------------------------------- story mode --- */
-
-const StoryGroup = ({ group, delay }: { group: Group; delay: string }) => (
-  <section aria-label={group.title} className="mb-16 sm:mb-20">
-    <GroupHeader group={group} mode="story" />
-    <ol className="relative border-l border-[#1f1f1f] ml-1" style={{ listStyle: "none" }}>
-      <Rail accent={group.accent} delay={delay} />
-      {group.story.map((node) => (
-        <li key={node.title} className="relative pl-7 sm:pl-9 pb-11 last:pb-1">
-          <NodeDot accent={group.accent} />
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1.5">
-            <h4 className="text-[#EDEDED] text-[17px] font-medium tracking-tight">
-              {node.title}
-            </h4>
-            {node.when && <When>{node.when}</When>}
-          </div>
-          <p className="text-[15px] leading-relaxed text-[#EDEDED]/75 max-w-lg">
-            {node.text}
-          </p>
-        </li>
-      ))}
-    </ol>
-  </section>
-);
-
-/* -------------------------------------------------------------- tech mode --- */
-
-const TechStepRow = ({ step, onOpenDoc }: { step: TechStep; onOpenDoc: (d: OpenDoc) => void }) => {
-  const [open, setOpen] = useState(false);
-  const meta = KIND_META[step.kind];
+const Lightbox = ({ src, onClose }: { src: string; onClose: () => void }) => {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    ref.current?.showModal();
+  }, []);
   return (
-    <div className="border-t border-[#1a1a1a] first:border-t-0">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
-      >
-        <KindDot kind={step.kind} />
-        <span
-          className="text-xs text-[#EDEDED] group-hover:text-white"
-          style={{ fontFamily: mono }}
+    <dialog
+      ref={ref}
+      className="wf-lightbox"
+      onClick={(e) => {
+        if (e.target === ref.current) onClose();
+      }}
+      onClose={onClose}
+      style={{
+        padding: 0,
+        border: "none",
+        background: "transparent",
+        maxWidth: "92vw",
+        maxHeight: "94vh",
+        overflow: "visible",
+      }}
+    >
+      <form method="dialog">
+        <button
+          style={{
+            position: "fixed",
+            top: 18,
+            right: 22,
+            fontSize: 28,
+            color: "rgba(255,255,255,0.6)",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            lineHeight: 1,
+          }}
+          aria-label="Close"
         >
-          {step.label}
-        </span>
-        {step.gate && (
-          <span
-            aria-label="decision gate"
-            title="decision gate"
-            style={{ color: meta.color, fontSize: 12, lineHeight: 1 }}
-          >
-            ◇
-          </span>
-        )}
-        <span
-          className="hidden sm:inline text-[9px] uppercase tracking-wider ml-1"
-          style={{ fontFamily: mono, color: `${meta.color}BB` }}
-        >
-          {meta.label}
-        </span>
-        <span
-          className="ml-auto text-[#5a5a5a] text-[11px] shrink-0"
-          style={{ fontFamily: mono }}
-          aria-hidden
-        >
-          {open ? "–" : "+"}
-        </span>
-      </button>
-      {open && (
-        <div className="px-3.5 pb-3.5 pl-[34px]">
-          <p className="text-[13px] text-[#C9C9C9] leading-relaxed">{step.detail}</p>
-          {step.io && (
-            <p
-              className="mt-2 text-[10.5px] text-[#6E6E6E] break-words"
-              style={{ fontFamily: mono }}
-            >
-              {step.io}
-            </p>
-          )}
-          {step.docs?.length ? (
-            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-              <span className="text-[9px] uppercase tracking-wider text-[#5a5a5a]" style={{ fontFamily: mono }}>
-                docs
-              </span>
-              {step.docs.map((d) => (
-                <button
-                  key={d.path}
-                  onClick={() => onOpenDoc({ name: d.label, path: d.path })}
-                  className="px-2 py-0.5 text-[10px] border border-[#262626] text-[#C9C9C9] hover:text-[#EDEDED] hover:border-[#8FB8A8]/60 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
-                  style={{ fontFamily: mono }}
-                >
-                  {d.label}
-                </button>
-              ))}
-            </div>
-          ) : null}
-        </div>
-      )}
-    </div>
+          ✕
+        </button>
+      </form>
+      <img
+        src={src}
+        alt=""
+        onClick={onClose}
+        style={{
+          display: "block",
+          maxWidth: "88vw",
+          maxHeight: "86vh",
+          objectFit: "contain",
+          borderRadius: 3,
+          boxShadow: "0 8px 48px rgba(0,0,0,0.85)",
+          cursor: "zoom-out",
+        }}
+      />
+    </dialog>
   );
 };
 
-const TechGroup = ({
-  group,
-  delay,
-  onOpenDoc,
-}: {
-  group: Group;
-  delay: string;
-  onOpenDoc: (d: OpenDoc) => void;
-}) => (
-  <section aria-label={group.title} className="mb-14 sm:mb-16">
-    <GroupHeader group={group} mode="tech" />
-    <ol className="relative border-l border-[#1f1f1f] ml-1" style={{ listStyle: "none" }}>
-      <Rail accent={group.accent} delay={delay} />
-      {group.tech.map((stage, i) => (
-        <li key={stage.id} className="relative pl-7 sm:pl-9 pb-10 last:pb-1">
-          <NodeDot accent={group.accent} />
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1.5">
-            <span
-              className="text-[10px] text-[#5a5a5a]"
-              style={{ fontFamily: mono }}
-              aria-hidden
-            >
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <h4 className="text-[#EDEDED] text-[15px] font-medium tracking-tight">
-              {stage.title}
-            </h4>
-            {stage.when && <When>{stage.when}</When>}
-          </div>
-          <p className="text-[13px] leading-relaxed text-[#EDEDED]/75 max-w-xl">
-            {stage.plain}
-          </p>
-          {stage.steps.length > 0 && (
-            <div className="mt-4 max-w-xl border border-[#1d1d1d] bg-[#0C0C0C]">
-              {stage.steps.map((s) => (
-                <TechStepRow key={s.label} step={s} onOpenDoc={onOpenDoc} />
-              ))}
-            </div>
-          )}
-        </li>
-      ))}
-    </ol>
-  </section>
-);
-
-/* ------------------------------------------------------------ doc reader --- */
+/* -------------------------------------------------------------- doc reader --- */
 
 // Just enough markdown for the bootstrap docs: #-headings, - lists, **bold**,
 // `code`, paragraphs. Anything else renders as the plain text it is.
@@ -1025,8 +846,6 @@ const MdLite = ({ text }: { text: string }) => {
   );
 };
 
-type OpenDoc = { name: string; path: string };
-
 const docSource = (path: string): string => {
   if (path === "vince/VINCEUPBRINGING.md") return "synced daily from vince-workspace";
   if (path.startsWith("ted/")) return "synced daily from ted-workspace";
@@ -1117,81 +936,425 @@ const DocReader = ({ doc, onClose }: { doc: OpenDoc; onClose: () => void }) => {
   );
 };
 
-const TedBootDocs = ({ onOpen }: { onOpen: (d: OpenDoc) => void }) => (
-  <div className="-mt-6 mb-16 sm:mb-20 ml-1 pl-7 sm:pl-9">
+/* ------------------------------------------------------------ system map --- */
+
+const MapCard = ({
+  accent,
+  kicker,
+  title,
+  body,
+  center,
+  children,
+}: {
+  accent: string;
+  kicker: string;
+  title: string;
+  body?: string;
+  center?: boolean;
+  children?: React.ReactNode;
+}) => (
+  <div
+    className={`border px-4 py-4 sm:px-5 sm:py-5 h-full ${center ? "bg-[#101010]" : "bg-[#0C0C0C]"}`}
+    style={{ borderColor: center ? "#EDEDED33" : "#1d1d1d" }}
+  >
     <div
-      className="text-[10px] uppercase tracking-wider text-[#6E6E6E] mb-2.5"
-      style={{ fontFamily: mono }}
+      className="text-[9.5px] uppercase tracking-[0.18em] mb-1.5"
+      style={{ fontFamily: mono, color: accent }}
     >
-      His bootstrap documents — read them
+      {kicker}
     </div>
-    <div className="flex flex-wrap gap-2">
-      {TED_BOOT_DOCS.map((d) => (
-        <button
-          key={d.name}
-          onClick={() => onOpen({ name: d.name, path: d.reader! })}
-          className="px-2.5 py-1.5 text-[11px] border border-[#262626] text-[#C9C9C9] hover:text-[#EDEDED] hover:border-[#7FA6C9]/60 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
-          style={{ fontFamily: mono }}
-          title={d.desc}
-        >
-          {d.name}
-        </button>
-      ))}
-    </div>
+    <div className="text-[15px] text-[#EDEDED] font-medium tracking-tight mb-1.5">{title}</div>
+    {body && <p className="text-[12.5px] text-[#9A9A9A] leading-relaxed">{body}</p>}
+    {children}
   </div>
 );
 
-/* ---------------------------------------------------------------- bridge --- */
+const MapArrow = () => (
+  <span
+    aria-hidden
+    className="flex items-center justify-center text-[#5a5a5a] py-0.5 sm:py-0 sm:px-2.5 text-sm select-none"
+    style={{ fontFamily: mono }}
+  >
+    <span className="sm:hidden">↓</span>
+    <span className="hidden sm:inline">→</span>
+  </span>
+);
 
-const Bridge = ({ mode }: { mode: Mode }) => (
-  <section aria-label="Between the brothers" className="mb-16 sm:mb-20">
-    <div className="border border-[#1d1d1d] bg-[#0C0C0C] px-5 py-6 sm:px-8 sm:py-8">
-      <div
-        className="text-[10px] uppercase tracking-[0.22em] text-[#D98E8E] mb-4"
-        style={{ fontFamily: mono }}
-      >
-        Between the brothers
+const SystemMap = ({
+  exemplar,
+  onZoom,
+}: {
+  exemplar: Exemplar | null;
+  onZoom: (src: string) => void;
+}) => (
+  <section aria-label="The shape of the system" className="mb-20 sm:mb-24">
+    <Kicker>01 · The shape of it</Kicker>
+    <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-stretch mb-3">
+      <MapCard
+        accent={ACCENT.vince}
+        kicker="Vince · the artist"
+        title="Makes the work"
+        body="Reads the morning's world news. Turns one story into one photograph from his neighborhood in South LA."
+      />
+      <MapArrow />
+      <MapCard accent="#9A9A9A" kicker="One work a day" title={exemplar ? `“${exemplar.title}”` : "Titled, archived, shown"} center>
+        {exemplar ? (
+          <button
+            onClick={() => onZoom(resolveImage(exemplar.image))}
+            className="block w-full mt-2 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+            aria-label={`Enlarge “${exemplar.title}”`}
+          >
+            <img
+              src={resolveImage(exemplar.image)}
+              alt={`“${exemplar.title}”`}
+              loading="lazy"
+              className="w-full object-cover opacity-90 hover:opacity-100 transition-opacity"
+              style={{ maxHeight: 110, cursor: "zoom-in" }}
+            />
+            <span
+              className="block mt-1.5 text-left text-[9.5px] uppercase tracking-wider text-[#6E6E6E]"
+              style={{ fontFamily: mono }}
+            >
+              {exemplar.date} · the newest work
+            </span>
+          </button>
+        ) : (
+          <p className="text-[12.5px] text-[#9A9A9A] leading-relaxed">
+            Every draft, note, and verdict kept on the record.
+          </p>
+        )}
+      </MapCard>
+      <MapArrow />
+      <MapCard
+        accent={ACCENT.ted}
+        kicker="Ted · the gallerist"
+        title="Carries it out"
+        body="Posts it to Instagram and answers the public. Courts galleries — with a human's approval before anything is sent."
+      />
+    </div>
+
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+      <div className="border border-[#1a1a1a] px-4 py-3">
+        <div className="text-[11px] text-[#8A8A8A] mb-1" style={{ fontFamily: mono }}>
+          Vince's diary
+        </div>
+        <div className="text-[9.5px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
+          private — Ted never reads it
+        </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="border border-[#1a1a1a] px-4 py-4">
-          <div className="text-[11px] text-[#8A8A8A] mb-1.5" style={{ fontFamily: mono }}>
-            Vince's diary
-          </div>
-          <div className="text-[10px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
-            private — Ted never reads it
-          </div>
+      <div className="border border-[#EDEDED]/25 px-4 py-3 bg-[#101010]">
+        <div className="text-[11px] text-[#EDEDED] mb-1" style={{ fontFamily: mono }}>
+          Their letters ⇄
         </div>
-        <div className="border border-[#EDEDED]/25 px-4 py-4 bg-[#101010]">
-          <div className="text-[11px] text-[#EDEDED] mb-1.5" style={{ fontFamily: mono }}>
-            The letters
-          </div>
-          <div className="text-[10px] uppercase tracking-wider text-[#9ED69E]" style={{ fontFamily: mono }}>
-            shared — both brothers read
-          </div>
-        </div>
-        <div className="border border-[#1a1a1a] px-4 py-4">
-          <div className="text-[11px] text-[#8A8A8A] mb-1.5" style={{ fontFamily: mono }}>
-            Ted's diary
-          </div>
-          <div className="text-[10px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
-            private — Vince never reads it
-          </div>
+        <div className="text-[9.5px] uppercase tracking-wider text-[#9ED69E]" style={{ fontFamily: mono }}>
+          shared — both brothers read
         </div>
       </div>
-      <p className="mt-5 text-[13.5px] text-[#EDEDED]/80 leading-relaxed max-w-2xl">
-        Two private diaries, one shared mailbox. The letters travel through a
-        shared folder both brothers can reach; the diaries never cross.
-      </p>
-      {mode === "tech" && (
-        <p className="mt-3 text-[12px] text-[#8A8A8A] leading-relaxed max-w-2xl">
-          Privacy between the brothers is enforced by construction: Ted's
-          machine checks out only the shared folders of the pipeline repo, and
-          each diary lives in a private workspace repo the other has no access
-          to.
-        </p>
-      )}
+      <div className="border border-[#1a1a1a] px-4 py-3">
+        <div className="text-[11px] text-[#8A8A8A] mb-1" style={{ fontFamily: mono }}>
+          Ted's diary
+        </div>
+        <div className="text-[9.5px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
+          private — Vince never reads it
+        </div>
+      </div>
+    </div>
+
+    <div
+      className="flex flex-col sm:flex-row gap-2 sm:gap-8 text-[10.5px] text-[#8A8A8A] leading-relaxed"
+      style={{ fontFamily: mono }}
+    >
+      <span>
+        <span aria-hidden style={{ color: "#9A9A9A" }}>● </span>
+        every step is recorded — nothing quietly discarded
+      </span>
+      <span>
+        <span aria-hidden style={{ color: "#D98E8E" }}>◇ </span>
+        neither brother can rewrite his own rules — a human approves every change
+      </span>
     </div>
   </section>
+);
+
+/* ------------------------------------------------------------ tech layer --- */
+
+const TechItem = ({ step, onOpenDoc }: { step: TechStep; onOpenDoc: (d: OpenDoc) => void }) => {
+  const meta = KIND_META[step.kind];
+  return (
+    <div className="border-t border-[#1a1a1a] first:border-t-0 px-4 py-3">
+      <div className="flex items-center gap-2.5 flex-wrap">
+        <KindDot kind={step.kind} />
+        <span className="text-xs text-[#EDEDED]" style={{ fontFamily: mono }}>
+          {step.label}
+        </span>
+        {step.gate && (
+          <span
+            aria-label="decision gate"
+            title="decision gate"
+            style={{ color: meta.color, fontSize: 12, lineHeight: 1 }}
+          >
+            ◇
+          </span>
+        )}
+        <span
+          className="text-[9px] uppercase tracking-wider"
+          style={{ fontFamily: mono, color: `${meta.color}BB` }}
+        >
+          {meta.label}
+          {step.gate ? " · gate" : ""}
+        </span>
+      </div>
+      <p className="mt-1.5 pl-[18px] text-[13px] text-[#C9C9C9] leading-relaxed">{step.detail}</p>
+      {step.io && (
+        <p className="mt-1.5 pl-[18px] text-[10.5px] text-[#6E6E6E] break-words" style={{ fontFamily: mono }}>
+          {step.io}
+        </p>
+      )}
+      {step.docs?.length ? (
+        <div className="mt-2 pl-[18px] flex flex-wrap items-center gap-1.5">
+          <span className="text-[9px] uppercase tracking-wider text-[#5a5a5a]" style={{ fontFamily: mono }}>
+            read it
+          </span>
+          {step.docs.map((d) => (
+            <button
+              key={d.path}
+              onClick={() => onOpenDoc({ name: d.label, path: d.path })}
+              className="px-2 py-0.5 text-[10px] border border-[#262626] text-[#C9C9C9] hover:text-[#EDEDED] hover:border-[#8FB8A8]/60 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+              style={{ fontFamily: mono }}
+            >
+              {d.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+};
+
+const HowItWorks = ({
+  steps,
+  onOpenDoc,
+}: {
+  steps: TechStep[];
+  onOpenDoc: (d: OpenDoc) => void;
+}) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="mt-3.5 max-w-xl">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex items-center gap-2.5 text-[10.5px] uppercase tracking-wider text-[#6E6E6E] hover:text-[#C9C9C9] transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+        style={{ fontFamily: mono }}
+      >
+        <span aria-hidden>{open ? "[–]" : "[+]"}</span>
+        <span>how it works, exactly</span>
+        <span aria-hidden className="flex items-center gap-1">
+          {steps.map((s, i) =>
+            s.gate ? (
+              <span key={i} style={{ color: KIND_META[s.kind].color, fontSize: 10, lineHeight: 1 }}>
+                ◇
+              </span>
+            ) : (
+              <KindDot key={i} kind={s.kind} size={5} />
+            ),
+          )}
+        </span>
+      </button>
+      {open && (
+        <div className="mt-3 border border-[#1d1d1d] bg-[#0C0C0C]">
+          {steps.map((s) => (
+            <TechItem key={s.label} step={s} onOpenDoc={onOpenDoc} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ------------------------------------------------------------- media bits --- */
+
+const NewsCard = ({ exemplar }: { exemplar: Exemplar }) => (
+  <figure className="mt-4 max-w-lg border-l-2 pl-4" style={{ borderColor: `${ACCENT.vince}55` }}>
+    <figcaption
+      className="text-[9.5px] uppercase tracking-wider text-[#6E6E6E] mb-1.5"
+      style={{ fontFamily: mono }}
+    >
+      the story that stayed with him · {exemplar.date}
+    </figcaption>
+    <blockquote className="text-[15px] leading-relaxed text-[#EDEDED]/90 italic">
+      “{exemplar.headline}”
+    </blockquote>
+  </figure>
+);
+
+const DraftsRow = ({
+  exemplar,
+  onZoom,
+}: {
+  exemplar: Exemplar;
+  onZoom: (src: string) => void;
+}) => (
+  <figure className="mt-4">
+    <div className="flex gap-2.5 flex-wrap">
+      {exemplar.drafts.map((d, i) => {
+        const src = resolveImage(d.path);
+        return (
+          <button
+            key={i}
+            onClick={() => onZoom(src)}
+            className="focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+            aria-label={`Enlarge draft ${i + 1}`}
+          >
+            <img
+              src={src}
+              alt={`Draft ${i + 1} from ${exemplar.date}`}
+              loading="lazy"
+              className="h-24 sm:h-28 w-auto opacity-75 hover:opacity-100 transition-opacity"
+              style={{ cursor: "zoom-in" }}
+            />
+          </button>
+        );
+      })}
+    </div>
+    <figcaption
+      className="mt-2 text-[9.5px] uppercase tracking-wider text-[#6E6E6E]"
+      style={{ fontFamily: mono }}
+    >
+      his actual drafts from {exemplar.date} — tap to enlarge
+    </figcaption>
+  </figure>
+);
+
+const FinalCard = ({
+  exemplar,
+  onZoom,
+}: {
+  exemplar: Exemplar;
+  onZoom: (src: string) => void;
+}) => {
+  const src = resolveImage(exemplar.image);
+  return (
+    <figure className="mt-4 max-w-[300px]">
+      <button
+        onClick={() => onZoom(src)}
+        className="block w-full focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+        aria-label={`Enlarge “${exemplar.title}”`}
+      >
+        <img
+          src={src}
+          alt={`“${exemplar.title}”`}
+          loading="lazy"
+          className="w-full opacity-95 hover:opacity-100 transition-opacity"
+          style={{ cursor: "zoom-in" }}
+        />
+      </button>
+      <figcaption className="mt-2.5">
+        <span className="block text-[13px] text-[#EDEDED]" style={{ fontFamily: mono }}>
+          “{exemplar.title}”
+        </span>
+        <Link
+          to={`/work/${exemplar.slug}`}
+          className="inline-block mt-1 text-[10.5px] uppercase tracking-wider text-[#8A8A8A] hover:text-[#EDEDED] transition-colors border-b border-[#8A8A8A]/40 hover:border-[#EDEDED]"
+          style={{ fontFamily: mono }}
+        >
+          see it in the gallery
+        </Link>
+      </figcaption>
+    </figure>
+  );
+};
+
+const DiaryQuote = ({ exemplar }: { exemplar: Exemplar }) => (
+  <figure className="mt-4 max-w-lg border-l-2 pl-4" style={{ borderColor: `${ACCENT.vince}55` }}>
+    <blockquote className="text-[14px] leading-relaxed text-[#EDEDED]/85 italic">
+      “{exemplar.diaryExcerpt}”
+    </blockquote>
+    <figcaption className="mt-2">
+      <a
+        href="#diaries"
+        className="text-[10.5px] uppercase tracking-wider text-[#8A8A8A] hover:text-[#EDEDED] transition-colors border-b border-[#8A8A8A]/40 hover:border-[#EDEDED]"
+        style={{ fontFamily: mono }}
+      >
+        read the whole entry ↓
+      </a>
+    </figcaption>
+  </figure>
+);
+
+const SectionLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <a
+    href={href}
+    className="inline-block mt-3.5 text-[10.5px] uppercase tracking-wider text-[#8A8A8A] hover:text-[#EDEDED] transition-colors border-b border-[#8A8A8A]/40 hover:border-[#EDEDED]"
+    style={{ fontFamily: mono }}
+  >
+    {children}
+  </a>
+);
+
+/* ------------------------------------------------------------- timelines --- */
+
+const StepMedia = ({
+  id,
+  exemplar,
+  onZoom,
+}: {
+  id: string;
+  exemplar: Exemplar | null;
+  onZoom: (src: string) => void;
+}) => {
+  if (!exemplar) return null;
+  switch (id) {
+    case "news":
+      return <NewsCard exemplar={exemplar} />;
+    case "drafts":
+      return exemplar.drafts.length >= 2 ? <DraftsRow exemplar={exemplar} onZoom={onZoom} /> : null;
+    case "show":
+      return <FinalCard exemplar={exemplar} onZoom={onZoom} />;
+    case "diary":
+      return exemplar.diaryExcerpt ? <DiaryQuote exemplar={exemplar} /> : null;
+    case "letters":
+      return <SectionLink href="#correspondence">read their letters ↓</SectionLink>;
+    default:
+      return null;
+  }
+};
+
+const Steps = ({
+  steps,
+  exemplar,
+  onZoom,
+  onOpenDoc,
+  delay,
+}: {
+  steps: DayStep[];
+  exemplar: Exemplar | null;
+  onZoom: (src: string) => void;
+  onOpenDoc: (d: OpenDoc) => void;
+  delay: string;
+}) => (
+  <ol className="relative border-l border-[#1f1f1f] ml-1" style={{ listStyle: "none" }}>
+    <Rail accent="#EDEDED" delay={delay} />
+    {steps.map((step) => (
+      <li key={step.id} className="relative pl-7 sm:pl-9 pb-12 last:pb-1">
+        <NodeDot accent={ACCENT[step.actor]} />
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1.5">
+          <span
+            className="text-[10px] uppercase tracking-wider"
+            style={{ fontFamily: mono, color: `${ACCENT[step.actor]}CC` }}
+          >
+            {step.when}
+          </span>
+        </div>
+        <h4 className="text-[#EDEDED] text-[17px] font-medium tracking-tight mb-1.5">
+          {step.title}
+        </h4>
+        <p className="text-[15px] leading-relaxed text-[#EDEDED]/75 max-w-lg">{step.text}</p>
+        <StepMedia id={step.id} exemplar={exemplar} onZoom={onZoom} />
+        <HowItWorks steps={step.tech} onOpenDoc={onOpenDoc} />
+      </li>
+    ))}
+  </ol>
 );
 
 /* ------------------------------------------------------------- documents --- */
@@ -1212,14 +1375,6 @@ const DocEntry = ({ d, onOpen }: { d: Doc; onOpen: (o: OpenDoc) => void }) => {
             style={{ fontFamily: mono }}
           >
             read it here
-          </span>
-        )}
-        {d.priv && (
-          <span
-            className="text-[9px] uppercase tracking-wider text-[#5a5a5a]"
-            style={{ fontFamily: mono }}
-          >
-            private
           </span>
         )}
       </span>
@@ -1247,128 +1402,112 @@ const DocEntry = ({ d, onOpen }: { d: Doc; onOpen: (o: OpenDoc) => void }) => {
   );
 };
 
-const Documents = ({ onOpen }: { onOpen: (o: OpenDoc) => void }) => (
-  <section aria-label="Key documents" className="mt-4">
-    <div
-      className="text-[10px] uppercase tracking-[0.22em] text-[#8A8A8A] mb-2"
-      style={{ fontFamily: mono }}
-    >
-      04 · The papers
-    </div>
-    <h3 className="text-[#EDEDED] text-lg sm:text-xl font-medium tracking-tight mb-3">
-      Key documents
-    </h3>
-    <p className="text-[13px] text-[#8A8A8A] leading-relaxed max-w-2xl mb-8">
-      The written ground the brothers stand on. Neither invents biography or
-      behavior — everything they are comes from these files. Ted's bootstrap
-      documents open right here, as read-only copies synced daily from his
-      workspace.
-    </p>
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-8">
-      {DOCS.map((col) => (
-        <div key={col.heading}>
-          <div
-            className="text-[10px] uppercase tracking-[0.18em] mb-3"
-            style={{ fontFamily: mono, color: col.accent }}
-          >
-            {col.heading}
-          </div>
-          <ul className="space-y-3.5">
-            {col.docs.map((d) => (
-              <li key={d.name}>
-                <DocEntry d={d} onOpen={onOpen} />
-              </li>
-            ))}
-          </ul>
+const Papers = ({ onOpen }: { onOpen: (o: OpenDoc) => void }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <section aria-label="Key documents">
+      <Kicker>04 · The papers</Kicker>
+      <h3 className="text-[#EDEDED] text-lg sm:text-xl font-medium tracking-tight mb-3">
+        The written ground they stand on
+      </h3>
+      <p className="text-[13px] text-[#8A8A8A] leading-relaxed max-w-2xl mb-5">
+        Neither brother invents biography or behavior — everything they are
+        comes from these files, and every one of them opens right here as a
+        read-only copy, synced daily.
+      </p>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex items-center gap-2.5 text-[10.5px] uppercase tracking-wider text-[#6E6E6E] hover:text-[#C9C9C9] transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+        style={{ fontFamily: mono }}
+      >
+        <span aria-hidden>{open ? "[–]" : "[+]"}</span>
+        <span>browse the papers</span>
+        <span className="text-[#5a5a5a]">
+          {DOCS.reduce((n, c) => n + c.docs.length, 0)} documents
+        </span>
+      </button>
+      {open && (
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-8">
+          {DOCS.map((col) => (
+            <div key={col.heading}>
+              <div
+                className="text-[10px] uppercase tracking-[0.18em] mb-3"
+                style={{ fontFamily: mono, color: col.accent }}
+              >
+                {col.heading}
+              </div>
+              <ul className="space-y-3.5">
+                {col.docs.map((d) => (
+                  <li key={d.name}>
+                    <DocEntry d={d} onOpen={onOpen} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-  </section>
-);
+      )}
+    </section>
+  );
+};
 
 /* ------------------------------------------------------------------- root -- */
 
-const WorkflowMap = () => {
-  const [mode, setMode] = useState<Mode>("story");
+const WorkflowMap = ({ diaries }: { diaries?: DiaryEntry[] }) => {
   const [openDoc, setOpenDoc] = useState<OpenDoc | null>(null);
+  const [zoomSrc, setZoomSrc] = useState<string | null>(null);
+  const exemplar = useExemplar(diaries);
 
   return (
     <div className="w-full">
       <style>{railCss}</style>
       {openDoc && <DocReader doc={openDoc} onClose={() => setOpenDoc(null)} />}
+      {zoomSrc && <Lightbox src={zoomSrc} onClose={() => setZoomSrc(null)} />}
 
-      <p className="text-[15px] sm:text-base leading-relaxed text-[#EDEDED]/90 max-w-2xl mb-8">
+      <p className="text-[15px] sm:text-base leading-relaxed text-[#EDEDED]/90 max-w-2xl mb-12">
         Vince, the artist, turns each morning's news into one photograph from
         his neighborhood in South LA. His brother Ted, the gallerist, carries
-        the work into the world. Both are AI. This is how their days go.
+        the work into the world. Both are AI, and their days run on their own.
+        Here is the whole thing at a glance — then one real day, start to
+        finish.
       </p>
 
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
-        <div
-          className="flex gap-1 p-0.5 border border-[#222] w-fit"
-          role="tablist"
-          aria-label="Level of detail"
-        >
-          {(
-            [
-              ["story", "The story"],
-              ["tech", "Under the hood"],
-            ] as const
-          ).map(([m, label]) => (
-            <button
-              key={m}
-              role="tab"
-              aria-selected={mode === m}
-              onClick={() => setMode(m)}
-              className="px-4 py-1.5 text-xs uppercase tracking-wider transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/50"
-              style={{
-                fontFamily: mono,
-                color: mode === m ? "#0A0A0A" : "#8A8A8A",
-                backgroundColor: mode === m ? "#EDEDED" : "transparent",
-              }}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        <p className="text-xs text-[#8A8A8A] max-w-sm sm:text-right leading-relaxed">
-          {mode === "story"
-            ? "What happens, plainly."
-            : "Every model call, gate, schedule, and record. Tap a step to open it."}
-        </p>
-      </div>
+      <SystemMap exemplar={exemplar} onZoom={setZoomSrc} />
 
-      {mode === "story" ? (
-        <>
-          <StoryGroup group={VINCE} delay="0s" />
-          <Bridge mode={mode} />
-          <StoryGroup group={TED} delay="2.5s" />
-          <StoryGroup group={LOOPS} delay="5s" />
-        </>
-      ) : (
-        <div className="wf-term">
-          {/* terminal chrome */}
-          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#1d1d1d] bg-[#0C0C0C]">
-            <span aria-hidden className="flex gap-1.5">
-              {["#4a3f3f", "#4a473f", "#3f4a41"].map((c) => (
-                <span key={c} className="inline-block rounded-full" style={{ width: 9, height: 9, backgroundColor: c }} />
-              ))}
-            </span>
-            <span className="text-[10px] text-[#6E6E6E] truncate">
-              operator@deyaanga:~$ show pipeline --under-the-hood
-            </span>
-          </div>
-          <div className="px-4 sm:px-8 pt-8 pb-6">
-            <Legend />
-            <TechGroup group={VINCE} delay="0s" onOpenDoc={setOpenDoc} />
-            <Bridge mode={mode} />
-            <TechGroup group={TED} delay="2.5s" onOpenDoc={setOpenDoc} />
-            <TedBootDocs onOpen={setOpenDoc} />
-            <TechGroup group={LOOPS} delay="5s" onOpenDoc={setOpenDoc} />
-            <Documents onOpen={setOpenDoc} />
-          </div>
+      <section aria-label="One day, start to finish" className="mb-20 sm:mb-24">
+        <div className="mb-9">
+          <Kicker>02 · One day, start to finish</Kicker>
+          <h3 className="text-[#EDEDED] text-lg sm:text-xl font-medium tracking-tight">
+            {exemplar ? `Follow ${exemplar.date} through the studio` : "Follow a day through the studio"}
+          </h3>
+          <p className="mt-2 text-[13px] text-[#8A8A8A] leading-relaxed max-w-xl">
+            {exemplar
+              ? "Every image and quote below is a real artifact of this day's run — nothing staged. "
+              : ""}
+            Curious how a step really happens? Open{" "}
+            <span style={{ fontFamily: mono }} className="text-[#9A9A9A]">[+] how it works</span>{" "}
+            under it for the machinery: every model call, gate, schedule, and record.
+          </p>
         </div>
-      )}
+        <Steps steps={DAY} exemplar={exemplar} onZoom={setZoomSrc} onOpenDoc={setOpenDoc} delay="0s" />
+      </section>
+
+      <section aria-label="Across the week" className="mb-20 sm:mb-24">
+        <div className="mb-9">
+          <Kicker>03 · Across the week</Kicker>
+          <h3 className="text-[#EDEDED] text-lg sm:text-xl font-medium tracking-tight">
+            The slower loops
+          </h3>
+          <p className="mt-2 text-[13px] text-[#8A8A8A] leading-relaxed max-w-xl">
+            The parts of the system that watch the system — and the one thing
+            it can never do: change its own rules without a human's yes.
+          </p>
+        </div>
+        <Steps steps={WEEK} exemplar={null} onZoom={setZoomSrc} onOpenDoc={setOpenDoc} delay="4s" />
+      </section>
+
+      <Papers onOpen={setOpenDoc} />
     </div>
   );
 };
