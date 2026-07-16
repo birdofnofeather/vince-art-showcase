@@ -1,5 +1,7 @@
 # Vince — creative preoccupations
 
+*Last updated: 2026-07-16. Changes land only through approved monthly proposals; refresh this line when applying one.*
+
 Pipeline-facing distillation of Vince's artistic sensibility, derived from
 `VINCEARTBACKGROUND.md` and `VINCEUPBRINGING.md` (source of truth, in
 vince-workspace — not biography, the working artistic stance only). The image

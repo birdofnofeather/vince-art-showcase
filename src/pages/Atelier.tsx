@@ -43,10 +43,9 @@ const Lightbox = ({ src, onClose }: { src: string; onClose: () => void }) => {
 
 const SECTIONS = [
   { id: "vision", label: "Vision" },
-  { id: "pipeline", label: "Pipeline" },
+  { id: "pipeline", label: "Workflow" },
   { id: "diaries", label: "Diaries" },
   { id: "correspondence", label: "Correspondence" },
-  { id: "activity", label: "Activity" },
 ];
 
 const fmtDate = (iso: string) => {
@@ -233,7 +232,6 @@ import WorkflowMap from "@/components/WorkflowMap";
 const Atelier = () => {
   const { data, loading, error } = useProjectData();
   const [tab, setTab] = useState<"vince" | "ted">("vince");
-  const [activityOpen, setActivityOpen] = useState(false);
   const [active, setActive] = useState("vision");
 
   useEffect(() => {
@@ -266,12 +264,7 @@ const Atelier = () => {
   }, [data]);
 
   const correspondenceSorted = useMemo(
-    () => (data ? [...data.correspondence].sort((a, b) => (a.date < b.date ? -1 : 1)) : []),
-    [data],
-  );
-
-  const runLogSorted = useMemo(
-    () => (data ? [...data.runLog].sort((a, b) => (a.ts < b.ts ? 1 : -1)) : []),
+    () => (data ? [...data.correspondence].sort((a, b) => (a.date < b.date ? 1 : -1)) : []),
     [data],
   );
 
@@ -346,7 +339,7 @@ const Atelier = () => {
                 className="text-xs uppercase tracking-[0.25em] text-[#8A8A8A] mb-8 flex items-center gap-3 flex-wrap"
                 style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
               >
-                <span>02 / Pipeline</span>
+                <span>02 / Workflow</span>
                 <span aria-hidden="true">—</span>
                 <a
                   href="https://dashboard.deyaanga.art/dashboard.html"
@@ -406,45 +399,6 @@ const Atelier = () => {
               </div>
             </section>
 
-            <hr style={{ borderColor: "#222" }} />
-
-            <section id="activity" className="pt-24 pb-32 scroll-mt-24">
-              <button
-                onClick={() => setActivityOpen((v) => !v)}
-                className="text-xs uppercase tracking-[0.25em] text-[#8A8A8A] hover:text-[#EDEDED] transition-colors flex items-center gap-3"
-                style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
-                aria-expanded={activityOpen}
-              >
-                <span>05 / Activity</span>
-                <span>{activityOpen ? "[-]" : "[+]"}</span>
-              </button>
-              {activityOpen && (
-                <ul
-                  className="mt-8 space-y-2 text-xs"
-                  style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
-                >
-                  {runLogSorted.map((r, i) => (
-                    <li key={i} className="text-[#EDEDED]/90">
-                      <span className="text-[#8A8A8A]">{r.ts}</span>
-                      {" · "}
-                      <span>{r.agent}/{r.pipeline}</span>
-                      {" · "}
-                      <span
-                        style={{
-                          color:
-                            r.status === "ok" || r.status === "success" ? "#9ED69E"
-                            : r.status === "error" || r.status === "failed" ? "#D69E9E"
-                            : "#8A8A8A",
-                        }}
-                      >
-                        {r.status}
-                      </span>
-                      {r.note ? <span className="text-[#8A8A8A]"> · {r.note}</span> : null}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
           </>
         )}
         <div className="h-20" />

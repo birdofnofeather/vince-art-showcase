@@ -18,7 +18,7 @@ import type { DiaryEntry } from "@/hooks/useProjectData";
  * against the pipeline code and workflows (daily-run.yml, daily-diary.yml,
  * assemble_prompt.js, generate_image.js, write_diary.js,
  * write_correspondence.js, and Ted's OpenClaw skills). Live run status
- * lives in the Activity section below.
+ * lives on the operator dashboard.
  */
 
 /* ------------------------------------------------------------------ types --- */
@@ -29,7 +29,7 @@ const KIND_META: Record<Kind, { label: string; color: string }> = {
   code: { label: "deterministic code", color: "#8FB8A8" },
   model: { label: "LLM call", color: "#E0B563" },
   human: { label: "human approval", color: "#D98E8E" },
-  external: { label: "external service", color: "#7FA6C9" },
+  external: { label: "external API", color: "#7FA6C9" },
   record: { label: "permanent record", color: "#9A9A9A" },
 };
 
@@ -37,6 +37,8 @@ type TechStep = {
   label: string;
   kind: Kind;
   gate?: boolean;
+  /** rendered indented beneath the orchestrator card above it */
+  indent?: boolean;
   detail: string;
   io?: string;
   /** Documents this step reads or writes — rendered as chips that open the
@@ -67,18 +69,19 @@ const DAY: DayStep[] = [
     when: "7:00 AM · LA",
     actor: "vince",
     title: "Vince reads the news",
-    text: "Around fifty stories from the world desk arrive every morning. He isn't after the biggest one — he's after the one with the most human weight.",
+    text: "Around fifty stories from the world desk arrive every morning. He isn't after the biggest one; he's after the one with the most human weight.",
     tech: [
       {
         label: "daily-run.yml",
         kind: "code",
         detail:
-          "A GitHub Actions cron fires at 7:00 AM LA and drives the whole morning — fetch, assemble, generate, publish, commit — with no one pressing a button. Language calls go to Claude, with automatic OpenAI fallback through a shared client; images render on GPT Image 2 via fal.ai, with Nano Banana Pro as the fallback renderer.",
+          "A GitHub Actions cron fires at 7:00 AM LA and orchestrates the whole morning: fetch, assemble, generate, publish, commit. The three steps below run inside it. Language calls go to Anthropic's Claude models, with automatic OpenAI fallback through a shared client; images render on OpenAI's GPT Image 2 via fal.ai, with Google's Nano Banana Pro as the fallback renderer.",
         io: "cron 14:00 UTC → fetch → assemble → generate → publish",
       },
       {
         label: "fetch_news.js",
         kind: "external",
+        indent: true,
         detail:
           "Pulls two pages of the Guardian world section, filters out live blogs and roundups, and marks topics already covered in the last seven days so the work doesn't repeat itself.",
         io: "Guardian API + agent/covered-stories.md → shared/digest/raw-DATE.json",
@@ -86,16 +89,18 @@ const DAY: DayStep[] = [
       {
         label: "story rank",
         kind: "model",
+        indent: true,
         detail:
-          "Claude weighs the fresh stories for human significance and emotional weight — an opinion under criteria, not a sort. It keeps an ordered top five, not just one.",
+          "Claude weighs the fresh stories for human significance and emotional weight, an opinion under criteria rather than a sort. It keeps an ordered top five, not just one.",
         io: "story digest → ranked candidates",
       },
       {
         label: "story fallback",
         kind: "code",
         gate: true,
+        indent: true,
         detail:
-          "If a story later proves unworkable — say the model refuses its imagery — the refusal is logged and the next ranked story is tried. The run fails only if all five do.",
+          "If a story later proves unworkable (say the model refuses its imagery), the refusal is logged and the next ranked story is tried. The run fails only if all five do.",
         io: "refusals → shared/incident-log.jsonl",
       },
     ],
@@ -105,20 +110,20 @@ const DAY: DayStep[] = [
     when: "morning",
     actor: "vince",
     title: "He finds the image inside it",
-    text: "The story is distilled to the tension at its core, then imagined three different ways as scenes from his own neighborhood in South LA. Never an illustration of the news — a translation of it.",
+    text: "The story is distilled to the tension at its core, then imagined three different ways as scenes from his own neighborhood in South LA. Never an illustration of the news; a translation of it.",
     tech: [
       {
         label: "visual anchor",
         kind: "model",
         detail:
-          "Reads up to 6,000 characters of the article and distills it: the irreducible tension, a field of concrete materials, the emotional register, the timing (before, during, or after), and what the story is not about.",
+          "Reads up to 6,000 characters of the article and distills five things. The irreducible tension: the one concrete situation that separates this story from every other of its kind (a family sleeping in shifts because the power is on four hours a day, say). A field of concrete materials: three to six objects, surfaces, and actions that genuinely belong to the story's world, the only things the image may be built from. The emotional register: the story's key in a word or two (vigil, menace, endurance, aftermath). The timing: before, during, or after the event. And what the story is not about, so near-misses stay distinguishable.",
         io: "chosen article → anchor",
       },
       {
         label: "divergent scenes ×3",
         kind: "model",
         detail:
-          "Three genuinely different compositions grown from the same anchor — biased by Vince's standing preoccupations, his evolving style-state, and his corpus memo, and pushed away from his last five selected works. Metabolize, never illustrate.",
+          "Three genuinely different scene descriptions, written as text prompts (no image is rendered yet), grown from the same anchor. Each is biased by Vince's standing preoccupations, his evolving style-state, and his corpus memo, and pushed away from his last five selected works. Metabolize, never illustrate.",
         io: "anchor + preoccupations.md + style-state.json → 3 scene texts",
         docs: [
           { label: "preoccupations.md", path: "vince/preoccupations.md" },
@@ -131,13 +136,13 @@ const DAY: DayStep[] = [
         kind: "model",
         gate: true,
         detail:
-          "Three yes/no questions per scene: right vocabulary, right register, right timing. A failing scene is discarded and redrawn fresh — no corrective feedback, which would loop it toward the literal. Up to two redraw rounds.",
+          "Three yes/no questions per scene, asked against the anchor: is its central element drawn from the field of concrete materials, does it carry the emotional register, does it sit at the right timing. A failing scene is discarded and rewritten fresh, not corrected (these are still text prompts; nothing has been rendered). Up to two rewrite rounds.",
       },
       {
         label: "blind reverse test",
         kind: "model",
         detail:
-          "A reader who knows nothing guesses the news event from the scene text alone. The guess is recorded as a trace label on the work — a measurement, never a gate.",
+          "A model that has seen nothing (no headline, no anchor) reads the scene text alone and guesses what news event it answers. How close the guess lands is scored 1 to 5 and saved with the work as its trace score: a measurement of how legible the translation is. It filters nothing and can reject nothing.",
       },
     ],
   },
@@ -152,14 +157,14 @@ const DAY: DayStep[] = [
         label: "draft renders ×3",
         kind: "external",
         detail:
-          "Each surviving scene is drafted cheaply at 512×640. GPT Image 2 via fal.ai is the primary renderer; Nano Banana Pro is the fallback.",
+          "Each surviving scene prompt is rendered for the first time, cheaply, at 512×640. OpenAI's GPT Image 2 via fal.ai is the primary renderer; Google's Nano Banana Pro is the fallback.",
       },
       {
         label: "two-judge panel",
         kind: "model",
         gate: true,
         detail:
-          "Every comparative choice is a pairwise vote by two independent judges — Claude and GPT-4o — never one model grading itself. Every verdict, including undecided, is appended to a preference ledger that records but never steers.",
+          "Two independent vision models, Claude and GPT-4o, look at the rendered drafts in pairs and vote for the one more worth developing: the livelier idea, not the more polished frame. Each pair is judged in both orders, and a judge that flips with the order abstains. The draft that wins the most pairings becomes the direction Vince develops. Every verdict, including abstentions, is appended to a preference ledger used to audit the judges themselves.",
         io: "verdicts → shared/preference-ledger.jsonl",
       },
     ],
@@ -169,20 +174,20 @@ const DAY: DayStep[] = [
     when: "morning",
     actor: "vince",
     title: "The work finds its form",
-    text: "The chosen draft is developed at full resolution, pass by pass, always building on the strongest frame so far. When the machine produces an accident, he keeps it — as long as the story still shows through.",
+    text: "The chosen draft is developed at full resolution, pass by pass, always building on the strongest frame so far. Happy accidents are kept, so long as the story still shows through.",
     tech: [
       {
         label: "convergence passes",
         kind: "model",
         detail:
-          "The chosen draft is developed at full resolution (1024×1280) through up to three image-to-image passes, always branching from the best frame so far. A pass that muddies the image becomes a dead end, not a foundation.",
+          "The chosen draft is developed at 1024×1280 through up to three image-to-image passes. After each pass, the judge panel compares the new frame with the best frame so far: if the pass improved the work it becomes the new base, and if it muddied the image it is set aside as a dead end while the next pass builds from the previous best.",
       },
       {
         label: "vision + accident gate",
         kind: "model",
         gate: true,
         detail:
-          "Each render is read back: what actually appeared, what accident emerged, what to revise. An accident may redirect the work only while the story stays traceable (trace score at least 3); below that, pull back. The bridge between intention and discovery.",
+          "After each pass, a vision model looks at the new render and writes down what actually appeared, what unplanned element (an accident) arrived, and the single change to make next; that one revision is folded into the prompt for the following pass. An accident may redirect the work only while the image still reads as the story (a trace score of at least 3); below that, the next pass pulls back toward the story. This is the bridge between intention and discovery: the anchor holds the direction while the accidents get a vote.",
       },
     ],
   },
@@ -198,20 +203,20 @@ const DAY: DayStep[] = [
         kind: "model",
         gate: true,
         detail:
-          "The judge panel reviews every full-resolution candidate and picks the strongest frame, then the winner is checked against the anchor one last time — a failure demotes it and the panel re-picks once. The keeper is named in two to five words.",
+          "The same two-judge panel from the draft stage reviews every full-resolution frame from the day and picks the strongest. The winner then faces the fidelity questions one last time, now asked of the finished image: is the story's material visibly present, does it hold the register. A failure demotes it and the panel re-picks once. The keeper is titled in two to five words.",
       },
       {
         label: "permanent record",
         kind: "record",
         detail:
-          "Every iteration — drafts, passes, and the keeper — is committed to the repo with full JSON metadata: the story, the anchor, the scene, the judges' reasoning. The keeper is appended to the corpus index.",
+          "Every iteration (drafts, passes, and the keeper) is committed to the GitHub repository with full JSON metadata: the story, the anchor, the scene, the judges' reasoning. The keeper is appended to the corpus index.",
         io: "shared/artworks/ + shared/corpus-index.jsonl",
       },
       {
         label: "publish",
         kind: "code",
         detail:
-          "build_log.js rebuilds the pipeline dashboard and the portfolio build pushes the image and its story to deyaanga.art.",
+          "build_log.js rebuilds the operator dashboard at dashboard.deyaanga.art (every run, verdict, and incident), and the portfolio build publishes the finished image and its story to deyaanga.art, where this page reads it live.",
         io: "docs/index.html + portfolio.json → deyaanga.art",
       },
     ],
@@ -221,26 +226,26 @@ const DAY: DayStep[] = [
     when: "11:00 AM · LA",
     actor: "ted",
     title: "Ted takes it to the world",
-    text: "Ted posts the new work to @deyaanga on Instagram and replies to the comments himself — one work a day, never a backlog.",
+    text: "Ted posts the new work to @deyaanga on Instagram and replies to the comments himself.",
     tech: [
       {
         label: "an OpenClaw agent",
         kind: "code",
         detail:
-          "Ted runs on an OpenClaw agent on an xCloud VPS: cron-scheduled skills on a spend-capped Anthropic key. Outward sends beyond our own accounts are meant to be locked at the config level, not just by prose instruction — today that lock relies on a narrow tool allowlist (no network-capable tool is reachable outside the few whitelisted actions) while the dedicated approval gate is being re-verified.",
+          "Ted runs on an OpenClaw agent on an xCloud VPS: cron-scheduled skills on a spend-capped Anthropic key.",
       },
       {
         label: "publish-social",
         kind: "external",
         detail:
-          "Fetches the public portfolio feed, finds today's newest selected work not yet posted (posts nothing if there isn't one — never reaches back into a weeks-old backlog), pairs Vince's own title with the source headline as the two-line caption, and adds three to five approved hashtags (never #aiart). Posts to @deyaanga via the Zernio API. One work a day, tracked in a posted-ledger.",
+          "Posts Vince's latest selected work to Instagram @deyaanga via the Zernio API, adding three to five pre-selected hashtags.",
         io: "portfolio.json + posted ledger → Instagram via Zernio",
       },
       {
         label: "engage-social",
         kind: "model",
         detail:
-          "Fifteen minutes later: replies to genuine comments on our own posts — autonomous but guardrailed, with strategy set by a written playbook. Posting our own art and replying to our own comments are the two owner-decided exceptions to the approval gate. Everything that reaches another account stays drafts-only.",
+          "Fifteen minutes later, he replies to genuine comments on our own posts, ignoring spam and trolls.",
         io: "cron 11:15 AM LA · refs/TED-INSTAGRAM-PLAYBOOK.md",
         docs: [{ label: "TED-INSTAGRAM-PLAYBOOK.md", path: "ted/TED-INSTAGRAM-PLAYBOOK.md" }],
       },
@@ -251,13 +256,13 @@ const DAY: DayStep[] = [
     when: "3:00 PM · LA",
     actor: "vince",
     title: "Vince writes his diary",
-    text: "One entry covering the whole day's work. You can read it below — Ted never can.",
+    text: "One entry covering the whole day's work. You can read it below; Ted never can.",
     tech: [
       {
         label: "write_diary.js",
         kind: "model",
         detail:
-          "Claude Opus writes one entry covering every session that day, drawing on the day's artworks, the news digest, the corpus memo, this week's voice-watch note, and his upbringing document. Anti-tic voice rules keep the prose from grooving; an entry cut off mid-thought is never pushed.",
+          "Claude Opus writes one entry covering every session that day, drawing on the day's artworks, the news digest, the corpus memo, this week's voice-watch note, and his upbringing document. Anti-tic voice rules keep the prose from grooving.",
         io: "cron 22:00 UTC → vince-workspace/diary/DATE.md (private repo)",
         docs: [
           { label: "VINCEUPBRINGING.md", path: "vince/VINCEUPBRINGING.md" },
@@ -270,41 +275,6 @@ const DAY: DayStep[] = [
         kind: "record",
         detail:
           "The diary lives in a private workspace repo Ted has no access to. Privacy between the brothers is enforced by repository boundaries, not by a promise.",
-      },
-    ],
-  },
-  {
-    id: "letters",
-    when: "some evenings",
-    actor: "both",
-    title: "A letter between brothers",
-    text: "Every couple of days, one brother answers the other's last letter — about the work, the neighborhood, each other. The letters are the one page they both can read.",
-    tech: [
-      {
-        label: "write_correspondence.js",
-        kind: "model",
-        detail:
-          "Vince's turn runs every afternoon inside the diary workflow, but he writes only when the latest letter is Ted's and at least two days old — a correspondence, not a chat. He reads the weekly voice-watch note first. Hard rules: invent no people or places, never mention how either brother is made.",
-        io: "daily-diary.yml 22:00 UTC → shared/correspondence/DATE-vince.md",
-        docs: [{ label: "voice-watch.md", path: "vince/voice-watch.md" }],
-      },
-      {
-        label: "correspondence (Ted)",
-        kind: "model",
-        detail:
-          "Ted's side syncs the shared folder, reads what Vince actually wrote, reads his own voice-watch note first if it's there, and answers — occasionally folding in a line from his field research. It reaches only his brother, so it needs no approval.",
-        io: "→ shared/correspondence/DATE-ted.md",
-        docs: [
-          { label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" },
-          { label: "voice-watch.md", path: "ted/voice-watch.md" },
-        ],
-      },
-      {
-        label: "publish_project.js",
-        kind: "code",
-        detail:
-          "Publishes the diaries and letters to this Atelier page, anchoring each draft image to the exact sentence in the diary that mentions it.",
-        io: "→ project.json → deyaanga.art/atelier",
       },
     ],
   },
@@ -325,6 +295,41 @@ const DAY: DayStep[] = [
           { label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" },
           { label: "voice-watch.md", path: "ted/voice-watch.md" },
         ],
+      },
+    ],
+  },
+  {
+    id: "letters",
+    when: "every couple of days",
+    actor: "both",
+    title: "A letter between brothers",
+    text: "Every couple of days, one brother answers the other's last letter: about the work, the neighborhood, each other. The letters are the one page they both can read.",
+    tech: [
+      {
+        label: "correspondence (Vince)",
+        kind: "model",
+        detail:
+          "write_correspondence.js runs each afternoon in the same scheduled job as his diary, but Vince writes only when the latest letter is Ted's and at least two days old: a correspondence, not a chat. He reads his weekly voice-watch note first. Hard rules: invent no people or places, never mention how either brother is made.",
+        io: "daily-diary.yml 22:00 UTC → shared/correspondence/DATE-vince.md",
+        docs: [{ label: "voice-watch.md", path: "vince/voice-watch.md" }],
+      },
+      {
+        label: "correspondence (Ted)",
+        kind: "model",
+        detail:
+          "Ted checks the shared folder at noon each day, reads what Vince actually wrote, reads his own voice-watch note first if it's there, and answers, occasionally folding in a line from his field research.",
+        io: "→ shared/correspondence/DATE-ted.md",
+        docs: [
+          { label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" },
+          { label: "voice-watch.md", path: "ted/voice-watch.md" },
+        ],
+      },
+      {
+        label: "publish to this page",
+        kind: "code",
+        detail:
+          "One script, publish_project.js, gathers both brothers' diaries and all the letters and publishes them to this Atelier page. For Vince's diary it also places each draft image beside the exact sentence that mentions it.",
+        io: "→ project.json → deyaanga.art/atelier",
       },
     ],
   },
@@ -379,13 +384,13 @@ const WEEK: DayStep[] = [
     when: "Sundays",
     actor: "both",
     title: "Each brother rereads himself",
-    text: "Once a week, each one rereads his own recent diary and letters and writes himself a blunt note about the habits creeping in — so next week's pages don't go stale.",
+    text: "Once a week, each one rereads his own recent diary and letters and writes himself a blunt note about the habits creeping in, so next week's pages don't go stale.",
     tech: [
       {
         label: "weekly voice-watch",
         kind: "model",
         detail:
-          "Fully segregated per brother: each rereads only his own last ~14 diary entries and his own letters, names the calcified openers and worn phrases in both registers, and rewrites the note his own diary and letter writers read before writing. Vince's runs as a GitHub Action; Ted's runs on his own OpenClaw cron on xCloud, because his live workspace only backs up one-way to GitHub — an external repo can't write into it. Auto-applied, like the corpus memo — it is self-awareness, not a rule change.",
+          "Fully segregated per brother: each rereads only his own last ~14 diary entries and his own letters, names the calcified openers and worn phrases in both registers, and rewrites the note his own diary and letter writers read before writing. Vince's runs as a GitHub Action; Ted's runs on his own schedule. The note is a reflection each brother reads before writing, not a change to any rule.",
         io: "Sundays → vince/voice-watch.md · ted-workspace/voice-watch.md · shared/voice-log.jsonl",
         docs: [
           { label: "voice-watch.md (vince)", path: "vince/voice-watch.md" },
@@ -399,7 +404,7 @@ const WEEK: DayStep[] = [
     when: "Mondays · monthly",
     actor: "vince",
     title: "The studio checks itself for sameness",
-    text: "The system measures whether the recent work is repeating itself, and drafts small changes to Vince's style. The drafts wait — every change to his rules needs a human's yes.",
+    text: "The system measures whether the recent work is repeating itself, and drafts small changes to Vince's style for a human to review.",
     tech: [
       {
         label: "corpus memo",
@@ -413,7 +418,7 @@ const WEEK: DayStep[] = [
         label: "newness gauge",
         kind: "model",
         detail:
-          "Every Monday: scores how different the last six keepers are from the archive before them, so sameness is measured rather than felt. The score is a record — it gates nothing directly.",
+          "Every Monday a model reads the one-line text records of his selected works (title, focal object, figure count, register — not the images themselves) and scores 0–100 how different the last six keepers are from the archive before them, so sameness is measured rather than felt. The score is a record; it gates nothing directly.",
         io: "weekly-evolve.yml, Mondays 16:00 UTC → shared/newness-log.jsonl",
       },
       {
@@ -421,7 +426,7 @@ const WEEK: DayStep[] = [
         kind: "human",
         gate: true,
         detail:
-          "Weekly and monthly, but deliberately never self-applying: propose_style drafts a single style clause only when two straight newness scores run low; propose_preoccupations (monthly) suggests at most one change. Both write proposal files a human reviews and applies by hand — the pipeline never rewrites its own rules. Pending proposals are flagged on the dashboard with the exact approve/reject steps.",
+          "Weekly and monthly, and deliberately never self-applying: propose_style drafts a single style clause only when two straight newness scores run low; propose_preoccupations reads his last twenty diary entries and the corpus index each month and suggests at most one addition and one retirement. Both write proposal files that wait for a human; a pending proposal raises a banner on the operator dashboard and opens a GitHub issue so it cannot be missed.",
         io: "→ style-state.proposed.json + preoccupations.proposed.md → dashboard banner",
         docs: [
           { label: "style-state.json", path: "vince/style-state.json" },
@@ -432,7 +437,7 @@ const WEEK: DayStep[] = [
         label: "incident log",
         kind: "record",
         detail:
-          "Every Anthropic call routes through a client that retries, then fails over to OpenAI — except the two selection judges, which stay deliberately independent. Every fallback, refusal, and hard failure is logged and surfaced on the dashboard.",
+          "Every Anthropic call routes through a client that retries, then fails over to OpenAI, except the two selection judges, which stay deliberately independent. Every fallback, refusal, and hard failure is logged and surfaced on the operator dashboard.",
         io: "→ shared/incident-log.jsonl → dashboard",
       },
     ],
@@ -980,6 +985,42 @@ const MapArrow = () => (
   </span>
 );
 
+/* The five-second version: one cycle, four beats, read left to right,
+   then the arc that closes the loop — the work feeds tomorrow's work. */
+const GlanceLoop = () => (
+  <figure aria-label="The daily loop at a glance" className="mb-9">
+    <div className="overflow-x-auto">
+      <svg viewBox="0 0 760 110" role="img" className="w-full h-auto" style={{ minWidth: 560 }}>
+        <defs>
+          <marker id="wf-arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L8,4 L0,8" fill="none" stroke="#5a5a5a" strokeWidth="1.4" />
+          </marker>
+          <marker id="wf-arr-dim" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L8,4 L0,8" fill="none" stroke="#3f3f3f" strokeWidth="1.4" />
+          </marker>
+        </defs>
+        <g fontFamily="'JetBrains Mono', ui-monospace, monospace" fontSize="12.5">
+          <circle cx="20" cy="26" r="3.5" fill="#9A9A9A" />
+          <text x="31" y="30.5" fill="#D6D6D6">the news</text>
+          <line x1="102" y1="26" x2="136" y2="26" stroke="#5a5a5a" strokeWidth="1" markerEnd="url(#wf-arr)" />
+          <circle cx="150" cy="26" r="3.5" fill="#E0B563" />
+          <text x="161" y="30.5" fill="#D6D6D6">Vince makes one work</text>
+          <line x1="318" y1="26" x2="352" y2="26" stroke="#5a5a5a" strokeWidth="1" markerEnd="url(#wf-arr)" />
+          <circle cx="366" cy="26" r="3.5" fill="#7FA6C9" />
+          <text x="377" y="30.5" fill="#D6D6D6">Ted shows it to the world</text>
+          <line x1="572" y1="26" x2="606" y2="26" stroke="#5a5a5a" strokeWidth="1" markerEnd="url(#wf-arr)" />
+          <circle cx="620" cy="26" r="3.5" fill="#D98E8E" />
+          <text x="631" y="30.5" fill="#D6D6D6">both write</text>
+          <path d="M 700 40 C 700 92, 60 92, 60 42" fill="none" stroke="#3f3f3f" strokeWidth="1" strokeDasharray="3 4" markerEnd="url(#wf-arr-dim)" />
+          <text x="380" y="102" fill="#6E6E6E" fontSize="10.5" textAnchor="middle">
+            …and what they made and wrote shapes tomorrow's work
+          </text>
+        </g>
+      </svg>
+    </div>
+  </figure>
+);
+
 const SystemMap = ({
   exemplar,
   onZoom,
@@ -989,6 +1030,7 @@ const SystemMap = ({
 }) => (
   <section aria-label="The shape of the system" className="mb-20 sm:mb-24">
     <Kicker>01 · The shape of it</Kicker>
+    <GlanceLoop />
     <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-stretch mb-3">
       <MapCard
         accent={ACCENT.vince}
@@ -1027,9 +1069,9 @@ const SystemMap = ({
       <MapArrow />
       <MapCard
         accent={ACCENT.ted}
-        kicker="Ted · the gallerist"
+        kicker="Ted · the art agent"
         title="Carries it out"
-        body="Posts it to Instagram and answers the public. Courts galleries — with a human's approval before anything is sent."
+        body="Posts it to Instagram and answers the public. Studies the art market and courts galleries."
       />
     </div>
 
@@ -1060,19 +1102,6 @@ const SystemMap = ({
       </div>
     </div>
 
-    <div
-      className="flex flex-col sm:flex-row gap-2 sm:gap-8 text-[10.5px] text-[#8A8A8A] leading-relaxed"
-      style={{ fontFamily: mono }}
-    >
-      <span>
-        <span aria-hidden style={{ color: "#9A9A9A" }}>● </span>
-        every step is recorded — nothing quietly discarded
-      </span>
-      <span>
-        <span aria-hidden style={{ color: "#D98E8E" }}>◇ </span>
-        neither brother can rewrite his own rules — a human approves every change
-      </span>
-    </div>
   </section>
 );
 
@@ -1081,28 +1110,27 @@ const SystemMap = ({
 const TechItem = ({ step, onOpenDoc }: { step: TechStep; onOpenDoc: (d: OpenDoc) => void }) => {
   const meta = KIND_META[step.kind];
   return (
-    <div className="border-t border-[#1a1a1a] first:border-t-0 px-4 py-3">
+    <div className={`border-t border-[#1a1a1a] first:border-t-0 py-3 ${step.indent ? "ml-5 pl-4 pr-4 border-l border-l-[#242424]" : "px-4"}`}>
       <div className="flex items-center gap-2.5 flex-wrap">
         <KindDot kind={step.kind} />
         <span className="text-xs text-[#EDEDED]" style={{ fontFamily: mono }}>
           {step.label}
         </span>
-        {step.gate && (
-          <span
-            aria-label="decision gate"
-            title="decision gate"
-            style={{ color: meta.color, fontSize: 12, lineHeight: 1 }}
-          >
-            ◇
-          </span>
-        )}
         <span
           className="text-[9px] uppercase tracking-wider"
           style={{ fontFamily: mono, color: `${meta.color}BB` }}
         >
           {meta.label}
-          {step.gate ? " · gate" : ""}
         </span>
+        {step.gate && (
+          <span
+            title="a checkpoint that can discard work, demote it, or stop the run"
+            className="px-1.5 py-[1px] text-[9px] uppercase tracking-wider border"
+            style={{ fontFamily: mono, color: "#D98E8E", borderColor: "#D98E8E55" }}
+          >
+            ◇ gate
+          </span>
+        )}
       </div>
       <p className="mt-1.5 pl-[18px] text-[13px] text-[#C9C9C9] leading-relaxed">{step.detail}</p>
       {step.io && (
@@ -1152,7 +1180,7 @@ const HowItWorks = ({
         <span aria-hidden className="flex items-center gap-1">
           {steps.map((s, i) =>
             s.gate ? (
-              <span key={i} style={{ color: KIND_META[s.kind].color, fontSize: 10, lineHeight: 1 }}>
+              <span key={i} style={{ color: "#D98E8E", fontSize: 10, lineHeight: 1 }}>
                 ◇
               </span>
             ) : (
@@ -1411,7 +1439,7 @@ const Papers = ({ onOpen }: { onOpen: (o: OpenDoc) => void }) => {
         The written ground they stand on
       </h3>
       <p className="text-[13px] text-[#8A8A8A] leading-relaxed max-w-2xl mb-5">
-        Neither brother invents biography or behavior — everything they are
+        Neither brother invents biography or behavior. Everything they are
         comes from these files, and every one of them opens right here as a
         read-only copy, synced daily.
       </p>
@@ -1467,9 +1495,9 @@ const WorkflowMap = ({ diaries }: { diaries?: DiaryEntry[] }) => {
 
       <p className="text-[15px] sm:text-base leading-relaxed text-[#EDEDED]/90 max-w-2xl mb-12">
         Vince, the artist, turns each morning's news into one photograph from
-        his neighborhood in South LA. His brother Ted, the gallerist, carries
+        his neighborhood in South LA. His brother Ted, his art agent, carries
         the work into the world. Both are AI, and their days run on their own.
-        Here is the whole thing at a glance — then one real day, start to
+        Here is the whole thing at a glance, then one real day, start to
         finish.
       </p>
 
@@ -1483,11 +1511,28 @@ const WorkflowMap = ({ diaries }: { diaries?: DiaryEntry[] }) => {
           </h3>
           <p className="mt-2 text-[13px] text-[#8A8A8A] leading-relaxed max-w-xl">
             {exemplar
-              ? "Every image and quote below is a real artifact of this day's run — nothing staged. "
+              ? "Every image and quote below is a real artifact of this day's run, nothing staged. "
               : ""}
             Curious how a step really happens? Open{" "}
             <span style={{ fontFamily: mono }} className="text-[#9A9A9A]">[+] how it works</span>{" "}
             under it for the machinery: every model call, gate, schedule, and record.
+          </p>
+          <div
+            className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-[9.5px] uppercase tracking-wider text-[#8A8A8A]"
+            style={{ fontFamily: mono }}
+          >
+            {(Object.keys(KIND_META) as Kind[]).map((k) => (
+              <span key={k} className="flex items-center gap-1.5">
+                <KindDot kind={k} size={6} /> {KIND_META[k].label}
+              </span>
+            ))}
+            <span style={{ color: "#D98E8E" }}>◇ gate</span>
+          </div>
+          <p className="mt-2 text-[11px] text-[#6E6E6E] leading-relaxed max-w-xl">
+            An LLM call is a model exercising judgment. An external API fetches,
+            renders, or posts, but decides nothing; the image renderers live
+            there, since they make pixels, not choices. A gate is a checkpoint
+            that can discard work or stop the run.
           </p>
         </div>
         <Steps steps={DAY} exemplar={exemplar} onZoom={setZoomSrc} onOpenDoc={setOpenDoc} delay="0s" />
@@ -1500,8 +1545,10 @@ const WorkflowMap = ({ diaries }: { diaries?: DiaryEntry[] }) => {
             The slower loops
           </h3>
           <p className="mt-2 text-[13px] text-[#8A8A8A] leading-relaxed max-w-xl">
-            The parts of the system that watch the system — and the one thing
-            it can never do: change its own rules without a human's yes.
+            The parts of the system that watch the system. The rules the brothers
+            work under (Vince's style and preoccupations, the playbooks) live in
+            versioned files; the pipeline can draft a change to them but can never
+            apply one. Applying a change is always a human's move.
           </p>
         </div>
         <Steps steps={WEEK} exemplar={null} onZoom={setZoomSrc} onOpenDoc={setOpenDoc} delay="4s" />
