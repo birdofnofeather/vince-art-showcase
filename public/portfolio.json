@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "intensifies-attacks-iran-tehra",
+      "title": "Steel Shore, No Shelter",
+      "headline": "US intensifies attacks on Iran as Tehran hits back at Gulf states",
+      "date": "2026-07-16",
+      "image": "artworks/intensifies-attacks-iran-tehra.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "they-want-break-our",
       "title": "Silence Made Flesh",
       "headline": "‘They want to break our will’: Gaza flotilla activist tells of rape in Israeli detention",
