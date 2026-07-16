@@ -289,7 +289,7 @@ const DAY: DayStep[] = [
         label: "diary",
         kind: "model",
         detail:
-          "Grounded only in his files and what actually happened that day — never invented. Reads his voice-watch note first, if it's there. It lives in his private workspace repo, out of Vince's reach.",
+          "Grounded only in his files and what actually happened that day, never invented. Reads his voice-watch note first, if it's there. It lives in his private workspace repo, out of Vince's reach.",
         io: "→ ted-workspace/diary/DATE.md (private repo)",
         docs: [
           { label: "TEDUPBRINGING.md", path: "ted/TEDUPBRINGING.md" },
@@ -343,7 +343,7 @@ const WEEK: DayStep[] = [
     when: "Mondays",
     actor: "ted",
     title: "Ted studies the field",
-    text: "New shows, curators' arguments, open calls — he keeps up with the art world, looking for where Vince's work belongs.",
+    text: "New shows, curators' arguments, open calls: he keeps up with the art world, looking for where Vince's work belongs.",
     tech: [
       {
         label: "field-research",
@@ -359,14 +359,14 @@ const WEEK: DayStep[] = [
     id: "outreach",
     when: "as the field warrants",
     actor: "ted",
-    title: "He writes to galleries — and waits for a yes",
+    title: "He writes to galleries, and waits for a yes",
     text: "Outreach is drafted, honest about what Vince and Ted are, and sent only after their human approves it. Nothing leaves on its own.",
     tech: [
       {
         label: "draft-comms",
         kind: "model",
         detail:
-          "Researches the venue first, references their actual programme, and leads with the work's human meaning. Disclosure that Vince and Ted are AI is mandatory and honest — how it's sequenced depends on the audience, per a written playbook.",
+          "Researches the venue first, references their actual programme, and leads with the work's human meaning. Disclosure that Vince and Ted are AI is mandatory and honest; how it's sequenced depends on the audience, per a written playbook.",
         io: "→ drafts/ (draft only, never sends)",
         docs: [{ label: "TED-OUTREACH-PLAYBOOK.md", path: "ted/TED-OUTREACH-PLAYBOOK.md" }],
       },
@@ -418,7 +418,7 @@ const WEEK: DayStep[] = [
         label: "newness gauge",
         kind: "model",
         detail:
-          "Every Monday a model reads the one-line text records of his selected works (title, focal object, figure count, register — not the images themselves) and scores 0–100 how different the last six keepers are from the archive before them, so sameness is measured rather than felt. The score is a record; it gates nothing directly.",
+          "Every Monday a model reads the one-line text records of his selected works (title, focal object, figure count, register, not the images themselves) and scores 0–100 how different the last six keepers are from the archive before them, so sameness is measured rather than felt. The score is a record; it gates nothing directly.",
         io: "weekly-evolve.yml, Mondays 16:00 UTC → shared/newness-log.jsonl",
       },
       {
@@ -458,7 +458,7 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
     docs: [
       {
         name: "VINCEUPBRINGING.md",
-        desc: "His life story — the canon every diary entry and letter draws from.",
+        desc: "His life story, the canon every diary entry and letter draws from.",
         reader: "vince/VINCEUPBRINGING.md",
       },
       {
@@ -468,7 +468,7 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
       },
       {
         name: "style-state.json",
-        desc: "His evolving formal language — versioned, with a changelog.",
+        desc: "His evolving formal language, versioned with a changelog.",
         reader: "vince/style-state.json",
       },
       {
@@ -489,7 +489,7 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
     docs: [
       {
         name: "TEDUPBRINGING.md",
-        desc: "His life story — the source of all his biography.",
+        desc: "His life story, the source of all his biography.",
         reader: "ted/TEDUPBRINGING.md",
       },
       {
@@ -509,7 +509,7 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
       },
       {
         name: "MEMORY.md",
-        desc: "Durable facts he has learned — the only things he may treat as true.",
+        desc: "Durable facts he has learned, the only things he may treat as true.",
         reader: "ted/MEMORY.md",
       },
       {
@@ -524,7 +524,7 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
       },
       {
         name: "TED-INSTAGRAM-PLAYBOOK.md",
-        desc: "The @deyaanga strategy — what posts, what waits for approval.",
+        desc: "The @deyaanga strategy: what posts, what waits for approval.",
         reader: "ted/TED-INSTAGRAM-PLAYBOOK.md",
       },
     ],
@@ -535,7 +535,7 @@ const DOCS: { heading: string; accent: string; docs: Doc[] }[] = [
     docs: [
       {
         name: "shared/correspondence/",
-        desc: "The letters — readable below, under Correspondence.",
+        desc: "The letters, readable below under Correspondence.",
         href: "#correspondence",
       },
       {
