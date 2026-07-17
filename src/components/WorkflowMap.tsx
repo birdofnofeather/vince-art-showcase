@@ -262,7 +262,7 @@ const DAY: DayStep[] = [
         label: "write_diary.js",
         kind: "model",
         detail:
-          "Claude Opus writes one entry covering every session that day, drawing on the day's artworks, the news digest, the corpus memo, this week's voice-watch note, and his upbringing document. Anti-tic voice rules keep the prose from grooving.",
+          "Claude Opus writes one entry covering every session that day, drawing on the day's artworks, the news digest, the corpus memo, this week's voice-watch note, Ted's most recent letter, and his upbringing document. Reception reaches the work only this way: through his brother's words, never as a metric. Anti-tic voice rules keep the prose from grooving.",
         io: "cron 22:00 UTC → vince-workspace/diary/DATE.md (private repo)",
         docs: [
           { label: "VINCEUPBRINGING.md", path: "vince/VINCEUPBRINGING.md" },
