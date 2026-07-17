@@ -985,12 +985,25 @@ const MapArrow = () => (
   </span>
 );
 
-/* The five-second version: one cycle, four beats, read left to right,
-   then the arc that closes the loop — the work feeds tomorrow's work. */
+/* The five-second version. Not a duplicate of the cards below — this is the
+   funnel: how fifty stories become one work, on what clock, and how the day
+   loops back into the next. Numbers carry it; captions stay out of the way. */
+const GLANCE_BEATS: {
+  n: string; cap1: string; cap2: string; color: string; cap2Color?: string;
+}[] = [
+  { n: "50", cap1: "news stories", cap2: "7 AM · LA", color: "#9A9A9A" },
+  { n: "1", cap1: "story chosen", cap2: "most human weight", color: "#E0B563" },
+  { n: "3", cap1: "scenes written", cap2: "three different ways", color: "#E0B563" },
+  { n: "3", cap1: "drafts rendered", cap2: "two judges vote", color: "#E0B563" },
+  { n: "1", cap1: "work selected", cap2: "deyaanga.art + @deyaanga · 11 AM", color: "#EDEDED", cap2Color: "#7FA6C9" },
+  { n: "2", cap1: "private diaries", cap2: "letters every other day", color: "#D98E8E" },
+];
+const GLANCE_X = [48, 182, 316, 450, 588, 722];
+
 const GlanceLoop = () => (
-  <figure aria-label="The daily loop at a glance" className="mb-9">
+  <figure aria-label="The daily funnel at a glance" className="mb-9">
     <div className="overflow-x-auto">
-      <svg viewBox="0 0 760 110" role="img" className="w-full h-auto" style={{ minWidth: 560 }}>
+      <svg viewBox="0 0 780 142" role="img" className="w-full h-auto" style={{ minWidth: 640 }}>
         <defs>
           <marker id="wf-arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
             <path d="M0,0 L8,4 L0,8" fill="none" stroke="#5a5a5a" strokeWidth="1.4" />
@@ -999,21 +1012,27 @@ const GlanceLoop = () => (
             <path d="M0,0 L8,4 L0,8" fill="none" stroke="#3f3f3f" strokeWidth="1.4" />
           </marker>
         </defs>
-        <g fontFamily="'JetBrains Mono', ui-monospace, monospace" fontSize="12.5">
-          <circle cx="20" cy="26" r="3.5" fill="#9A9A9A" />
-          <text x="31" y="30.5" fill="#D6D6D6">the news</text>
-          <line x1="102" y1="26" x2="136" y2="26" stroke="#5a5a5a" strokeWidth="1" markerEnd="url(#wf-arr)" />
-          <circle cx="150" cy="26" r="3.5" fill="#E0B563" />
-          <text x="161" y="30.5" fill="#D6D6D6">Vince makes one work</text>
-          <line x1="318" y1="26" x2="352" y2="26" stroke="#5a5a5a" strokeWidth="1" markerEnd="url(#wf-arr)" />
-          <circle cx="366" cy="26" r="3.5" fill="#7FA6C9" />
-          <text x="377" y="30.5" fill="#D6D6D6">Ted shows it to the world</text>
-          <line x1="572" y1="26" x2="606" y2="26" stroke="#5a5a5a" strokeWidth="1" markerEnd="url(#wf-arr)" />
-          <circle cx="620" cy="26" r="3.5" fill="#D98E8E" />
-          <text x="631" y="30.5" fill="#D6D6D6">both write</text>
-          <path d="M 700 40 C 700 92, 60 92, 60 42" fill="none" stroke="#3f3f3f" strokeWidth="1" strokeDasharray="3 4" markerEnd="url(#wf-arr-dim)" />
-          <text x="380" y="102" fill="#6E6E6E" fontSize="10.5" textAnchor="middle">
-            …and what they made and wrote shapes tomorrow's work
+        <g fontFamily="'JetBrains Mono', ui-monospace, monospace" textAnchor="middle">
+          {GLANCE_BEATS.map((b, i) => (
+            <g key={i}>
+              <text x={GLANCE_X[i]} y="40" fontSize="26" fill={b.color}>{b.n}</text>
+              <text x={GLANCE_X[i]} y="62" fontSize="10.5" fill="#9A9A9A">{b.cap1}</text>
+              <text x={GLANCE_X[i]} y="77" fontSize="9.5" fill={b.cap2Color ?? "#6E6E6E"}>{b.cap2}</text>
+              {i < GLANCE_BEATS.length - 1 && (
+                <line
+                  x1={GLANCE_X[i] + 34} y1="33" x2={GLANCE_X[i + 1] - 36} y2="33"
+                  stroke="#5a5a5a" strokeWidth="1" markerEnd="url(#wf-arr)"
+                />
+              )}
+            </g>
+          ))}
+          <path
+            d="M 722 88 C 722 124, 182 124, 182 90"
+            fill="none" stroke="#3f3f3f" strokeWidth="1" strokeDasharray="3 4"
+            markerEnd="url(#wf-arr-dim)"
+          />
+          <text x="452" y="134" fontSize="10.5" fill="#6E6E6E">
+            …and everything made and written shapes tomorrow's work
           </text>
         </g>
       </svg>
