@@ -985,60 +985,102 @@ const MapArrow = () => (
   </span>
 );
 
-/* The five-second version. Not a duplicate of the cards below — this is the
-   funnel: how fifty stories become one work, on what clock, and how the day
-   loops back into the next. Numbers carry it; captions stay out of the way. */
-const GLANCE_BEATS: {
-  n: string; cap1: string; cap2: string; color: string; cap2Color?: string;
-}[] = [
-  { n: "50", cap1: "news stories", cap2: "7 AM · LA", color: "#9A9A9A" },
-  { n: "1", cap1: "story chosen", cap2: "most human weight", color: "#E0B563" },
-  { n: "3", cap1: "scenes written", cap2: "three different ways", color: "#E0B563" },
-  { n: "3", cap1: "drafts rendered", cap2: "two judges vote", color: "#E0B563" },
-  { n: "1", cap1: "work selected", cap2: "site + @deyaanga · 11 AM", color: "#EDEDED", cap2Color: "#7FA6C9" },
-  { n: "2", cap1: "private diaries", cap2: "letters every 2 days", color: "#D98E8E" },
-];
-const GLANCE_X = [48, 182, 316, 450, 588, 722];
-
-const GlanceLoop = () => (
-  <figure aria-label="The daily funnel at a glance" className="mb-9">
-    <div className="overflow-x-auto">
-      <svg viewBox="0 0 780 142" role="img" className="w-full h-auto" style={{ minWidth: 640 }}>
-        <defs>
-          <marker id="wf-arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
-            <path d="M0,0 L8,4 L0,8" fill="none" stroke="#5a5a5a" strokeWidth="1.4" />
-          </marker>
-          <marker id="wf-arr-dim" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
-            <path d="M0,0 L8,4 L0,8" fill="none" stroke="#3f3f3f" strokeWidth="1.4" />
-          </marker>
-        </defs>
-        <g fontFamily="'JetBrains Mono', ui-monospace, monospace" textAnchor="middle">
-          {GLANCE_BEATS.map((b, i) => (
-            <g key={i}>
-              <text x={GLANCE_X[i]} y="40" fontSize="26" fill={b.color}>{b.n}</text>
-              <text x={GLANCE_X[i]} y="62" fontSize="10.5" fill="#9A9A9A">{b.cap1}</text>
-              <text x={GLANCE_X[i]} y="77" fontSize="9.5" fill={b.cap2Color ?? "#6E6E6E"}>{b.cap2}</text>
-              {i < GLANCE_BEATS.length - 1 && (
-                <line
-                  x1={GLANCE_X[i] + 34} y1="33" x2={GLANCE_X[i + 1] - 36} y2="33"
-                  stroke="#5a5a5a" strokeWidth="1" markerEnd="url(#wf-arr)"
-                />
-              )}
-            </g>
-          ))}
-          <path
-            d="M 722 88 C 722 124, 182 124, 182 90"
-            fill="none" stroke="#3f3f3f" strokeWidth="1" strokeDasharray="3 4"
-            markerEnd="url(#wf-arr-dim)"
-          />
-          <text x="452" y="134" fontSize="10.5" fill="#6E6E6E">
-            …and everything made and written shapes tomorrow's work
-          </text>
-        </g>
-      </svg>
-    </div>
-  </figure>
+const GlanceArrow = () => (
+  <span aria-hidden className="shrink-0 text-[#5a5a5a] text-sm select-none" style={{ fontFamily: mono }}>
+    →
+  </span>
 );
+
+/* The five-second layer, made of the real thing instead of a diagram: the
+   latest run's actual headline, drafts, and keeper laid out as one line.
+   A first-time visitor watches news become a picture; a returning one sees
+   the newest pass through the studio. Renders nothing until data loads. */
+const GlanceStrip = ({
+  exemplar,
+  onZoom,
+}: {
+  exemplar: Exemplar | null;
+  onZoom: (src: string) => void;
+}) => {
+  if (!exemplar) return null;
+  const hasDrafts = exemplar.drafts.length >= 2;
+  return (
+    <figure aria-label="The latest run at a glance" className="mb-10">
+      <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto pb-2">
+        <div className="shrink-0 w-[190px] border-l-2 pl-3" style={{ borderColor: "#E0B56355" }}>
+          <div className="text-[9px] uppercase tracking-wider text-[#6E6E6E] mb-1" style={{ fontFamily: mono }}>
+            7 AM · one story from the news
+          </div>
+          <div className="text-[11.5px] leading-snug text-[#C9C9C9] italic">
+            “{clampText(exemplar.headline, 90)}”
+          </div>
+        </div>
+        <GlanceArrow />
+        {hasDrafts && (
+          <>
+            <div className="shrink-0">
+              <div className="flex gap-1.5">
+                {exemplar.drafts.map((d, i) => {
+                  const src = resolveImage(d.path);
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => onZoom(src)}
+                      className="focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+                      aria-label={`Enlarge draft ${i + 1}`}
+                    >
+                      <img
+                        src={src}
+                        alt=""
+                        loading="lazy"
+                        className="h-12 w-auto opacity-70 hover:opacity-100 transition-opacity"
+                        style={{ cursor: "zoom-in" }}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="mt-1 text-[9px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
+                {exemplar.drafts.length} drafts · judges vote
+              </div>
+            </div>
+            <GlanceArrow />
+          </>
+        )}
+        <div className="shrink-0">
+          <button
+            onClick={() => onZoom(resolveImage(exemplar.image))}
+            className="block focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
+            aria-label={`Enlarge “${exemplar.title}”`}
+          >
+            <img
+              src={resolveImage(exemplar.image)}
+              alt={`“${exemplar.title}”`}
+              loading="lazy"
+              className="h-16 w-auto opacity-90 hover:opacity-100 transition-opacity"
+              style={{ cursor: "zoom-in" }}
+            />
+          </button>
+          <div className="mt-1 text-[9px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
+            the day's one work
+          </div>
+        </div>
+        <GlanceArrow />
+        <div className="shrink-0 w-[180px]">
+          <div className="text-[11.5px] leading-snug text-[#C9C9C9]">
+            shown at deyaanga.art and @deyaanga, written about in two private diaries
+          </div>
+          <div className="mt-1 text-[9px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
+            again tomorrow · 7 AM
+          </div>
+        </div>
+      </div>
+      <figcaption className="mt-1 text-[9.5px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
+        {exemplar.date} · the latest run, not a mockup — every day works like this
+      </figcaption>
+    </figure>
+  );
+};
 
 const SystemMap = ({
   exemplar,
@@ -1049,7 +1091,7 @@ const SystemMap = ({
 }) => (
   <section aria-label="The shape of the system" className="mb-20 sm:mb-24">
     <Kicker>01 · The shape of it</Kicker>
-    <GlanceLoop />
+    <GlanceStrip exemplar={exemplar} onZoom={onZoom} />
     <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-stretch mb-3">
       <MapCard
         accent={ACCENT.vince}
