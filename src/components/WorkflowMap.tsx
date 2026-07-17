@@ -985,103 +985,6 @@ const MapArrow = () => (
   </span>
 );
 
-const GlanceArrow = () => (
-  <span aria-hidden className="shrink-0 text-[#5a5a5a] text-sm select-none" style={{ fontFamily: mono }}>
-    →
-  </span>
-);
-
-/* The five-second layer, made of the real thing instead of a diagram: the
-   latest run's actual headline, drafts, and keeper laid out as one line.
-   A first-time visitor watches news become a picture; a returning one sees
-   the newest pass through the studio. Renders nothing until data loads. */
-const GlanceStrip = ({
-  exemplar,
-  onZoom,
-}: {
-  exemplar: Exemplar | null;
-  onZoom: (src: string) => void;
-}) => {
-  if (!exemplar) return null;
-  const hasDrafts = exemplar.drafts.length >= 2;
-  return (
-    <figure aria-label="The latest run at a glance" className="mb-10">
-      <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto pb-2">
-        <div className="shrink-0 w-[190px] border-l-2 pl-3" style={{ borderColor: "#E0B56355" }}>
-          <div className="text-[9px] uppercase tracking-wider text-[#6E6E6E] mb-1" style={{ fontFamily: mono }}>
-            7 AM · one story from the news
-          </div>
-          <div className="text-[11.5px] leading-snug text-[#C9C9C9] italic">
-            “{clampText(exemplar.headline, 90)}”
-          </div>
-        </div>
-        <GlanceArrow />
-        {hasDrafts && (
-          <>
-            <div className="shrink-0">
-              <div className="flex gap-1.5">
-                {exemplar.drafts.map((d, i) => {
-                  const src = resolveImage(d.path);
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => onZoom(src)}
-                      className="focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
-                      aria-label={`Enlarge draft ${i + 1}`}
-                    >
-                      <img
-                        src={src}
-                        alt=""
-                        loading="lazy"
-                        className="h-12 w-auto opacity-70 hover:opacity-100 transition-opacity"
-                        style={{ cursor: "zoom-in" }}
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="mt-1 text-[9px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
-                {exemplar.drafts.length} drafts · judges vote
-              </div>
-            </div>
-            <GlanceArrow />
-          </>
-        )}
-        <div className="shrink-0">
-          <button
-            onClick={() => onZoom(resolveImage(exemplar.image))}
-            className="block focus:outline-none focus-visible:ring-1 focus-visible:ring-[#EDEDED]/40"
-            aria-label={`Enlarge “${exemplar.title}”`}
-          >
-            <img
-              src={resolveImage(exemplar.image)}
-              alt={`“${exemplar.title}”`}
-              loading="lazy"
-              className="h-16 w-auto opacity-90 hover:opacity-100 transition-opacity"
-              style={{ cursor: "zoom-in" }}
-            />
-          </button>
-          <div className="mt-1 text-[9px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
-            the day's one work
-          </div>
-        </div>
-        <GlanceArrow />
-        <div className="shrink-0 w-[180px]">
-          <div className="text-[11.5px] leading-snug text-[#C9C9C9]">
-            shown at deyaanga.art and @deyaanga, written about in two private diaries
-          </div>
-          <div className="mt-1 text-[9px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
-            again tomorrow · 7 AM
-          </div>
-        </div>
-      </div>
-      <figcaption className="mt-1 text-[9.5px] uppercase tracking-wider text-[#6E6E6E]" style={{ fontFamily: mono }}>
-        {exemplar.date} · the latest run, not a mockup — every day works like this
-      </figcaption>
-    </figure>
-  );
-};
-
 const SystemMap = ({
   exemplar,
   onZoom,
@@ -1091,7 +994,6 @@ const SystemMap = ({
 }) => (
   <section aria-label="The shape of the system" className="mb-20 sm:mb-24">
     <Kicker>01 · The shape of it</Kicker>
-    <GlanceStrip exemplar={exemplar} onZoom={onZoom} />
     <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-stretch mb-3">
       <MapCard
         accent={ACCENT.vince}
