@@ -32,6 +32,10 @@
   .status-value { font-size: .95rem; font-weight: 600; }
   .status-sub { font-size: .66rem; color: var(--muted); margin-top: .2rem; }
   .status-schedule { font-size: .68rem; color: var(--muted); margin: .2rem 0 1.6rem; }
+  .status-q { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 50%; width: 14px; height: 14px; font-size: .6rem; line-height: 1; cursor: pointer; margin-left: .35rem; padding: 0; vertical-align: middle; }
+  .status-q:hover { color: var(--text); border-color: var(--muted); }
+  .status-note { display: none; font-size: .66rem; color: var(--muted); line-height: 1.45; margin-top: .4rem; padding-top: .35rem; border-top: 1px solid var(--border); }
+  .status-cell.show-note .status-note { display: block; }
   .empty { color: var(--muted); font-style: italic; }
   .table-wrap { overflow-x: auto; }
   table.story-table { width: 100%; border-collapse: collapse; font-size: .78rem; }
@@ -142,39 +146,46 @@
 <section id="status">
   <div class="status-strip">
     <div class="status-cell">
-      <div class="status-label">Last run</div>
+      <div class="status-label">Last run<button class="status-q" title="The most recent daily image run (7 AM LA): fetch news, write scenes, render, judge, publish. ok means a new work was made and published. failed means no work today: open Pipeline Runs below for the error, then re-run daily-run.yml from the Actions tab." aria-label="What is this?" onclick="this.closest('.status-cell').classList.toggle('show-note')">?</button></div>
       <div class="status-value" style="color:var(--fresh)">ok · 2026-07-16</div>
       <div class="status-sub">US intensifies attacks on Iran as Tehran hits back at Gulf …</div>
+      <div class="status-note">The most recent daily image run (7 AM LA): fetch news, write scenes, render, judge, publish. ok means a new work was made and published. failed means no work today: open Pipeline Runs below for the error, then re-run daily-run.yml from the Actions tab.</div>
     </div>
     <div class="status-cell">
-      <div class="status-label">Proposals pending</div>
+      <div class="status-label">Proposals pending<button class="status-q" title="Style or preoccupation changes the system has drafted but can never apply itself. At 1+, your decision is needed: a banner below links the proposal file with exact apply/reject steps, and a GitHub issue was opened. At 0, nothing waits." aria-label="What is this?" onclick="this.closest('.status-cell').classList.toggle('show-note')">?</button></div>
       <div class="status-value" style="color:var(--fresh)">0</div>
       <div class="status-sub">nothing waiting</div>
+      <div class="status-note">Style or preoccupation changes the system has drafted but can never apply itself. At 1+, your decision is needed: a banner below links the proposal file with exact apply/reject steps, and a GitHub issue was opened. At 0, nothing waits.</div>
     </div>
     <div class="status-cell">
-      <div class="status-label">Incidents · 7d</div>
+      <div class="status-label">Incidents · 7d<button class="status-q" title="Provider trouble across the week. Fallbacks (Anthropic failed, OpenAI stood in) mean runs completed but degraded. Story refusals are normal: the content filter balked and the pipeline moved to the next ranked story. Hard failures turn this red: check API keys and credit on both providers." aria-label="What is this?" onclick="this.closest('.status-cell').classList.toggle('show-note')">?</button></div>
       <div class="status-value" style="color:var(--fresh)">0</div>
       <div class="status-sub">clean week</div>
+      <div class="status-note">Provider trouble across the week. Fallbacks (Anthropic failed, OpenAI stood in) mean runs completed but degraded. Story refusals are normal: the content filter balked and the pipeline moved to the next ranked story. Hard failures turn this red: check API keys and credit on both providers.</div>
     </div>
     <div class="status-cell">
-      <div class="status-label">Newness</div>
+      <div class="status-label">Newness<button class="status-q" title="Each Monday a model scores 0-100 how different the last six works are from the archive before them. Healthy is 30+. Two consecutive scores under 30 make the system draft a one-clause style proposal for your review, so amber here means a proposal may be coming. You never need to act on this number directly." aria-label="What is this?" onclick="this.closest('.status-cell').classList.toggle('show-note')">?</button></div>
       <div class="status-value" style="color:var(--pending)">18/100</div>
       <div class="status-sub">gauged 2026-07-13 · running samey</div>
+      <div class="status-note">Each Monday a model scores 0-100 how different the last six works are from the archive before them. Healthy is 30+. Two consecutive scores under 30 make the system draft a one-clause style proposal for your review, so amber here means a proposal may be coming. You never need to act on this number directly.</div>
     </div>
     <div class="status-cell">
-      <div class="status-label">Trace median · last 10</div>
+      <div class="status-label">Trace median · last 10<button class="status-q" title="For every selected work, a blind viewer (a model shown only the image) guesses what news event it answers; 1-5 scores how close the guess lands. The work is designed to live at 1-2: oblique, displaced, never illustration. A median of 3+ means the work is drifting toward illustrating headlines: review recent selections, and if it persists consider a style nudge." aria-label="What is this?" onclick="this.closest('.status-cell').classList.toggle('show-note')">?</button></div>
       <div class="status-value" style="color:var(--fresh)">1.5/5</div>
       <div class="status-sub">oblique, as designed</div>
+      <div class="status-note">For every selected work, a blind viewer (a model shown only the image) guesses what news event it answers; 1-5 scores how close the guess lands. The work is designed to live at 1-2: oblique, displaced, never illustration. A median of 3+ means the work is drifting toward illustrating headlines: review recent selections, and if it persists consider a style nudge.</div>
     </div>
     <div class="status-cell">
-      <div class="status-label">Last letter</div>
+      <div class="status-label">Last letter<button class="status-q" title="The newest letter in the brothers&#39; correspondence and who wrote it. They alternate, each replying about two days after the other. If this is older than three days, someone&#39;s turn is stuck: Ted&#39;s noon cron on the VPS if it is his turn, the daily-diary workflow if it is Vince&#39;s." aria-label="What is this?" onclick="this.closest('.status-cell').classList.toggle('show-note')">?</button></div>
       <div class="status-value" style="color:var(--muted)">vince · 2026-07-15</div>
       <div class="status-sub">every-other-day cadence</div>
+      <div class="status-note">The newest letter in the brothers' correspondence and who wrote it. They alternate, each replying about two days after the other. If this is older than three days, someone's turn is stuck: Ted's noon cron on the VPS if it is his turn, the daily-diary workflow if it is Vince's.</div>
     </div>
     <div class="status-cell">
-      <div class="status-label">Latest work</div>
+      <div class="status-label">Latest work<button class="status-q" title="The most recent selected artwork. Its date should match the last ok run; if the run is ok but this looks stale, the publish step likely failed: re-run publish-portfolio.yml from the Actions tab." aria-label="What is this?" onclick="this.closest('.status-cell').classList.toggle('show-note')">?</button></div>
       <div class="status-value" style="color:var(--muted)">Steel Shore, No Shelter</div>
       <div class="status-sub">2026-07-16</div>
+      <div class="status-note">The most recent selected artwork. Its date should match the last ok run; if the run is ok but this looks stale, the publish step likely failed: re-run publish-portfolio.yml from the Actions tab.</div>
     </div></div>
   <p class="status-schedule">Schedule (LA): image run 7:00 AM · diary + letters 3:00 PM · atelier re-publish 9:15 PM · voice-watch Sun · newness gauge Mon · preoccupations 1st of month</p>
 </section>
@@ -201,11 +212,12 @@
       last: ok · Jul 16, 2026, 03:23 PM
     </span>
   </h2>
-  <p class="section-explainer">Each row is one full pipeline execution: fetch → assemble → generate → log. The most recent 20 runs are shown. Failed runs show the error inline.</p>
-  <div class="table-wrap">
-    <table class="story-table">
-      <thead><tr><th>Started</th><th>Status</th><th>Story</th><th>Duration</th></tr></thead>
-      <tbody>
+  <details>
+    <summary style="cursor:pointer;color:var(--muted);font-size:.8rem">34 executions logged · all of the last 7 ok — expand for the table (failures and durations; successes also appear as artwork cards below)</summary>
+    <div class="table-wrap" style="margin-top:.6rem">
+      <table class="story-table">
+        <thead><tr><th>Started</th><th>Status</th><th>Story</th><th>Duration</th></tr></thead>
+        <tbody>
 <tr>
   <td class="run-time">Jul 16, 2026, 03:23 PM</td>
   <td><span class="badge badge-fresh">ok</span></td>
@@ -326,8 +338,9 @@
   <td class="run-story"><a href="https://www.theguardian.com/world/2026/jun/25/el-nino-pacific-papua-new-guinea-png-food-shortages" target="_blank" rel="noopener">Papua New Guinea at risk of food shortages as El Niño brings frost and drought</a></td>
   <td class="run-dur">1279s</td>
 </tr></tbody>
-    </table>
-  </div>
+      </table>
+    </div>
+  </details>
 </section>
 
   
