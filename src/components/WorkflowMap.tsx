@@ -995,8 +995,8 @@ const GLANCE_BEATS: {
   { n: "1", cap1: "story chosen", cap2: "most human weight", color: "#E0B563" },
   { n: "3", cap1: "scenes written", cap2: "three different ways", color: "#E0B563" },
   { n: "3", cap1: "drafts rendered", cap2: "two judges vote", color: "#E0B563" },
-  { n: "1", cap1: "work selected", cap2: "deyaanga.art + @deyaanga · 11 AM", color: "#EDEDED", cap2Color: "#7FA6C9" },
-  { n: "2", cap1: "private diaries", cap2: "letters every other day", color: "#D98E8E" },
+  { n: "1", cap1: "work selected", cap2: "site + @deyaanga · 11 AM", color: "#EDEDED", cap2Color: "#7FA6C9" },
+  { n: "2", cap1: "private diaries", cap2: "letters every 2 days", color: "#D98E8E" },
 ];
 const GLANCE_X = [48, 182, 316, 450, 588, 722];
 
