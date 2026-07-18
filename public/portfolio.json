@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "former-boss-italian-motorways",
+      "title": "Where Accountability Ends",
+      "headline": "Former boss of Italian motorways sentenced to 12 years over Genoa bridge tragedy",
+      "date": "2026-07-18",
+      "image": "artworks/former-boss-italian-motorways.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "mafia-law-gives-italian",
       "title": "Bloodline, Revised",
       "headline": "Mafia law gives Italian families right to break free from life of crime",
