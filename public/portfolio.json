@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "russia-pounds-kyiv-five",
+      "title": "Witnesses to Their Own Burial",
+      "headline": "Russia pounds Kyiv for five hours in one of its biggest ballistic missile attacks",
+      "date": "2026-07-19",
+      "image": "artworks/russia-pounds-kyiv-five.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "former-boss-italian-motorways",
       "title": "Where Accountability Ends",
       "headline": "Former boss of Italian motorways sentenced to 12 years over Genoa bridge tragedy",
