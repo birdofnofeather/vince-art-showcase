@@ -69,21 +69,25 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
       } else if (relX > 0.85) {
         goTo(1);
       } else {
-        // Center tap: toggle pause; if resuming, advance immediately
-        setPaused((p) => {
-          if (p) goTo(1);
-          return !p;
-        });
+        // Center tap: if paused, advance and resume; if playing, pause.
+        if (paused) {
+          goTo(1);
+          setPaused(false);
+        } else {
+          setPaused(true);
+        }
         markAdvanced();
       }
     }
   };
 
   const togglePause = () => {
-    setPaused((p) => {
-      if (p) goTo(1);
-      return !p;
-    });
+    if (paused) {
+      goTo(1);
+      setPaused(false);
+    } else {
+      setPaused(true);
+    }
     markAdvanced();
   };
 
