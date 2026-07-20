@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "total-devastation-inside-amazo",
+      "title": "Cartography of What Burned",
+      "headline": "‘It’s total devastation’: inside the Amazonian war against illegal gold mining",
+      "date": "2026-07-20",
+      "image": "artworks/total-devastation-inside-amazo.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "russia-pounds-kyiv-five",
       "title": "Witnesses to Their Own Burial",
       "headline": "Russia pounds Kyiv for five hours in one of its biggest ballistic missile attacks",
