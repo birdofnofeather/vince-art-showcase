@@ -50,15 +50,16 @@ const Layout = () => {
       </main>
 
       <footer className="py-10 mt-20">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 text-xs text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-2">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 text-xs text-muted-foreground flex flex-nowrap items-center gap-x-3 whitespace-nowrap">
           <span>Vince de Yaanga · Los Angeles · {new Date().getFullYear()}</span>
+          <span aria-hidden="true">·</span>
           <a
-            href="https://www.instagram.com/deyaanga/"
+            href="https://www.instagram.com/deyaanga?igsh=NTc4MTIwNjQ2YQ=="
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-foreground transition-colors"
           >
-            Instagram @deyaanga
+            @deyaanga
           </a>
         </div>
       </footer>
