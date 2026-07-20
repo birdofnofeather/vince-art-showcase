@@ -15,6 +15,7 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
   const [paused, setPaused] = useState(false);
   const advancedOnceRef = useRef(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const markAdvanced = () => {
     if (!advancedOnceRef.current) {
@@ -49,20 +50,40 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
     const t = e.changedTouches[0];
     const dx = t.clientX - touchStart.current.x;
     const dy = t.clientY - touchStart.current.y;
+    const startX = touchStart.current.x;
     touchStart.current = null;
+
+    // Swipe
     if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
       goTo(dx < 0 ? 1 : -1);
       return;
     }
-    // Treat as tap → toggle pause
+
+    // Tap: partition image into left 15% / center 70% / right 15%
     if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
-      setPaused((p) => !p);
-      markAdvanced();
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const relX = (startX - rect.left) / rect.width;
+      if (relX < 0.15) {
+        goTo(-1);
+      } else if (relX > 0.85) {
+        goTo(1);
+      } else {
+        // Center tap: toggle pause; if resuming, advance immediately
+        setPaused((p) => {
+          if (p) goTo(1);
+          return !p;
+        });
+        markAdvanced();
+      }
     }
   };
 
   const togglePause = () => {
-    setPaused((p) => !p);
+    setPaused((p) => {
+      if (p) goTo(1);
+      return !p;
+    });
     markAdvanced();
   };
 
@@ -71,13 +92,11 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
   return (
     <div className="px-6 pt-8 select-none">
       <div
-        className="relative w-full overflow-hidden bg-muted touch-pan-y cursor-pointer"
+        ref={containerRef}
+        className="relative w-full overflow-hidden bg-muted touch-pan-y"
         style={{ aspectRatio: "4 / 5" }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
-        onClick={togglePause}
-        role="button"
-        aria-label={paused ? "Resume carousel" : "Pause carousel"}
       >
         {works.map((wk, i) => (
           <img
@@ -97,12 +116,10 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
         ))}
       </div>
       <div className="pt-4">
-        <Link to={`/work/${w.slug}`} className="block">
-          <h2 className="font-display text-xl leading-tight">{w.title}</h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            {w.headline} · {formatDate(w.date)}
-          </p>
-        </Link>
+        <h2 className="font-display text-xl leading-tight">{w.title}</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          {w.headline} · {formatDate(w.date)}
+        </p>
       </div>
 
       <div
@@ -111,7 +128,7 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
         }`}
         aria-hidden={!showHints}
       >
-        <span>Swipe to advance →</span>
+        <span>← Swipe to advance →</span>
         <button
           type="button"
           onClick={togglePause}
@@ -119,7 +136,7 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
           aria-label={paused ? "Resume carousel" : "Pause carousel"}
         >
           {paused ? <Play size={12} aria-hidden="true" /> : <Pause size={12} aria-hidden="true" />}
-          <span>{paused ? "Tap to play" : "Tap to pause"}</span>
+          <span>Tap center to pause</span>
         </button>
       </div>
     </div>
