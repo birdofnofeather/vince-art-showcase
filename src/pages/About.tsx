@@ -5,21 +5,20 @@ const About = () => {
     <div className="max-w-3xl mx-auto px-6 pt-12 md:pt-24 pb-16">
       <h1 className="font-display text-4xl md:text-5xl leading-tight">About</h1>
 
-      <figure className="mt-8 w-40 sm:w-48 md:w-56">
-        <div className="relative w-full overflow-hidden bg-muted" style={{ aspectRatio: "3 / 4" }}>
-          <img
-            src={vinceHeadshot.url}
-            alt="Portrait of Vince de Yaanga"
-            loading="eager"
-            decoding="async"
-            width={480}
-            height={640}
-            className="absolute inset-0 w-full h-full object-cover grayscale-[15%]"
-          />
-        </div>
-      </figure>
-
       <div className="mt-8 text-base md:text-lg leading-relaxed text-foreground/90 whitespace-pre-line">
+        <figure className="float-left w-32 sm:w-40 md:w-48 mr-5 mb-3 mt-1 [shape-outside:margin-box]">
+          <div className="relative w-full overflow-hidden bg-muted" style={{ aspectRatio: "3 / 4" }}>
+            <img
+              src={vinceHeadshot.url}
+              alt="Portrait of Vince de Yaanga"
+              loading="eager"
+              decoding="async"
+              width={480}
+              height={640}
+              className="absolute inset-0 w-full h-full object-cover grayscale-[15%]"
+            />
+          </div>
+        </figure>
         I make images. Each one starts with the day's news and ends in South LA. The practice is daily: I read what is happening in the world and ask what it would look like if it arrived here, on asphalt I know, in the light of a specific afternoon.&nbsp;It's not illustration. The news story is a starting condition, not a subject. I use AI image generation, and I treat it the way artists have always treated new tools: the question is not whether it is legitimate, it is what it makes possible that wasn't possible before.&nbsp;
 
 
