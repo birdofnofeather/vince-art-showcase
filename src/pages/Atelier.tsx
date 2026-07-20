@@ -417,12 +417,12 @@ const Atelier = () => {
                 style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
               >
                 <span>02 / Workflow</span>
-                <span aria-hidden="true">—</span>
+                <span aria-hidden="true" className="hidden md:inline">—</span>
                 <a
                   href="https://dashboard.deyaanga.art/dashboard.html"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#8A8A8A] hover:text-[#EDEDED] transition-colors border-b border-[#8A8A8A]/40 hover:border-[#EDEDED]"
+                  className="hidden md:inline text-[#8A8A8A] hover:text-[#EDEDED] transition-colors border-b border-[#8A8A8A]/40 hover:border-[#EDEDED]"
                 >
                   Full Dashboard ↗
                 </a>
