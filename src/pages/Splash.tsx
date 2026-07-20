@@ -1,21 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Pause, Play } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { formatDate, resolveImage, type Work } from "@/lib/data";
 import WorkGrid from "@/components/WorkGrid";
 
-const AUTO_ADVANCE_MS = 5000;
+const AUTO_ADVANCE_MS = 7000;
 const SWIPE_THRESHOLD = 40;
 
 const MobileCarousel = ({ works }: { works: Work[] }) => {
   const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
   const [showHint, setShowHint] = useState(true);
   const advancedOnceRef = useRef(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
-    if (works.length <= 1) return;
+    if (works.length <= 1 || paused) return;
     const id = window.setInterval(() => {
       setIndex((i) => (i + 1) % works.length);
       if (!advancedOnceRef.current) {
@@ -24,7 +26,7 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
       }
     }, AUTO_ADVANCE_MS);
     return () => window.clearInterval(id);
-  }, [works.length]);
+  }, [works.length, paused]);
 
   const goTo = (delta: number) => {
     setIndex((i) => {
@@ -86,14 +88,27 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
           <p className="text-sm text-muted-foreground mt-1">
             {w.headline} · {formatDate(w.date)}
           </p>
-          <p
-            className={`text-xs text-muted-foreground/60 mt-3 transition-opacity duration-500 ${
-              showHint ? "opacity-100" : "opacity-0"
-            }`}
-            aria-hidden={!showHint}
-          >
-            Swipe to advance →
-          </p>
+          <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground/60">
+            <span
+              className={`transition-opacity duration-500 ${showHint ? "opacity-100" : "opacity-0"}`}
+              aria-hidden={!showHint}
+            >
+              Swipe to advance →
+            </span>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setPaused((p) => !p);
+              }}
+              className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+              aria-label={paused ? "Play carousel" : "Pause carousel"}
+            >
+              {paused ? "Tap to play" : "Tap to pause"}
+              {paused ? <Play size={12} /> : <Pause size={12} />}
+            </button>
+          </div>
         </div>
       </Link>
     </div>
