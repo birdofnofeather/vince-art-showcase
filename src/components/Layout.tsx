@@ -53,13 +53,14 @@ const Layout = () => {
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 text-xs text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-2">
           <span>Vince de Yaanga · Los Angeles · {new Date().getFullYear()}</span>
           <a
-            href="https://www.instagram.com/deyaanga/"
+            href="https://www.instagram.com/deyaanga?igsh=NTc4MTIwNjQ2YQ=="
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-foreground transition-colors"
           >
-            Instagram @deyaanga
+            @deyaanga
           </a>
+
         </div>
       </footer>
     </div>
