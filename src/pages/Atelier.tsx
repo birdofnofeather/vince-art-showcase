@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Menu } from "lucide-react";
 import ToggleGlyph from "@/components/ToggleGlyph";
 import { useProjectData, type DiaryEntry, type DraftImage, type Letter } from "@/hooks/useProjectData";
 import { resolveImage } from "@/lib/data";
+import vinceHeadshot from "@/assets/vince-headshot.png.asset.json";
+import tedHeadshot from "@/assets/ted-headshot.png.asset.json";
 
 const Lightbox = ({ src, onClose }: { src: string; onClose: () => void }) => {
   const ref = useRef<HTMLDialogElement>(null);
