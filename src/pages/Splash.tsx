@@ -52,45 +52,58 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
     touchStart.current = null;
     if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
       goTo(dx < 0 ? 1 : -1);
+      return;
     }
+    // Treat as tap → toggle pause
+    if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+      setPaused((p) => !p);
+      markAdvanced();
+    }
+  };
+
+  const togglePause = () => {
+    setPaused((p) => !p);
+    markAdvanced();
   };
 
   const w = works[index];
 
   return (
-    <div
-      className="px-6 pt-8 select-none"
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-    >
-      <Link
-        to={`/work/${w.slug}`}
-        className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+    <div className="px-6 pt-8 select-none">
+      <div
+        className="relative w-full overflow-hidden bg-muted touch-pan-y cursor-pointer"
+        style={{ aspectRatio: "4 / 5" }}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        onClick={togglePause}
+        role="button"
+        aria-label={paused ? "Resume carousel" : "Pause carousel"}
       >
-        <div className="relative w-full overflow-hidden bg-muted" style={{ aspectRatio: "4 / 5" }}>
-          {works.map((wk, i) => (
-            <img
-              key={wk.slug}
-              src={resolveImage(wk.image)}
-              alt={wk.title}
-              loading={i === 0 ? "eager" : "lazy"}
-              decoding="async"
-              width={wk.width}
-              height={wk.height}
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-                i === index ? "opacity-100" : "opacity-0"
-              }`}
-              aria-hidden={i === index ? undefined : true}
-            />
-          ))}
-        </div>
-        <div className="pt-4">
+        {works.map((wk, i) => (
+          <img
+            key={wk.slug}
+            src={resolveImage(wk.image)}
+            alt={wk.title}
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding="async"
+            width={wk.width}
+            height={wk.height}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 pointer-events-none ${
+              i === index ? "opacity-100" : "opacity-0"
+            }`}
+            aria-hidden={i === index ? undefined : true}
+            draggable={false}
+          />
+        ))}
+      </div>
+      <div className="pt-4">
+        <Link to={`/work/${w.slug}`} className="block">
           <h2 className="font-display text-xl leading-tight">{w.title}</h2>
           <p className="text-sm text-muted-foreground mt-1">
             {w.headline} · {formatDate(w.date)}
           </p>
-        </div>
-      </Link>
+        </Link>
+      </div>
 
       <div
         className={`mt-3 flex items-center justify-between text-xs text-muted-foreground/60 transition-opacity duration-500 ${
@@ -101,11 +114,7 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
         <span>Swipe to advance →</span>
         <button
           type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setPaused((p) => !p);
-          }}
+          onClick={togglePause}
           className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
           aria-label={paused ? "Resume carousel" : "Pause carousel"}
         >
@@ -116,6 +125,7 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
     </div>
   );
 };
+
 
 const Splash = () => {
   const isMobile = useIsMobile();
