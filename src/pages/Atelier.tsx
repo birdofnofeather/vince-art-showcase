@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Menu } from "lucide-react";
 import ToggleGlyph from "@/components/ToggleGlyph";
 import { useProjectData, type DiaryEntry, type DraftImage, type Letter } from "@/hooks/useProjectData";
 import { resolveImage } from "@/lib/data";
+import vinceHeadshot from "@/assets/vince-headshot.png.asset.json";
+import tedHeadshot from "@/assets/ted-headshot.png.asset.json";
 
 const Lightbox = ({ src, onClose }: { src: string; onClose: () => void }) => {
   const ref = useRef<HTMLDialogElement>(null);
@@ -229,6 +232,80 @@ const LetterBlock = ({ letter }: { letter: Letter }) => {
 
 import WorkflowMap from "@/components/WorkflowMap";
 
+const AtelierNav = ({ active }: { active: string }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <nav
+      className="sticky top-0 z-40 backdrop-blur-sm"
+      style={{ backgroundColor: "rgba(10,10,10,0.85)", borderBottom: "1px solid #222" }}
+    >
+      <div className="max-w-5xl mx-auto px-6 py-3 flex items-center gap-5">
+        <span
+          className="text-xs uppercase tracking-[0.2em] text-[#8A8A8A] shrink-0"
+          style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
+        >
+          Atelier
+        </span>
+
+        {/* Mobile: hamburger */}
+        <div className="relative md:hidden">
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Sections menu"
+            aria-expanded={open}
+            className="text-[#8A8A8A] hover:text-[#EDEDED] transition-colors p-1 -ml-1"
+          >
+            <Menu size={18} aria-hidden="true" />
+          </button>
+          {open && (
+            <div
+              className="absolute left-0 top-full mt-2 min-w-[160px] py-2 z-50"
+              style={{ backgroundColor: "#0A0A0A", border: "1px solid #222" }}
+            >
+              {SECTIONS.map((s) => (
+                <a
+                  key={s.id}
+                  href={`#${s.id}`}
+                  onClick={() => setOpen(false)}
+                  className="block px-4 py-2 text-xs uppercase tracking-wider transition-colors"
+                  style={{
+                    fontFamily: "'JetBrains Mono', ui-monospace, monospace",
+                    color: active === s.id ? "#EDEDED" : "#8A8A8A",
+                  }}
+                >
+                  {s.label}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Desktop: inline section links */}
+        <div className="hidden md:flex items-center gap-5">
+          {SECTIONS.map((s) => (
+            <a
+              key={s.id}
+              href={`#${s.id}`}
+              className="text-xs uppercase tracking-wider shrink-0 transition-colors"
+              style={{
+                fontFamily: "'JetBrains Mono', ui-monospace, monospace",
+                color: active === s.id ? "#EDEDED" : "#8A8A8A",
+              }}
+            >
+              {s.label}
+            </a>
+          ))}
+        </div>
+
+        <div className="ml-auto shrink-0 text-[#EDEDED]">
+          <ToggleGlyph />
+        </div>
+      </div>
+    </nav>
+  );
+};
+
 const Atelier = () => {
   const { data, loading, error } = useProjectData();
   const [tab, setTab] = useState<"vince" | "ted">("vince");
@@ -273,35 +350,7 @@ const Atelier = () => {
       className="min-h-screen"
       style={{ backgroundColor: "#0A0A0A", color: "#EDEDED", fontFamily: "'Inter', sans-serif" }}
     >
-      <nav
-        className="sticky top-0 z-40 backdrop-blur-sm"
-        style={{ backgroundColor: "rgba(10,10,10,0.85)", borderBottom: "1px solid #222" }}
-      >
-        <div className="max-w-5xl mx-auto px-6 py-3 flex items-center gap-5 overflow-x-auto">
-          <span
-            className="text-xs uppercase tracking-[0.2em] text-[#8A8A8A] mr-4 shrink-0"
-            style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
-          >
-            Atelier
-          </span>
-          {SECTIONS.map((s) => (
-            <a
-              key={s.id}
-              href={`#${s.id}`}
-              className="text-xs uppercase tracking-wider shrink-0 transition-colors"
-              style={{
-                fontFamily: "'JetBrains Mono', ui-monospace, monospace",
-                color: active === s.id ? "#EDEDED" : "#8A8A8A",
-              }}
-            >
-              {s.label}
-            </a>
-          ))}
-          <div className="ml-auto shrink-0 text-[#EDEDED]">
-            <ToggleGlyph />
-          </div>
-        </div>
-      </nav>
+      <AtelierNav active={active} />
 
       <div className="max-w-5xl mx-auto px-6">
         {loading && (
@@ -330,6 +379,34 @@ const Atelier = () => {
               <div className="text-xl md:text-2xl leading-[1.55] text-[#EDEDED] max-w-3xl">
                 <Paragraphs body={data.vision} />
               </div>
+
+              <div className="mt-12 flex gap-8 md:gap-12">
+                {[
+                  { src: vinceHeadshot.url, name: "Vince", alt: "Portrait of Vince de Yaanga" },
+                  { src: tedHeadshot.url, name: "Ted", alt: "Portrait of Ted de Yaanga" },
+                ].map((p) => (
+                  <figure key={p.name} className="w-32 sm:w-40 md:w-48">
+                    <div
+                      className="relative w-full overflow-hidden"
+                      style={{ aspectRatio: "3 / 4", backgroundColor: "#1a1a1a" }}
+                    >
+                      <img
+                        src={p.src}
+                        alt={p.alt}
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover grayscale-[25%] opacity-90"
+                      />
+                    </div>
+                    <figcaption
+                      className="mt-2 text-xs uppercase tracking-[0.2em] text-[#8A8A8A]"
+                      style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
+                    >
+                      {p.name}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
             </section>
 
             <hr style={{ borderColor: "#222" }} />
@@ -340,12 +417,12 @@ const Atelier = () => {
                 style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
               >
                 <span>02 / Workflow</span>
-                <span aria-hidden="true">—</span>
+                <span aria-hidden="true" className="hidden md:inline">—</span>
                 <a
                   href="https://dashboard.deyaanga.art/dashboard.html"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#8A8A8A] hover:text-[#EDEDED] transition-colors border-b border-[#8A8A8A]/40 hover:border-[#EDEDED]"
+                  className="hidden md:inline text-[#8A8A8A] hover:text-[#EDEDED] transition-colors border-b border-[#8A8A8A]/40 hover:border-[#EDEDED]"
                 >
                   Full Dashboard ↗
                 </a>
