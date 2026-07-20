@@ -379,6 +379,34 @@ const Atelier = () => {
               <div className="text-xl md:text-2xl leading-[1.55] text-[#EDEDED] max-w-3xl">
                 <Paragraphs body={data.vision} />
               </div>
+
+              <div className="mt-12 flex gap-8 md:gap-12">
+                {[
+                  { src: vinceHeadshot.url, name: "Vince", alt: "Portrait of Vince de Yaanga" },
+                  { src: tedHeadshot.url, name: "Ted", alt: "Portrait of Ted de Yaanga" },
+                ].map((p) => (
+                  <figure key={p.name} className="w-32 sm:w-40 md:w-48">
+                    <div
+                      className="relative w-full overflow-hidden"
+                      style={{ aspectRatio: "3 / 4", backgroundColor: "#1a1a1a" }}
+                    >
+                      <img
+                        src={p.src}
+                        alt={p.alt}
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover grayscale-[25%] opacity-90"
+                      />
+                    </div>
+                    <figcaption
+                      className="mt-2 text-xs uppercase tracking-[0.2em] text-[#8A8A8A]"
+                      style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
+                    >
+                      {p.name}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
             </section>
 
             <hr style={{ borderColor: "#222" }} />
