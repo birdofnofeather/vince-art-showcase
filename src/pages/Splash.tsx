@@ -1,40 +1,43 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Pause, Play } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { formatDate, resolveImage, type Work } from "@/lib/data";
 import WorkGrid from "@/components/WorkGrid";
 
-const AUTO_ADVANCE_MS = 5000;
+const AUTO_ADVANCE_MS = 7000;
 const SWIPE_THRESHOLD = 40;
 
 const MobileCarousel = ({ works }: { works: Work[] }) => {
   const [index, setIndex] = useState(0);
-  const [showHint, setShowHint] = useState(true);
+  const [showHints, setShowHints] = useState(true);
+  const [paused, setPaused] = useState(false);
   const advancedOnceRef = useRef(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
+  const markAdvanced = () => {
+    if (!advancedOnceRef.current) {
+      advancedOnceRef.current = true;
+      setShowHints(false);
+    }
+  };
+
   useEffect(() => {
-    if (works.length <= 1) return;
+    if (works.length <= 1 || paused) return;
     const id = window.setInterval(() => {
       setIndex((i) => (i + 1) % works.length);
-      if (!advancedOnceRef.current) {
-        advancedOnceRef.current = true;
-        setShowHint(false);
-      }
+      markAdvanced();
     }, AUTO_ADVANCE_MS);
     return () => window.clearInterval(id);
-  }, [works.length]);
+  }, [works.length, paused]);
 
   const goTo = (delta: number) => {
     setIndex((i) => {
       const n = works.length;
       return ((i + delta) % n + n) % n;
     });
-    if (!advancedOnceRef.current) {
-      advancedOnceRef.current = true;
-      setShowHint(false);
-    }
+    markAdvanced();
   };
 
   const onTouchStart = (e: React.TouchEvent) => {
@@ -86,16 +89,30 @@ const MobileCarousel = ({ works }: { works: Work[] }) => {
           <p className="text-sm text-muted-foreground mt-1">
             {w.headline} · {formatDate(w.date)}
           </p>
-          <p
-            className={`text-xs text-muted-foreground/60 mt-3 transition-opacity duration-500 ${
-              showHint ? "opacity-100" : "opacity-0"
-            }`}
-            aria-hidden={!showHint}
-          >
-            Swipe to advance →
-          </p>
         </div>
       </Link>
+
+      <div
+        className={`mt-3 flex items-center justify-between text-xs text-muted-foreground/60 transition-opacity duration-500 ${
+          showHints ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        aria-hidden={!showHints}
+      >
+        <span>Swipe to advance →</span>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setPaused((p) => !p);
+          }}
+          className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+          aria-label={paused ? "Resume carousel" : "Pause carousel"}
+        >
+          {paused ? <Play size={12} aria-hidden="true" /> : <Pause size={12} aria-hidden="true" />}
+          <span>{paused ? "Tap to play" : "Tap to pause"}</span>
+        </button>
+      </div>
     </div>
   );
 };
