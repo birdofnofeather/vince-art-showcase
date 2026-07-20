@@ -276,35 +276,7 @@ const Atelier = () => {
       className="min-h-screen"
       style={{ backgroundColor: "#0A0A0A", color: "#EDEDED", fontFamily: "'Inter', sans-serif" }}
     >
-      <nav
-        className="sticky top-0 z-40 backdrop-blur-sm"
-        style={{ backgroundColor: "rgba(10,10,10,0.85)", borderBottom: "1px solid #222" }}
-      >
-        <div className="max-w-5xl mx-auto px-6 py-3 flex items-center gap-5 overflow-x-auto">
-          <span
-            className="text-xs uppercase tracking-[0.2em] text-[#8A8A8A] mr-4 shrink-0"
-            style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace" }}
-          >
-            Atelier
-          </span>
-          {SECTIONS.map((s) => (
-            <a
-              key={s.id}
-              href={`#${s.id}`}
-              className="text-xs uppercase tracking-wider shrink-0 transition-colors"
-              style={{
-                fontFamily: "'JetBrains Mono', ui-monospace, monospace",
-                color: active === s.id ? "#EDEDED" : "#8A8A8A",
-              }}
-            >
-              {s.label}
-            </a>
-          ))}
-          <div className="ml-auto shrink-0 text-[#EDEDED]">
-            <ToggleGlyph />
-          </div>
-        </div>
-      </nav>
+      <AtelierNav active={active} />
 
       <div className="max-w-5xl mx-auto px-6">
         {loading && (
