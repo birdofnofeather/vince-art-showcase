@@ -33,8 +33,7 @@ const Layout = () => {
               About
             </NavLink>
             <NavLink
-              to="/"
-              end
+              to="/work"
               className={({ isActive }) =>
                 isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground transition-colors"
               }
@@ -51,8 +50,16 @@ const Layout = () => {
       </main>
 
       <footer className="py-10 mt-20">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 text-xs text-muted-foreground">
-          Vince de Yaanga · Los Angeles · {new Date().getFullYear()}
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 text-xs text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-2">
+          <span>Vince de Yaanga · Los Angeles · {new Date().getFullYear()}</span>
+          <a
+            href="https://www.instagram.com/deyaanga/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-foreground transition-colors"
+          >
+            Instagram @deyaanga
+          </a>
         </div>
       </footer>
     </div>
