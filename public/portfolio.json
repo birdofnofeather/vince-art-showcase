@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "received-alert-say-leaders",
+      "title": "No Shore to Aim For",
+      "headline": "We received no alert, say leaders of First Nations communities razed by Canadian wildfires",
+      "date": "2026-07-21",
+      "image": "artworks/received-alert-say-leaders.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "total-devastation-inside-amazo",
       "title": "Cartography of What Burned",
       "headline": "‘It’s total devastation’: inside the Amazonian war against illegal gold mining",
