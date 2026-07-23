@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "france-records-more-5700",
+      "title": "Columns of the Same Summer",
+      "headline": "France records more than 5,700 excess deaths during June heatwave",
+      "date": "2026-07-23",
+      "image": "artworks/france-records-more-5700.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "nicaraguas-congress-announces-",
       "title": "Erasing the Room Where We Stood",
       "headline": "Nicaragua’s congress announces ‘work plan’ to suspend elections",
