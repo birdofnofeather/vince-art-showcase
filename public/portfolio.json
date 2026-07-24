@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "global-threat-millennia-expert",
+      "title": "Strata of Inherited Consequence",
+      "headline": "A global threat for millennia: experts warn Australia’s nuclear submarine legacy will be weapons-usable uranium cache",
+      "date": "2026-07-24",
+      "image": "artworks/global-threat-millennia-expert.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "france-records-more-5700",
       "title": "Columns of the Same Summer",
       "headline": "France records more than 5,700 excess deaths during June heatwave",
