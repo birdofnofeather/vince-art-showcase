@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "beaten-robbed-driven-violent",
+      "title": "Still Holding the Threshold",
+      "headline": "Beaten, robbed and driven out: violent demonstrations target immigrants in South Africa",
+      "date": "2026-07-26",
+      "image": "artworks/beaten-robbed-driven-violent.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "die-cause-how-indias",
       "title": "Cracked Crest of the Dispossessed",
       "headline": "‘I will die for this cause’: how India’s cockroach meme became the biggest challenge to Modi’s grip on power",
