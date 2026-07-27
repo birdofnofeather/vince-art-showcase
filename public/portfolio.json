@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "never-mentioned-years-didnt",
+      "title": "What the Rubble Kept",
+      "headline": "‘I never mentioned it for 25 years. I didn’t want to be a victim of the bomb’: Hiroshima survivor Koko Kondo on horror, anger and forgiveness",
+      "date": "2026-07-27",
+      "image": "artworks/never-mentioned-years-didnt.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "beaten-robbed-driven-violent",
       "title": "Still Holding the Threshold",
       "headline": "Beaten, robbed and driven out: violent demonstrations target immigrants in South Africa",
