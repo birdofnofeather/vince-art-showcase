@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "pakistan-accused-fatally-shoot",
+      "title": "After the Counting",
+      "headline": "Pakistan accused of fatally shooting 30 unarmed protesters in Kashmir",
+      "date": "2026-07-29",
+      "image": "artworks/pakistan-accused-fatally-shoot.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "deaths-feared-many-people",
       "title": "Weight of the Unfinished",
       "headline": "Deaths feared after ‘many people’ trapped inside Japanese shopping centre following earthquake – live updates",
