@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "europe-burns-visual-guide",
+      "title": "Quiet Thunder at the Threshold",
+      "headline": "Europe burns: a visual guide to the wildfires",
+      "date": "2026-07-30",
+      "image": "artworks/europe-burns-visual-guide.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "pakistan-accused-fatally-shoot",
       "title": "After the Counting",
       "headline": "Pakistan accused of fatally shooting 30 unarmed protesters in Kashmir",
