@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "least-people-die-tens",
+      "title": "What the Sea Kept",
+      "headline": "At least 57 people die as tens of thousands cross to Spanish enclave of Ceuta from Morocco",
+      "date": "2026-07-31",
+      "image": "artworks/least-people-die-tens.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "europe-burns-visual-guide",
       "title": "Quiet Thunder at the Threshold",
       "headline": "Europe burns: a visual guide to the wildfires",
