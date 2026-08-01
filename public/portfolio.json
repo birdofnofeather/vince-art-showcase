@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "french-riot-police-used",
+      "title": "After the Crossing, Before",
+      "headline": "French riot police used teargas on people trying to board small boat, charity claims",
+      "date": "2026-08-01",
+      "image": "artworks/french-riot-police-used.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "least-people-die-tens",
       "title": "What the Sea Kept",
       "headline": "At least 57 people die as tens of thousands cross to Spanish enclave of Ceuta from Morocco",
