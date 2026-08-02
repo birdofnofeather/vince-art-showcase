@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "antilgbtq-laws-rise-across",
+      "title": "Silenced in Plain Sight",
+      "headline": "Anti-LGBTQ+ laws are on the rise across west Africa, campaigners warn",
+      "date": "2026-08-02",
+      "image": "artworks/antilgbtq-laws-rise-across.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "french-riot-police-used",
       "title": "After the Crossing, Before",
       "headline": "French riot police used teargas on people trying to board small boat, charity claims",
