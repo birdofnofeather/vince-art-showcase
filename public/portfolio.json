@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "suspected-mass-bird-flu",
+      "title": "Before the Layer Lifts",
+      "headline": "Suspected mass bird flu deaths found in second state as Murray Watt warns ‘this is the beginning’",
+      "date": "2026-08-03",
+      "image": "artworks/suspected-mass-bird-flu.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "antilgbtq-laws-rise-across",
       "title": "Silenced in Plain Sight",
       "headline": "Anti-LGBTQ+ laws are on the rise across west Africa, campaigners warn",
