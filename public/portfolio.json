@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "pakistan-precinct-suspends-all",
+      "title": "All Present and Accounted For",
+      "headline": "Pakistan precinct suspends all 78 officers and staff over alleged rape at police station",
+      "date": "2026-08-05",
+      "image": "artworks/pakistan-precinct-suspends-all.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "abandoned-palestinian-american",
       "title": "Filtered Light, No Passage",
       "headline": "Abandoned by the US: Palestinian Americans trapped in a surge of Israeli settler violence",
