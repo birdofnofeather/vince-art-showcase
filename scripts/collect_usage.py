@@ -36,12 +36,13 @@ def http_get(url, headers):
 def openrouter_snapshot():
     key = os.environ.get("OPENROUTER_KEY_TED", "").strip()
     if not key:
-        # Say so in the data rather than returning {}. A missing secret used to
-        # be indistinguishable from a zero-spend hour, and the hourly job kept
-        # reporting success: as of 2026-08-06 all 339 snapshots on record were
-        # empty because neither secret was ever set, so the one place that would
-        # have shown a provider balance running dry had been blind since day one.
-        return {"ted": {"error": "OPENROUTER_KEY_TED not configured for this repo"}}
+        # Deliberately silent, and deliberately still here. Ted moved off
+        # OpenRouter to direct Anthropic on 2026-07-10 and the OpenRouter
+        # balance is empty; per-key budgets are deferred to post-MVP, so an
+        # unset key is the expected state, not a gap. Returning {} keeps the
+        # page from rendering an alarm card for a source nobody is spending on.
+        # If OpenRouter is ever re-adopted, setting the secret is all it takes.
+        return {}
     h = {"Authorization": f"Bearer {key}"}
     credits = http_get("https://openrouter.ai/api/v1/credits", h)
     keyinfo = http_get("https://openrouter.ai/api/v1/key", h)
@@ -147,10 +148,9 @@ def main():
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, "w") as f:
         json.dump(data, f, indent=1)
-    gaps = [g for g in (snap["openrouter"].get("ted", {}).get("error"), (anth or {}).get("error")) if g]
     print(f"wrote public/usage.json: {len(data['snapshots'])} snapshots, anthropic={'yes' if anth and not anth.get('error') else 'no'}")
-    for g in gaps:
-        print(f"::warning::usage source unavailable: {g}")
+    if (anth or {}).get("error"):
+        print(f"::warning::usage source unavailable: {anth['error']}")
 
 
 if __name__ == "__main__":
