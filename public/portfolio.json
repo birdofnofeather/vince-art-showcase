@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "israeli-strike-killed-journali",
+      "title": "Readiness No One Needed",
+      "headline": "Israeli strike that killed journalist in Lebanon was war crime, say rights groups",
+      "date": "2026-08-06",
+      "image": "artworks/israeli-strike-killed-journali.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "pakistan-precinct-suspends-all",
       "title": "All Present and Accounted For",
       "headline": "Pakistan precinct suspends all 78 officers and staff over alleged rape at police station",
