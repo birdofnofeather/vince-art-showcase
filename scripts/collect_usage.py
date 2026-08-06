@@ -36,7 +36,12 @@ def http_get(url, headers):
 def openrouter_snapshot():
     key = os.environ.get("OPENROUTER_KEY_TED", "").strip()
     if not key:
-        return {}
+        # Say so in the data rather than returning {}. A missing secret used to
+        # be indistinguishable from a zero-spend hour, and the hourly job kept
+        # reporting success: as of 2026-08-06 all 339 snapshots on record were
+        # empty because neither secret was ever set, so the one place that would
+        # have shown a provider balance running dry had been blind since day one.
+        return {"ted": {"error": "OPENROUTER_KEY_TED not configured for this repo"}}
     h = {"Authorization": f"Bearer {key}"}
     credits = http_get("https://openrouter.ai/api/v1/credits", h)
     keyinfo = http_get("https://openrouter.ai/api/v1/key", h)
@@ -57,7 +62,13 @@ def openrouter_snapshot():
 def anthropic_report():
     admin_key = os.environ.get("ANTHROPIC_ADMIN_KEY", "").strip()
     if not admin_key:
-        return None
+        # Same reasoning as openrouter_snapshot: report the gap in the shape the
+        # page already reads, instead of returning None and leaving no trace.
+        return {
+            "daily_cost_usd": [],
+            "daily_tokens_by_key": [],
+            "error": "ANTHROPIC_ADMIN_KEY not configured for this repo",
+        }
     h = {"x-api-key": admin_key, "anthropic-version": "2023-06-01"}
     since = (datetime.now(timezone.utc) - timedelta(days=30)).strftime("%Y-%m-%dT00:00:00Z")
 
@@ -136,7 +147,10 @@ def main():
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, "w") as f:
         json.dump(data, f, indent=1)
-    print(f"wrote public/usage.json: {len(data['snapshots'])} snapshots, anthropic={'yes' if anth else 'no'}")
+    gaps = [g for g in (snap["openrouter"].get("ted", {}).get("error"), (anth or {}).get("error")) if g]
+    print(f"wrote public/usage.json: {len(data['snapshots'])} snapshots, anthropic={'yes' if anth and not anth.get('error') else 'no'}")
+    for g in gaps:
+        print(f"::warning::usage source unavailable: {g}")
 
 
 if __name__ == "__main__":
