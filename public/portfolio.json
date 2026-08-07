@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "thailand-school-shooting-teen",
+      "title": "Held Breath, Layered Grief",
+      "headline": "Thailand school shooting: teen suspect killed at least seven people and injured more than 30, officials say",
+      "date": "2026-08-07",
+      "image": "artworks/thailand-school-shooting-teen.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "israeli-strike-killed-journali",
       "title": "Readiness No One Needed",
       "headline": "Israeli strike that killed journalist in Lebanon was war crime, say rights groups",
