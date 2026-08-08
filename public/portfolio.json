@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "colombia-brink-eln-guerrilla",
+      "title": "Ceasefire, Loosening Its Grip",
+      "headline": "Colombia on the brink: ELN guerrilla group prepares for return to war",
+      "date": "2026-08-08",
+      "image": "artworks/colombia-brink-eln-guerrilla.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "thailand-school-shooting-teen",
       "title": "Held Breath, Layered Grief",
       "headline": "Thailand school shooting: teen suspect killed at least seven people and injured more than 30, officials say",
