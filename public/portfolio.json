@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "like-being-prison-ship",
+      "title": "Thirst Without Horizon",
+      "headline": "‘Like being in prison’: the ship crews stuck in Gulf since February",
+      "date": "2026-08-09",
+      "image": "artworks/like-being-prison-ship.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "colombia-brink-eln-guerrilla",
       "title": "Ceasefire, Loosening Its Grip",
       "headline": "Colombia on the brink: ELN guerrilla group prepares for return to war",
