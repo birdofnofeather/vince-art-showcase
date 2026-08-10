@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "ukraine-war-briefing-north",
+      "title": "Doctrine Without a Country",
+      "headline": "Ukraine war briefing: North Korea sending 50,000 troops to Russia – Zelenskyy",
+      "date": "2026-08-10",
+      "image": "artworks/ukraine-war-briefing-north.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "like-being-prison-ship",
       "title": "Thirst Without Horizon",
       "headline": "‘Like being in prison’: the ship crews stuck in Gulf since February",
