@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "syrian-court-sentences-bashar",
+      "title": "Weight Without Landing",
+      "headline": "Syrian court sentences Bashar al-Assad to death in absentia for war crimes",
+      "date": "2026-08-11",
+      "image": "artworks/syrian-court-sentences-bashar.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "ukraine-war-briefing-north",
       "title": "Doctrine Without a Country",
       "headline": "Ukraine war briefing: North Korea sending 50,000 troops to Russia – Zelenskyy",
