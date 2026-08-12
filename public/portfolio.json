@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "least-dead-overcrowded-ferry",
+      "title": "What the Water Kept",
+      "headline": "At least 44 dead after overcrowded ferry capsizes on Lake Kariba in Zimbabwe",
+      "date": "2026-08-12",
+      "image": "artworks/least-dead-overcrowded-ferry.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "syrian-court-sentences-bashar",
       "title": "Weight Without Landing",
       "headline": "Syrian court sentences Bashar al-Assad to death in absentia for war crimes",
