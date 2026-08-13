@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "europe-heatwave-live-greece",
+      "title": "Weight of the Unseen Wind",
+      "headline": "Europe heatwave live: Greece battles gale force winds, sparking fears about wildfires; UK sees temperatures of 37C for third time this year",
+      "date": "2026-08-13",
+      "image": "artworks/europe-heatwave-live-greece.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "least-dead-overcrowded-ferry",
       "title": "What the Water Kept",
       "headline": "At least 44 dead after overcrowded ferry capsizes on Lake Kariba in Zimbabwe",
