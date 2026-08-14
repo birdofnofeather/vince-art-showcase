@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "unprecedented-rain-kills-five",
+      "title": "Where the City Exhales",
+      "headline": "‘Unprecedented’ rain kills five in Japan as thousands stranded at airport",
+      "date": "2026-08-14",
+      "image": "artworks/unprecedented-rain-kills-five.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "europe-heatwave-live-greece",
       "title": "Weight of the Unseen Wind",
       "headline": "Europe heatwave live: Greece battles gale force winds, sparking fears about wildfires; UK sees temperatures of 37C for third time this year",
