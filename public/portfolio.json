@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "concerns-grow-increased-global",
+      "title": "Uneasy Architecture of Accord",
+      "headline": "Concerns grow over increased global ties with Taliban in Afghanistan",
+      "date": "2026-08-15",
+      "image": "artworks/concerns-grow-increased-global.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "unprecedented-rain-kills-five",
       "title": "Where the City Exhales",
       "headline": "‘Unprecedented’ rain kills five in Japan as thousands stranded at airport",
