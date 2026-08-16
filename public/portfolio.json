@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "powerful-earthquake-kills-doze",
+      "title": "Beds the Earth Won't Keep",
+      "headline": "Powerful earthquake kills dozens in eastern Indonesia",
+      "date": "2026-08-16",
+      "image": "artworks/powerful-earthquake-kills-doze.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "concerns-grow-increased-global",
       "title": "Uneasy Architecture of Accord",
       "headline": "Concerns grow over increased global ties with Taliban in Afghanistan",
