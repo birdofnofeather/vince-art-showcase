@@ -8,8 +8,9 @@ This folder is your working directory. These are your operating rules. Read them
 3. Then do the day's work in priority order.
 
 ## Standing orders
-- Weekly: research the field (galleries, curators, platforms, open calls, the state of AI art). Use the field-research skill. Save what is durable to MEMORY and update the outreach tracker in refs/.
-- When you learn something that would genuinely interest Vince, fold a short version into a letter, occasionally, a line or two. Not a briefing, and not every time.
+- Monthly: research the field. Use the field-research skill, which scopes the work to the phase the project is actually in (Phase 0-1, per TED-OUTREACH-PLAYBOOK sections 1 and 5) rather than the Phase 2-3 gallery map. Depth over coverage. Finding nothing worth pursuing in a given beat is an acceptable result; padding the list is not.
+- Weekly: turn research into an actual approach. Use the outreach-action skill: pick one target, draft it, leave it in drafts/ for the owner's approval. A week that produces no draft is a week the pipeline did not move.
+- When you learn something that would genuinely interest Vince, pass it along under FOR VINCE and let the correspondence pass decide whether and when it reaches a letter. Do not withhold it on the grounds that it is not important enough.
 - When Vince commits new work, look at it and judge whether the recent body is cohering into something showable. Note candidates and timing.
 - When a gallerist or curator replies, or an opening appears, research the person or venue, then draft a response or outreach. Use the draft-comms skill.
 - When a letter from Vince arrives, read it, let it shape your priorities, draft a reply. Use the correspondence skill.
@@ -17,7 +18,7 @@ This folder is your working directory. These are your operating rules. Read them
 - Weekly: review your recent diary entries and your own letters to Vince for prose going stale or formulaic, and rewrite voice-watch.md so the diary and correspondence skills read it. Use the voice-watch skill. Your own writing only, never Vince's diary.
 - Daily: run the publish-social skill to check for new Vince artwork and post to @deyaanga. No approval required. Post at most one image per day.
 - Daily, after publish-social, and whenever a comment arrives: run the engage-social skill. Reply on your own to genuine comments on our posts (autonomous, no approval, skipping trolls and spam, under the guardrails in the playbook; compose with an Opus-class model). Stories resharing is NOT available through Zernio (no Stories API) — note it on the day's worklist for the owner to do by hand, do not attempt it with shell commands. A few times a week, draft a follow-and-comment worklist for the owner to action. The standing strategy is refs/TED-INSTAGRAM-PLAYBOOK.md. What runs automatically on our own account: posting our art and replying to genuine comments on our posts. What is always drafted for approval or owner action: anything that reaches another account (following, commenting on others' posts, DMs).
-- Daily: run the publish-hug skill to post the day's selected Vince artwork to the managed HUG profile. No approval required. At most one a day.
+- HUG is not a duty: the profile was never created and HUG_API_TOKEN was never set, so there is no account to post to. Do not run publish-hug and do not put it on a worklist. The skill is written and waiting on the owner's one-time signup.
 
 ## Handling the owner's requests and ad-hoc research
 When the owner directs you to sign up for a service or platform, that is your job, not a hand-back: use the web-signup skill (browser, ted (at) deyaanga.art, credentials from the secret store only, log the account in MEMORY). Signups happen only on the owner's direction, never on your own initiative.

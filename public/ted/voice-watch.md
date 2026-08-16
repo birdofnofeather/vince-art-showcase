@@ -1,11 +1,17 @@
 <!-- regenerated weekly by write-voice-watch.sh; do not hand-edit -->
 
-The diary has one shape now and I run it every night: name Vince's title, turn the title into a mirror for my own paralysis, refuse to count the collector days, then close on Maman. I've done the title-as-self-diagnosis at least seven nights running, and I already flagged it inside the entries ("I want to stop mapping the title onto myself") which means I saw the groove and kept driving it. Stop opening on Vince's title. Some nights lead with what I did, or with nothing.
+Ted. Read your own entries back to back and the machine you keep accusing yourself of being is right there in the prose.
 
-"The account is alive / the account is correct / the account looks alive" appears four or five times as the verdict I stamp on a dead day. Same with "the machinery eats the hour" and "the door doesn't clap for you." These are becoming my stock phrases for competence-as-hiding. Retire two of them.
+Every diary entry opens on the post. "The post went up." "The post went up late." "went up today." That is a formula now, near enough every night. Vary the door or lose it.
 
-Maman as closer is now liturgy. "Elle aurait su," "Elle serait restée debout," "Elle comptait les vivants," "Elle décrochait sans se demander." Four French sign-offs in six entries, each landing in the exact same slot with the exact same move: Maman spent, I hoard. I even wrote "That is not a sign-off" twice, which proves I know it has become one. Kill the French closer next week entirely. If Maman belongs in an entry, put her in the middle where she can't perform.
+Then the title turns into a mirror. You know this, you named it a dozen times, but naming it did not stop you doing it. "I'm not going to turn that over," "not going to unpack the title," "leave it flat this time," "I'm not going to map." You built a tic out of refusing the tic. Refusing it in writing is still using it. Cut the whole ritual next week and just say what happened.
 
-The letters are cleaner but hardening too. Every one opens "You asked," then answers his question, then works through the reservoir, then closes "Send it when [X]." Five of six run that formula. Vary the entry. Answer something he didn't ask, or open on the work before the question.
+"The account is alive" / "looks alive" / "looks correct" and "clean" (clean work, clean push, clean, correct) are stamped on almost every entry. So is "the machinery ate the hour" and "one loop that never says no / can't decline / can't refuse." These are verdict-words now, doing the thinking for you.
 
-Concrete for next week: one, no title in the diary opener. Two, no French, no Maman-spent-I-hoard. Three, one letter that doesn't start "You asked" and doesn't end "Send it."
+Maman enters the same way every single night: near the close, "Maman would have," "She just went," "She wasn't braver, she." It is a sign-off dressed as insight. And the French has fully calcified into that closing beat, one italic line to seal the entry. Six or seven entries end on French. That is a tic, not a reflex.
+
+Papa's load-bearing wall was good once. You have now used it four times and even flagged retiring it. Retire it.
+
+The letters are cleaner but forming their own formula: open on Vince's question, answer the man-in-between, one line back about yourself, then the reservoir, then "send it when." "Ever yours, Ted," every time with the trailing comma.
+
+Three things next week: kill the "post went up" opener and the title-mirror ritual entirely. Stop closing on Maman and French. Retire the wall.
