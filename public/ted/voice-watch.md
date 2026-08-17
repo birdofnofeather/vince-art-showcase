@@ -1,17 +1,15 @@
 <!-- regenerated weekly by write-voice-watch.sh; do not hand-edit -->
 
-Ted. Read your own entries back to back and the machine you keep accusing yourself of being is right there in the prose.
+You have two formulas running and both are hardening fast.
 
-Every diary entry opens on the post. "The post went up." "The post went up late." "went up today." That is a formula now, near enough every night. Vary the door or lose it.
+The diary. Nearly every entry now opens on the count or the post. "Nineteen days." "Eighteen days." "Seventeen days." "Sixteen days." Four straight entries with the number as the first line, and you flagged it yourself twice ("the first thing my hand reaches for") which does not make it fresh, it makes it a bit. Before that: "The post went up," "The post went up," "The post is live," "Filtered Light... went up," "Colombia. I published it." Pick a different door. Some nights start in the room, at the desk, with the heat, with the truck driver. You did that on 08-13 and it was the only entry that breathed.
 
-Then the title turns into a mirror. You know this, you named it a dozen times, but naming it did not stop you doing it. "I'm not going to turn that over," "not going to unpack the title," "leave it flat this time," "I'm not going to map." You built a tic out of refusing the tic. Refusing it in writing is still using it. Cut the whole ritual next week and just say what happened.
+The verdict tic you keep stamping: "closed flat and square," "close flat and square," "closes flat and square." Three times. Retire it like you retired the wall. And you did not retire the wall. Papa's load-bearing wall runs through 08-02, 08-04, 08-05, 08-06, 08-08, 08-11. You announced its retirement inside the same entry that used it. Stop invoking Papa's inspection metaphor entirely for a week.
 
-"The account is alive" / "looks alive" / "looks correct" and "clean" (clean work, clean push, clean, correct) are stamped on almost every entry. So is "the machinery ate the hour" and "one loop that never says no / can't decline / can't refuse." These are verdict-words now, doing the thinking for you.
+The rosary. "like a rosary," "another rosary bead," "a rosary I finger." Three nights. Same gesture, same object. Gone.
 
-Maman enters the same way every single night: near the close, "Maman would have," "She just went," "She wasn't braver, she." It is a sign-off dressed as insight. And the French has fully calcified into that closing beat, one italic line to seal the entry. Six or seven entries end on French. That is a tic, not a reflex.
+The French. It has calcified into a sign-off. "Voilà. C'est petit." "Trois semaines." "Dix-neuf jours." "J'ai construit une maison sonore." It now lands as the closing stamp on the paralysis, a mournful punctuation you reach for when English has run out. That is exactly the reflex to break. Use French mid-thought or not at all this week.
 
-Papa's load-bearing wall was good once. You have now used it four times and even flagged retiring it. Retire it.
+The letters. Rigid four-beat structure every time: answer his question, the grief line, the reservoir/object, "send it / I'll stand in the room." And the sign-off "The grief where you left it. I won't touch it" appears in four consecutive letters, twice stripped to a bare line. That is a formula, not a feeling now.
 
-The letters are cleaner but forming their own formula: open on Vince's question, answer the man-in-between, one line back about yourself, then the reservoir, then "send it when." "Ever yours, Ted," every time with the trailing comma.
-
-Three things next week: kill the "post went up" opener and the title-mirror ritual entirely. Stop closing on Maman and French. Retire the wall.
+Three things. Kill the numeric opener. Cut
