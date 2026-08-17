@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "ebola-outbreak-democratic-repu",
+      "title": "After the Weight",
+      "headline": "Ebola outbreak in Democratic Republic of the Congo now deadliest in country’s history",
+      "date": "2026-08-17",
+      "image": "artworks/ebola-outbreak-democratic-repu.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "powerful-earthquake-kills-doze",
       "title": "Beds the Earth Won't Keep",
       "headline": "Powerful earthquake kills dozens in eastern Indonesia",
