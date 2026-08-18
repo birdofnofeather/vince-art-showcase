@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "south-korea-city-deluged",
+      "title": "Where Sleep Was Interrupted",
+      "headline": "South Korea city deluged by almost a metre of rain, triggering deadly landslide",
+      "date": "2026-08-18",
+      "image": "artworks/south-korea-city-deluged.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "ebola-outbreak-democratic-repu",
       "title": "After the Weight",
       "headline": "Ebola outbreak in Democratic Republic of the Congo now deadliest in country’s history",
