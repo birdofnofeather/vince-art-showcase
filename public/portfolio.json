@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "death-alleged-torture-man",
+      "title": "Before and After the State",
+      "headline": "Death and alleged torture of man in detention sparks protests in Syria",
+      "date": "2026-08-19",
+      "image": "artworks/death-alleged-torture-man.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "south-korea-city-deluged",
       "title": "Where Sleep Was Interrupted",
       "headline": "South Korea city deluged by almost a metre of rain, triggering deadly landslide",
