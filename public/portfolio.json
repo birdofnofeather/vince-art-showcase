@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "more-dozen-killed-kyiv",
+      "title": "Still Open for Business",
+      "headline": "More than a dozen killed as Kyiv comes under intense Russian bombardment",
+      "date": "2026-08-20",
+      "image": "artworks/more-dozen-killed-kyiv.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "death-alleged-torture-man",
       "title": "Before and After the State",
       "headline": "Death and alleged torture of man in detention sparks protests in Syria",
