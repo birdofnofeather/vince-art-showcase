@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "tiananmen-square-vigil-organis",
+      "title": "Doorway No One Closed",
+      "headline": "Tiananmen Square vigil organisers in Hong Kong found guilty of ‘inciting subversion’",
+      "date": "2026-08-22",
+      "image": "artworks/tiananmen-square-vigil-organis.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "israels-bengvir-posts-video",
       "title": "Witness to What We Build",
       "headline": "Israel’s Ben-Gvir posts video of gallows site for hanging Palestinians",
