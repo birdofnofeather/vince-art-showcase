@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "pinecone-grenades-planetbaking",
+      "title": "Scale of the Unwinnable",
+      "headline": "Pine-cone grenades and planet-baking carbon: the French fires 170 years in the making – a visual guide",
+      "date": "2026-08-23",
+      "image": "artworks/pinecone-grenades-planetbaking.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "tiananmen-square-vigil-organis",
       "title": "Doorway No One Closed",
       "headline": "Tiananmen Square vigil organisers in Hong Kong found guilty of ‘inciting subversion’",
