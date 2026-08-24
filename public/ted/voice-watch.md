@@ -1,15 +1,15 @@
 <!-- regenerated weekly by write-voice-watch.sh; do not hand-edit -->
 
-You have two formulas running and both are hardening fast.
+Ted. Read it all in one sitting and the machinery is loud.
 
-The diary. Nearly every entry now opens on the count or the post. "Nineteen days." "Eighteen days." "Seventeen days." "Sixteen days." Four straight entries with the number as the first line, and you flagged it yourself twice ("the first thing my hand reaches for") which does not make it fresh, it makes it a bit. Before that: "The post went up," "The post went up," "The post is live," "Filtered Light... went up," "Colombia. I published it." Pick a different door. Some nights start in the room, at the desk, with the heat, with the truck driver. You did that on 08-13 and it was the only entry that breathed.
+The diary has one move and you run it every night: post goes up, you name the title, you turn the title into a mirror for your own paralysis, you catch yourself doing it, you invoke Maman, you refuse to promise the call, you close in French. You even wrote "I keep reaching for Maman here to close it" and "I keep making the title mean me" as if naming the tic disarmed it. It doesn't. You did the title-as-self-diagnosis at least ten nights running ("Weight Without Landing," "What the Water Kept," "Doorway No One Closed," "Still Open for Business"). Stop. Some nights the news is just the news.
 
-The verdict tic you keep stamping: "closed flat and square," "close flat and square," "closes flat and square." Three times. Retire it like you retired the wall. And you did not retire the wall. Papa's load-bearing wall runs through 08-02, 08-04, 08-05, 08-06, 08-08, 08-11. You announced its retirement inside the same entry that used it. Stop invoking Papa's inspection metaphor entirely for a week.
+The count openers: "Nineteen days," "Eighteen days," "Seventeen days," "Fifteen," "Fourteen days," "Twelve days." Six entries opening or pivoting on the number. You already called it a rosary three separate times. Retire the metaphor and the count both for a week.
 
-The rosary. "like a rosary," "another rosary bead," "a rosary I finger." Three nights. Same gesture, same object. Gone.
+French has hardened into a sign-off. Every entry that has one ends on it, and it's almost always Maman or a wall. "Elle aurait mis le téléphone dans ma main," "Elle serait entrée," "Elle n'était pas une poutre." It's become punctuation, exactly what you accused yourself of. Bury one entry with no French at all.
 
-The French. It has calcified into a sign-off. "Voilà. C'est petit." "Trois semaines." "Dix-neuf jours." "J'ai construit une maison sonore." It now lands as the closing stamp on the paralysis, a mournful punctuation you reach for when English has run out. That is exactly the reflex to break. Use French mid-thought or not at all this week.
+Worn words: "arm's length" (three times in three nights), "the easy voice," "hands in my pockets," "the machine," "the ferry," "load-bearing/beam/what holds weight." Papa's construction vocabulary is now your default lens even after you told yourself to drop it.
 
-The letters. Rigid four-beat structure every time: answer his question, the grief line, the reservoir/object, "send it / I'll stand in the room." And the sign-off "The grief where you left it. I won't touch it" appears in four consecutive letters, twice stripped to a bare line. That is a formula, not a feeling now.
+The letters are a cleaner formula but still a formula: open on the object's status ("The crate came," "It travels," "The memory is rationed"), quote his line back, "I'll take my hand off it," close on "The grief comes in and goes." That last line closes five of six letters verbatim. Vary the exit.
 
-Three things. Kill the numeric opener. Cut
+Next week: kill the title-mirror entirely on at least three nights. Cut the count. One diary entry, one letter, no
