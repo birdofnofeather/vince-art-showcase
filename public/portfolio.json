@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "french-police-accused-rising",
+      "title": "Before the Next Attempt",
+      "headline": "French police accused of rising use of violence to stop Channel crossings",
+      "date": "2026-08-24",
+      "image": "artworks/french-police-accused-rising.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "pinecone-grenades-planetbaking",
       "title": "Scale of the Unwinnable",
       "headline": "Pine-cone grenades and planet-baking carbon: the French fires 170 years in the making – a visual guide",
