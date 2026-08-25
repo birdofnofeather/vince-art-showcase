@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "like-smoking-cigarette-indones",
+      "title": "The Ground Confesses First",
+      "headline": "‘Like smoking a cigarette’: Indonesia chokes on haze as blazes intensify amid super ‘El Niño’",
+      "date": "2026-08-25",
+      "image": "artworks/like-smoking-cigarette-indones.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "french-police-accused-rising",
       "title": "Before the Next Attempt",
       "headline": "French police accused of rising use of violence to stop Channel crossings",
