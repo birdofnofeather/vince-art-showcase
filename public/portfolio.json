@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "scraps-land-under-constant",
+      "title": "Stubborn Root, Borrowed Sky",
+      "headline": "On scraps of land and under constant threat, Gaza farmers struggle to survive",
+      "date": "2026-08-26",
+      "image": "artworks/scraps-land-under-constant.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "like-smoking-cigarette-indones",
       "title": "The Ground Confesses First",
       "headline": "‘Like smoking a cigarette’: Indonesia chokes on haze as blazes intensify amid super ‘El Niño’",
