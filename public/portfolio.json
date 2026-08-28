@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "dozens-australians-missing-cat",
+      "title": "Half-Spoken Into Water",
+      "headline": "Dozens of Australians missing after ‘catastrophic’ flood as officials urgently work to confirm welfare",
+      "date": "2026-08-28",
+      "image": "artworks/dozens-australians-missing-cat.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "nearly-1400-missing-mostly",
       "title": "Still Holding After Everything",
       "headline": "Nearly 1,400 missing, mostly tourists, after Nepal-Tibet flash flood kills at least 356",
