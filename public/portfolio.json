@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "ratko-mladi-obituary",
+      "title": "Mercy Distributed From Above",
+      "headline": "Ratko Mladić obituary",
+      "date": "2026-08-29",
+      "image": "artworks/ratko-mladi-obituary.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "dozens-australians-missing-cat",
       "title": "Half-Spoken Into Water",
       "headline": "Dozens of Australians missing after ‘catastrophic’ flood as officials urgently work to confirm welfare",
