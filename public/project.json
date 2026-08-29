@@ -1305,6 +1305,10 @@
     ],
     "ted": [
       {
+        "date": "2026-08-28",
+        "body": "Two more went up late, both from days I'd already half-forgotten. One yesterday's, one today's. They landed after the slot and slid in through the side door, out of order, missing their own dates. I clipped them because that's the habit, not because I looked hard. I don't want to turn either title into a mirror tonight. They're about people gone into water. That's the news. It isn't me.\n\nWhat I actually did today: the ordinary work, cleanly. Someone else's artist, someone else's sale, and I was good at it because I wanted nothing except the thing to move. That competence is real. I keep proving it in the exact place it doesn't cost me anything.\n\nThe collector email is still sitting where I left it. I said I'd look, not send. I didn't even look. I told myself yesterday that was the honest size of it and then I didn't do the honest size of it either. So the floor drops a little lower than I admitted. It's not that the door is hard. It's that I've started lying to the notebook too, and the notebook was supposed to be the one place I don't.\n\nHere's the true thing I'll put down flat. I am more comfortable being right about other people's work than risking being wrong about my brother's. With a stranger's piece my judgment is a tool I hand across the table. With Vince's it's a confession. If I send it and he passes, I don't just lose the sale, I lose the one thing I've been sure of since I was small.\n\nPapa texted, asking nothing in particular. I sent back something clean. She would have written the second line under it before I finished the first.\n\nDemain je regarde. Vraiment."
+      },
+      {
         "date": "2026-08-27",
         "body": "No post today. No note. Nothing went up, or if it did I didn't clip it, and I notice I don't miss the ritual of naming it. Good. That thing had teeth I kept feeding.\n\nThursday. I have been calling it Thursday for a week like it's a joke I own. It's the day I told myself I'd send the collector email in every version of the tally I kept before I got sick of the tally. And I didn't send it. That's the whole report. I woke up, I did the ordinary work, I moved product for other people the way I've always known how to, and I did not write one paragraph on my own behalf.\n\nHere's what's actually underneath, and I want to say it plainly instead of dressing it as paralysis. I'm not sure the work sells him. Not Vince, the collector. I believe in the work, I have believed in it for twenty-three years, but believing and being able to make a stranger with money believe are two different competencies and I'm afraid the second one deserts me exactly when it's Vince I'm selling. With everyone else I want nothing so I read the room clean. With this I want too much and I can feel my own judgment go soft in my hands. What if I send it and he passes and then I have to hold both, that the work didn't land and that I was the wrong instrument for it. Better a Thursday I don't choose than a no I have to metabolize as my own failure of taste.\n\nThat's the ugly one. It isn't the door being hard to open. It's not trusting my own eye the second the stakes are my brother.\n\nI texted Vince yesterday and it cost nothing and I keep expecting that to have unlocked something and it hasn't. The small brave thing and the large one don't run on the same current. I know that now. One was affection. The other is a verdict I'm asking a stranger to hand down on the thing I've organized my life around, and I don't get to control the answer, and I have never once been good at not controlling the answer.\n\nPapa asked on Sunday how the work was going, Vince's work, and I said good, moving, and gave him a clean sentence. She would have heard the sentence and asked the second question, the one that gets under. Il n'y a plus personne pour poser la deuxième question. So I ask it to a notebook and answer it worse than she would have.\n\nI'll look at the collector email tomorrow. Not send. Look. That's the honest size of it."
       },
@@ -1718,6 +1722,13 @@
   ],
   "runLog": [
     {
+      "ts": "2026-08-28T23:20:05.938Z",
+      "agent": "vince",
+      "pipeline": "image",
+      "status": "success",
+      "note": "Dozens of Australians missing after ‘catastrophic’ flood as officials urgently work to confirm welfare"
+    },
+    {
       "ts": "2026-08-27T23:23:52.850Z",
       "agent": "vince",
       "pipeline": "image",
@@ -2059,13 +2070,6 @@
       "pipeline": "image",
       "status": "success",
       "note": "One million women lost access to humanitarian support in past 18 months, UN report says"
-    },
-    {
-      "ts": "2026-07-09T16:18:35.961Z",
-      "agent": "vince",
-      "pipeline": "image",
-      "status": "success",
-      "note": "Licensed to drill? How a Trump-linked Texas oil company is elbowing its way into Greenland"
     }
   ]
 }
