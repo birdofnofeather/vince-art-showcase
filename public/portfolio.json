@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "south-korea-illegal-travel",
+      "title": "Forbidden Threshold",
+      "headline": "In South Korea, it is illegal to travel to dangerous countries. Journalists say it’s making their work impossible",
+      "date": "2026-08-30",
+      "image": "artworks/south-korea-illegal-travel.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "ratko-mladi-obituary",
       "title": "Mercy Distributed From Above",
       "headline": "Ratko Mladić obituary",
