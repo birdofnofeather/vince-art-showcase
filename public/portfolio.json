@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "russian-drone-strike-kyiv",
+      "title": "After the Counting",
+      "headline": "Russian drone strike on Kyiv warehouse storing weapons kills at least 37",
+      "date": "2026-08-31",
+      "image": "artworks/russian-drone-strike-kyiv.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "south-korea-illegal-travel",
       "title": "Forbidden Threshold",
       "headline": "In South Korea, it is illegal to travel to dangerous countries. Journalists say it’s making their work impossible",
