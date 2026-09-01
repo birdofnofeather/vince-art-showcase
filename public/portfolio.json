@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "theres-place-providers-see",
+      "title": "Threshold She Cannot Cross",
+      "headline": "‘There’s no place to go’: providers see more abortions later in pregnancy as bans spread in US",
+      "date": "2026-09-01",
+      "image": "artworks/theres-place-providers-see.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "russian-drone-strike-kyiv",
       "title": "After the Counting",
       "headline": "Russian drone strike on Kyiv warehouse storing weapons kills at least 37",
