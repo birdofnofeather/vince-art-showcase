@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "iran-accuses-war-crime",
+      "title": "After the Last Dance",
+      "headline": "Iran accuses US of ‘war crime’ after missile blast kills four people at wedding",
+      "date": "2026-09-02",
+      "image": "artworks/iran-accuses-war-crime.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "theres-place-providers-see",
       "title": "Threshold She Cannot Cross",
       "headline": "‘There’s no place to go’: providers see more abortions later in pregnancy as bans spread in US",
