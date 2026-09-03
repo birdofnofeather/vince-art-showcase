@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "israel-seeking-trumps-support",
+      "title": "The Last Permitted Step",
+      "headline": "Israel ‘seeking Trump’s support for plan to expel Palestinians from Gaza’",
+      "date": "2026-09-03",
+      "image": "artworks/israel-seeking-trumps-support.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "iran-accuses-war-crime",
       "title": "After the Last Dance",
       "headline": "Iran accuses US of ‘war crime’ after missile blast kills four people at wedding",
