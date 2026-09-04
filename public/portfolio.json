@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "everyone-seems-forgotten-tibet",
+      "title": "The Names No One Reads",
+      "headline": "‘Everyone seems to have forgotten’: In Tibet, flood-hit families search for the missing and grapple with China’s silence",
+      "date": "2026-09-04",
+      "image": "artworks/everyone-seems-forgotten-tibet.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "israel-seeking-trumps-support",
       "title": "The Last Permitted Step",
       "headline": "Israel ‘seeking Trump’s support for plan to expel Palestinians from Gaza’",
