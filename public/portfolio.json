@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "woman-killed-florence-seventh",
+      "title": "Still Breathing, No Signal",
+      "headline": "Woman, 45, killed in Florence in seventh alleged femicide in Italy since mid-August",
+      "date": "2026-09-05",
+      "image": "artworks/woman-killed-florence-seventh.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "everyone-seems-forgotten-tibet",
       "title": "The Names No One Reads",
       "headline": "‘Everyone seems to have forgotten’: In Tibet, flood-hit families search for the missing and grapple with China’s silence",
