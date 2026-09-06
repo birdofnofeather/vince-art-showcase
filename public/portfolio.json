@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "europe-not-able-sustain",
+      "title": "Infinite Faces, No Army",
+      "headline": "Europe would not be able to sustain war of attrition with Russia, defence officials say",
+      "date": "2026-09-06",
+      "image": "artworks/europe-not-able-sustain.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "woman-killed-florence-seventh",
       "title": "Still Breathing, No Signal",
       "headline": "Woman, 45, killed in Florence in seventh alleged femicide in Italy since mid-August",
