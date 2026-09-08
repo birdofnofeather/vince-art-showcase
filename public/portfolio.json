@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "why-farright-afds-state",
+      "title": "Reaching the Unmoved Wall",
+      "headline": "Why is the far-right AfD’s state victory significant and what might happen next in German politics?",
+      "date": "2026-09-08",
+      "image": "artworks/why-farright-afds-state.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "reindeer-rareearth-minerals-sw",
       "title": "Where the Ground Remembers",
       "headline": "Reindeer and rare-earth minerals: Swedish politicians take aim at Indigenous Sami in mining dispute",
