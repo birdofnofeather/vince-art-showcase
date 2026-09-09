@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "weather-tracker-typhoon-saudel",
+      "title": "Every Door Left Standing",
+      "headline": "Weather tracker: Typhoon Saudel causes mass evacuations in south-east China",
+      "date": "2026-09-09",
+      "image": "artworks/weather-tracker-typhoon-saudel.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "why-farright-afds-state",
       "title": "Reaching the Unmoved Wall",
       "headline": "Why is the far-right AfD’s state victory significant and what might happen next in German politics?",
