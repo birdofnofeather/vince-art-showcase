@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "secret-systems-used-israel",
+      "title": "Blueprints for Erasure",
+      "headline": "Secret systems used by Israel in mass killings of Gaza civilians revealed in new film",
+      "date": "2026-09-10",
+      "image": "artworks/secret-systems-used-israel.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "weather-tracker-typhoon-saudel",
       "title": "Every Door Left Standing",
       "headline": "Weather tracker: Typhoon Saudel causes mass evacuations in south-east China",
