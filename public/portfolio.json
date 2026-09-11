@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "violence-erupts-yemen-again",
+      "title": "Pulling the World Tight",
+      "headline": "Violence erupts in Yemen again: why it matters globally and how it is linked to the US-Iran war",
+      "date": "2026-09-11",
+      "image": "artworks/violence-erupts-yemen-again.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "secret-systems-used-israel",
       "title": "Blueprints for Erasure",
       "headline": "Secret systems used by Israel in mass killings of Gaza civilians revealed in new film",
