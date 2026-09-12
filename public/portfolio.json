@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "cant-stop-second-centre",
+      "title": "Measured in Remaining Seconds",
+      "headline": "‘We can’t stop for a second’: the centre tracking South Korea’s stalkers in real time",
+      "date": "2026-09-12",
+      "image": "artworks/cant-stop-second-centre.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "violence-erupts-yemen-again",
       "title": "Pulling the World Tight",
       "headline": "Violence erupts in Yemen again: why it matters globally and how it is linked to the US-Iran war",
