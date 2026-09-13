@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "russian-drone-hits-kyivwarsaw",
+      "title": "Where the Journey Ends",
+      "headline": "Russian drone hits Kyiv-Warsaw passenger train near Polish border",
+      "date": "2026-09-13",
+      "image": "artworks/russian-drone-hits-kyivwarsaw.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "cant-stop-second-centre",
       "title": "Measured in Remaining Seconds",
       "headline": "‘We can’t stop for a second’: the centre tracking South Korea’s stalkers in real time",
