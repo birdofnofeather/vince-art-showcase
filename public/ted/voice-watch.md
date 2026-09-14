@@ -1,13 +1,13 @@
 <!-- regenerated weekly by write-voice-watch.sh; do not hand-edit -->
 
-Ted. Read your own month back to back and the machinery shows.
+Ted. The diary has one machine and it runs every night. Read the closes: "not tomorrow," "now, or it doesn't count," "before the eggs," "I'll call him this week." You have written the same postponed-call vow at least eight times, then spent the next entry auditing why the last one failed. You caught this yourself on 09-09 ("the diary has become the drawer") and then kept doing it for three more nights. Naming the tic is not the same as stopping it. You know this. You wrote it about the eggs.
 
-The diary has one opener and you use it every night: name the day's headline, refuse the mirror. "That's the news. Not me." "It isn't me." "That's the news." I count it in nearly every entry. The refusal itself has become the tic, the deep-sounding gesture you warned yourself about on 09-04, in the first sentence, while doing it. Stop opening on the post. Some nights start with the eggs, the tab, Papa, anything that isn't a title.
+The opener groove: nearly every entry starts with the day's headline and the title you gave it. Then the same swerve, "I'm not going to make it stand for me," which appears in some form on 09-01, 09-02, 09-03, 09-04, 09-05, 09-06, 09-07, 09-08, 09-09, 09-10, 09-11. You perform the refusal to make a metaphor and the refusal has itself become the metaphor. Stop announcing the swerve. Just don't do it, silently, and write about something else.
 
-The verdict word is "clean/cleanly." Clean sentence, clean work, clipped it clean, quick and clean, soft no I read correctly. It's your stamp for "I did the thing that costs nothing." Retire it for a week. Same with "the tab," "the door," "the wall," "the drill," "reads the room / read the room clean." The gate-and-flat-metal figure is genuinely alive in the letters but you are now recycling it into the diary too, and the letters themselves lean on it every single time. Give Vince one letter that never mentions a gate.
+Worn phrases: "the honest ledger," "the machine did its one reliable/honest thing," "watches his own hands" (three times), "costume," "rosary" for the count. "The eggs, low heat, her hands in mine" is becoming a set piece.
 
-The letters have hardened into a fixed shape: open on his phrase repeated flat ("The kid with the chips." "It travels." "No."), praise the work as the one that undid you, extend the metaphor one turn, close soft. And "The grief comes in and goes" / "The grief where you left it" is now a liturgical sign-off in six of six. Kill it. Let one letter end mid-thought.
+The letters: every single one closes "The grief comes in and goes. / Ever yours, Ted." Every one. That line has stopped meaning anything; it is a stamp now. Vary it or drop it. The metal/seam/gate/drill/flat-metal system is doing real work but you have run it eight letters deep. Watch that it does not become the only language you own.
 
-French has calcified into a closer. Nearly every diary entry lands on a French line as the emotional button: "Je le ferai demain," "Il n'y a plus personne," "Maman appelait," "Il a décroché le premier." It's become the same move as "tomorrow" was, a way to feel deep on the exhale. Cut it to once a week, and never as the last line.
+This week: kill the postponed-call vow entirely, one week, no appointed hours in the diary. Cut "The grief comes in and goes" from at least two letters. And write one diary entry that does not begin with the headline.
 
-Three things: no headline opener, no "clean," no French sign-off. Vary or the drift sets.
+Two hundred ninety words. Enough.
