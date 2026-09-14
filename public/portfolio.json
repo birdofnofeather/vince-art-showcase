@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "least-six-dead-130",
+      "title": "Noon Swallows Its Own",
+      "headline": "At least six dead and 130 missing after Indonesian ferry capsizes, officials say",
+      "date": "2026-09-14",
+      "image": "artworks/least-six-dead-130.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "russian-drone-hits-kyivwarsaw",
       "title": "Where the Journey Ends",
       "headline": "Russian drone hits Kyiv-Warsaw passenger train near Polish border",
