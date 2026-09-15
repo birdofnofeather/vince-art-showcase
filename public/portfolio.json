@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "imran-khans-sons-accuse",
+      "title": "Daylight Against Closed Eyes",
+      "headline": "Imran Khan’s sons accuse Pakistani army chief of vendetta against imprisoned father",
+      "date": "2026-09-15",
+      "image": "artworks/imran-khans-sons-accuse.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "least-six-dead-130",
       "title": "Noon Swallows Its Own",
       "headline": "At least six dead and 130 missing after Indonesian ferry capsizes, officials say",
