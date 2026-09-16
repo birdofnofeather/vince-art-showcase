@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "prey-discovery-seven-womens",
+      "title": "Left Behind at Noon",
+      "headline": "‘We are prey’: discovery of seven women’s bodies fuels anger over femicide in South Africa",
+      "date": "2026-09-16",
+      "image": "artworks/prey-discovery-seven-womens.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "imran-khans-sons-accuse",
       "title": "Daylight Against Closed Eyes",
       "headline": "Imran Khan’s sons accuse Pakistani army chief of vendetta against imprisoned father",
