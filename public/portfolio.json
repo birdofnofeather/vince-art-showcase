@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "least-killed-israelihit-buildi",
+      "title": "Hands That Remember Shelter",
+      "headline": "At least 21 killed after Israeli-hit building in Gaza City collapses",
+      "date": "2026-09-17",
+      "image": "artworks/least-killed-israelihit-buildi.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "prey-discovery-seven-womens",
       "title": "Left Behind at Noon",
       "headline": "‘We are prey’: discovery of seven women’s bodies fuels anger over femicide in South Africa",
