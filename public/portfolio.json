@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "spend-bagful-money-dont",
+      "title": "Noon Without Fire",
+      "headline": "‘I spend a bagful of money and don’t fill a bag’: the energy crisis hits Bangladesh",
+      "date": "2026-09-18",
+      "image": "artworks/spend-bagful-money-dont.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "least-killed-israelihit-buildi",
       "title": "Hands That Remember Shelter",
       "headline": "At least 21 killed after Israeli-hit building in Gaza City collapses",
