@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "rules-changed-russia-begun",
+      "title": "Dispatches From the Unreadable",
+      "headline": "‘The rules have changed’: has Russia begun to order assassinations on US soil?",
+      "date": "2026-09-20",
+      "image": "artworks/rules-changed-russia-begun.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "survivors-recount-panic-strugg",
       "title": "After the Last Breath",
       "headline": "Survivors recount panic and struggle to breathe in Nigerian prison cell where 37 died",
