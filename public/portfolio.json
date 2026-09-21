@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "physical-toll-visceral-how",
+      "title": "Filtered Breath, Yellowed Noon",
+      "headline": "‘The physical toll is visceral’: How Indonesia’s fire haze affects millions - visual guide",
+      "date": "2026-09-21",
+      "image": "artworks/physical-toll-visceral-how.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "rules-changed-russia-begun",
       "title": "Dispatches From the Unreadable",
       "headline": "‘The rules have changed’: has Russia begun to order assassinations on US soil?",
