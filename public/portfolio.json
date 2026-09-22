@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "babies-face-almost-twice",
+      "title": "Inheritance of Burning Hours",
+      "headline": "Babies ‘will face almost twice as much’ extreme fire weather in Europe than great-grandparents",
+      "date": "2026-09-22",
+      "image": "artworks/babies-face-almost-twice.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "physical-toll-visceral-how",
       "title": "Filtered Breath, Yellowed Noon",
       "headline": "‘The physical toll is visceral’: How Indonesia’s fire haze affects millions - visual guide",
