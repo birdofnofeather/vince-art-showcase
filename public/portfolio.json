@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "police-use-teargas-protesters",
+      "title": "What We Could Offer",
+      "headline": "Police use teargas on protesters as disabled woman, 87, evicted from Madrid home",
+      "date": "2026-09-23",
+      "image": "artworks/police-use-teargas-protesters.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "babies-face-almost-twice",
       "title": "Inheritance of Burning Hours",
       "headline": "Babies ‘will face almost twice as much’ extreme fire weather in Europe than great-grandparents",
