@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "rebel-offensive-against-ethiop",
+      "title": "Last Thing Standing",
+      "headline": "Rebel offensive against Ethiopian army stokes fears of return to civil war",
+      "date": "2026-09-24",
+      "image": "artworks/rebel-offensive-against-ethiop.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "police-use-teargas-protesters",
       "title": "What We Could Offer",
       "headline": "Police use teargas on protesters as disabled woman, 87, evicted from Madrid home",
