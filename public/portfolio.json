@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "hurricane-polo-barrels-towards",
+      "title": "Eye Before the Eye",
+      "headline": "Hurricane Polo barrels towards Baja California region of Mexico",
+      "date": "2026-09-25",
+      "image": "artworks/hurricane-polo-barrels-towards.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "rebel-offensive-against-ethiop",
       "title": "Last Thing Standing",
       "headline": "Rebel offensive against Ethiopian army stokes fears of return to civil war",
