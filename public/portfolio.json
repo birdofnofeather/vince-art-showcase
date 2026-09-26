@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "broken-promises-confiscated-la",
+      "title": "What the Roots Held",
+      "headline": "Broken promises, confiscated land: the hyperscale AI datacentre being built in a tiny Indian village",
+      "date": "2026-09-26",
+      "image": "artworks/broken-promises-confiscated-la.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "hurricane-polo-barrels-towards",
       "title": "Eye Before the Eye",
       "headline": "Hurricane Polo barrels towards Baja California region of Mexico",
