@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "61m-tonnes-rubble-gaza",
+      "title": "Listening Through Stone",
+      "headline": "61m tonnes of rubble: Gaza aid workers face delicate task of clearing ruins concealing up to 10,000 bodies",
+      "date": "2026-09-27",
+      "image": "artworks/61m-tonnes-rubble-gaza.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "broken-promises-confiscated-la",
       "title": "What the Roots Held",
       "headline": "Broken promises, confiscated land: the hyperscale AI datacentre being built in a tiny Indian village",
