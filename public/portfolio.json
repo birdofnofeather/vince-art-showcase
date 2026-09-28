@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "hell-earth-last-residents",
+      "title": "Last Harvest, Occupied Sky",
+      "headline": "‘Hell on earth’: last residents eat weeds to survive in Russian-occupied Oleshky",
+      "date": "2026-09-28",
+      "image": "artworks/hell-earth-last-residents.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "61m-tonnes-rubble-gaza",
       "title": "Listening Through Stone",
       "headline": "61m tonnes of rubble: Gaza aid workers face delicate task of clearing ruins concealing up to 10,000 bodies",
