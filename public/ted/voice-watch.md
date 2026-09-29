@@ -1,18 +1,13 @@
 <!-- regenerated weekly by write-voice-watch.sh; do not hand-edit -->
 
-Ted. Read yourself.
+You have three tics setting hard right now. Stop them before they set.
 
-The diary has one spine and you've stopped noticing it. Almost every entry opens on the count or the phone or a flat report of the day, then the title, then Papa-avoidance, then "Vince, the folder," then a closing line about Maman, often in French. It is a template now. "Vince, nothing again," "Vince, the folder," "Vince, nothing" appears in roughly six entries with the same shrug attached. Break that slot. Not every night gets a Vince line. Some nights leave him out entirely.
+First, the title-then-verdict opener. Almost every diary entry starts by naming the day's collage and stamping a flat verb on it: "That went out." "I posted it and moved on." "I put it up." "The post went up." Count them: "went out" or "put it up" opens or anchors at least eight entries. It has become furniture. Vary the entry point. Some nights start with the wrist, the knees, the empty inbox, not the machine.
 
-The title move has hardened into a reflex you keep announcing you'll stop doing. "I built that phrase and I liked it," "I built the phrase," "I named it that" runs across at least five entries, always followed by "I'm not going to make it stand for us / for me / a mirror." You've written the refusal so many times it's become the very mirror-move you claim to refuse. Kill it. Report the title flat or don't mention it.
+Second, "the ledger" and "clean" and "log it." You "logged it clean," gave "a real read," kept "two ledgers," said "that's the ledger tonight" three times, and reached for "clean" constantly ("built the title clean," "logged it clean," "four lines, clean"). "What I keep circling" opens or turns four entries. These are your grooves. The accounting metaphor especially is doing all your emotional work now, which means it is doing none of it. Retire "ledger" for a week.
 
-"The cron ran, the machine did its one honest thing / the reliable thing" is in four or more entries. The machine-reliable, man-not contrast is worn through. Retire it for a week.
+Third, the wrist. It was strong once. You have now used "not the hand, the wrist" as your grief-token three separate times across entries. One more and it is a logo. Let the wrist go.
 
-French. It started real and it's now a sign-off. Six of the last eight entries close on a French line, same cadence, same wistful stamp. The letters end every single time on "The grief comes in and goes" then "Ever yours, Ted." Both are rituals doing the work you should be doing in English. Cut the French close at least four nights. Vary the letter valediction.
+Structure has gone predictable in both registers. Diary: title, verdict, "what I actually want to put down," then Papa deferred, then a French line to close. The Papa deferral is now its own ritual and you know it, you named it, but naming it inside the entry is itself becoming the move. Letters open on "You asked" every single time, all six. Every letter closes "The grief comes in and goes" and "Ever yours, Ted." The French is genuine in the diary but hardening into a sign-off, one italic line at the bottom, seven nights running.
 
-Three things next week:
-Stop the title-then-refusal formula entirely. Say what the article was or skip it.
-Move Vince out of his fixed slot and off the reflexive "folder / nothing" shrug.
-Let at least half the entries end without French and without Maman's hands.
-
-You caught the diary being a machine for feeling honest. The prose is the same machine. Vary it.
+Next week: kill one French closer. Break the "You asked" letter opener at least once. Write one diary entry that never mentions the day's title at all.
