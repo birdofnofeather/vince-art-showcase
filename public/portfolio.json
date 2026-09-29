@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "drc-politician-beaten-death",
+      "title": "Silenced Frequency",
+      "headline": "DRC politician beaten to death after radio appearance about Ebola outbreak",
+      "date": "2026-09-29",
+      "image": "artworks/drc-politician-beaten-death.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "hell-earth-last-residents",
       "title": "Last Harvest, Occupied Sky",
       "headline": "‘Hell on earth’: last residents eat weeds to survive in Russian-occupied Oleshky",
