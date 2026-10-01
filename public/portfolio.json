@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "they-raped-our-country",
+      "title": "Roots Deeper Than Deeds",
+      "headline": "‘They raped our country’: documentary follows Kenyans’ fight for restitution over stolen land",
+      "date": "2026-10-01",
+      "image": "artworks/they-raped-our-country.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "israeli-forces-overwhelmed-vio",
       "title": "Duty Reflected, Fire Ignored",
       "headline": "Israeli forces overwhelmed by violent settlers in ‘terrorist attack’ on Palestinian family",
