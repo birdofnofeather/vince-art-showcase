@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "almost-half-fayed-abuse",
+      "title": "Lined Up, Going Nowhere",
+      "headline": "Almost half of Fayed abuse accusers are potential trafficking victims, MPs told",
+      "date": "2026-10-02",
+      "image": "artworks/almost-half-fayed-abuse.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "they-raped-our-country",
       "title": "Roots Deeper Than Deeds",
       "headline": "‘They raped our country’: documentary follows Kenyans’ fight for restitution over stolen land",
