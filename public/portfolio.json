@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "want-action-fijian-climate",
+      "title": "Salt Inherits the Earth",
+      "headline": "‘We want action’: Fijian climate activist sends message ahead of UN talks in Pacific",
+      "date": "2026-10-03",
+      "image": "artworks/want-action-fijian-climate.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "almost-half-fayed-abuse",
       "title": "Lined Up, Going Nowhere",
       "headline": "Almost half of Fayed abuse accusers are potential trafficking victims, MPs told",
