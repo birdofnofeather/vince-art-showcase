@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "egyptian-journalist-faces-terr",
+      "title": "Interrogation Without a Witness",
+      "headline": "Egyptian journalist faces terrorism charges after entire newsroom detained",
+      "date": "2026-10-04",
+      "image": "artworks/egyptian-journalist-faces-terr.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "want-action-fijian-climate",
       "title": "Salt Inherits the Earth",
       "headline": "‘We want action’: Fijian climate activist sends message ahead of UN talks in Pacific",
