@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "indias-supreme-court-demands",
+      "title": "Erasure Under Sovereign Light",
+      "headline": "India’s supreme court demands answers over changes to voter roll",
+      "date": "2026-10-05",
+      "image": "artworks/indias-supreme-court-demands.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "egyptian-journalist-faces-terr",
       "title": "Interrogation Without a Witness",
       "headline": "Egyptian journalist faces terrorism charges after entire newsroom detained",
