@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "state-parliament-elects-german",
+      "title": "Counting What Cannot Be Undone",
+      "headline": "State parliament elects Germany’s first far-right speaker since second world war",
+      "date": "2026-10-06",
+      "image": "artworks/state-parliament-elects-german.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "indias-supreme-court-demands",
       "title": "Erasure Under Sovereign Light",
       "headline": "India’s supreme court demands answers over changes to voter roll",
