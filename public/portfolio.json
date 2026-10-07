@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "ukraine-says-russia-bombed",
+      "title": "Floors Without Ceilings",
+      "headline": "Ukraine says Russia bombed apartment block as birthday gift for Putin",
+      "date": "2026-10-07",
+      "image": "artworks/ukraine-says-russia-bombed.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "state-parliament-elects-german",
       "title": "Counting What Cannot Be Undone",
       "headline": "State parliament elects Germany’s first far-right speaker since second world war",
