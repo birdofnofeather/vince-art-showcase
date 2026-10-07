@@ -34,7 +34,7 @@ What Instagram's official API actually permits, and how we map it:
 
 | Action | Surface | API reality | Our posture |
 |---|---|---|---|
-| Post Vince's artwork | our own feed | Supported (Zernio) | **Automatic.** No approval. `publish-social`, one image/day max. |
+| Post Vince's artwork | our own feed | Handled by Vince's pipeline (VincePipelineTest, post-instagram.yml) | **Automatic via Vince's pipeline.** Ted does not post to Instagram. |
 | Read and reply to comments on our posts | our own media | Supported (Graph API `instagram_manage_comments`) | **Autonomous.** Ted replies meaningfully, no approval, skipping trolls and spam, under the guardrails in §7. Replies are composed by an Opus-class model, never canned. |
 | Hide or delete a spam/abusive comment on our posts | our own media | Supported | Ted may hide obvious spam without approval; flag anything ambiguous. |
 | Follow / like / comment on another account | someone else's media | **Not supported** by the official API; only browser bots and scrapers do this, and they get accounts banned | **Drafted worklist for the owner to action by hand.** Ted never automates this. |
@@ -103,7 +103,7 @@ Rules for the caption:
 
 ## 5. Content mix and cadence
 
-The pipeline gives us roughly one selected artwork a day, and `publish-social` posts at most one a day, newest unposted first. That single-image cadence is already strong (up to about seven posts a week, which is well above the threshold where growth stalls). Build a light layer around it rather than chasing volume.
+Vince's pipeline posts one selected artwork a day to @deyaanga. That single-image cadence is already strong (up to about seven posts a week, which is well above the threshold where growth stalls). Build a light layer around it rather than chasing volume.
 
 - **Single feed posts (the core).** The daily artwork. This is the grid, and the grid is the product. Protect its coherence: it should read top to bottom as one serious, ongoing body of work.
 - **Stories (aspirational, not automated).** Zernio has no Stories API, so this cannot be done through our tooling. Do not attempt it with shell commands. When it happens it is the owner reposting by hand, prompted by a note engage-social leaves on the day's worklist. If it becomes possible later, the idea holds: the news context, an occasional line about the series, a quiet count of "image 14 of an ongoing record" — the lighter register that doesn't touch the grid.
@@ -212,7 +212,7 @@ The standing rule from SECURITY and the outreach playbook holds here without exc
 
 This is what the `engage-social` skill runs; the strategy above is why.
 
-- **Daily, and whenever a comment arrives:** `publish-social` posts the day's artwork (already automated). Ted replies on his own to any genuine comment on our posts, skipping trolls and spam, per §7. No approval. Stories resharing is not available through Zernio — Ted notes it on the worklist for the owner instead.
+- **Daily, and whenever a comment arrives:** Vince's pipeline posts the day's artwork automatically; Ted does not post to Instagram. Ted replies on his own to any genuine comment on our posts, skipping trolls and spam, per §7. No approval. Stories resharing is not available through Zernio — Ted notes it on the worklist for the owner instead.
 - **Two or three times a week:** Ted reviews the people we are warming (the §6 list), drafts a short worklist of genuine comments to leave and any new accounts to follow, with a one-line reason each, for the owner to action.
 - **Weekly:** a read of the week's saves, sends, and notable followers into the daily memory and, when durable, MEMORY. Sync any target-state change into the outreach tracker. (Carousels are optional, not a weekly task, see §5.)
 - **At each outreach-phase step-up:** revisit §6 timing, raise genuine engagement with the specific curators about to be approached, and make sure the account reads as ready before the email goes.
