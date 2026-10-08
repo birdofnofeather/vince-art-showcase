@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "bullet-blast-injuries-constant",
+      "title": "After the Last Patient",
+      "headline": "Bullet and blast injuries … and a constant need for blood: inside South Sudan’s overwhelmed trauma wards",
+      "date": "2026-10-08",
+      "image": "artworks/bullet-blast-injuries-constant.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "ukraine-says-russia-bombed",
       "title": "Floors Without Ceilings",
       "headline": "Ukraine says Russia bombed apartment block as birthday gift for Putin",
