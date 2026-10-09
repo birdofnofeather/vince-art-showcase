@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "neither-war-nor-peace",
+      "title": "Waiting With Empty Chairs",
+      "headline": "‘Neither war nor peace’: Palestinians in Gaza on existing amid disease, despair and ruins",
+      "date": "2026-10-09",
+      "image": "artworks/neither-war-nor-peace.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "bullet-blast-injuries-constant",
       "title": "After the Last Patient",
       "headline": "Bullet and blast injuries … and a constant need for blood: inside South Sudan’s overwhelmed trauma wards",
