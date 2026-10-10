@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "dozens-injured-buildings-damag",
+      "title": "Lessons Without Walls",
+      "headline": "Dozens injured and buildings damaged as tornadoes hit Sicily",
+      "date": "2026-10-10",
+      "image": "artworks/dozens-injured-buildings-damag.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "neither-war-nor-peace",
       "title": "Waiting With Empty Chairs",
       "headline": "‘Neither war nor peace’: Palestinians in Gaza on existing amid disease, despair and ruins",
