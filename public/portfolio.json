@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "least-139-dead-including",
+      "title": "Where the Counting Stops",
+      "headline": "At least 139 dead including children after migrant boat capsizes off Djibouti",
+      "date": "2026-10-11",
+      "image": "artworks/least-139-dead-including.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "dozens-injured-buildings-damag",
       "title": "Lessons Without Walls",
       "headline": "Dozens injured and buildings damaged as tornadoes hit Sicily",
