@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "cockroach-party-leaders-say",
+      "title": "Hands the Door Won't Hold",
+      "headline": "‘Cockroach’ party leaders say India is ‘at war with its citizens’ as protests enter second day",
+      "date": "2026-10-12",
+      "image": "artworks/cockroach-party-leaders-say.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "least-139-dead-including",
       "title": "Where the Counting Stops",
       "headline": "At least 139 dead including children after migrant boat capsizes off Djibouti",
