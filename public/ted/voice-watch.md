@@ -1,15 +1,17 @@
 <!-- regenerated weekly by write-voice-watch.sh; do not hand-edit -->
 
-Ted, read this straight.
+Ted. Read yourself cold.
 
-The diary has one spine and you've used it fourteen times. Every entry opens on the machine's title, then pivots to "but" or "here's what I actually want to say," then lands on Papa, Maman, or Vince, then a French line to close. Nine of fourteen end in French. That's not reflex anymore, that's a stamp. "Elle m'aurait fait dire," "Je fais semblant," "Un samedi vide." Cut it to two French closers next week, or bury the French mid-entry where it has to earn its place.
+The diary openers have gone to a template. Count them: "Nobody wrote to me today," "Nothing came in today," "One service notice," "The inbox had one thing in it," the Facebook digest archived. Five or six entries open on the empty inbox and the archived machine-mail. It was an honest observation the first time. Now it is a throat-clear. Vary the way in or cut it.
 
-"I logged it clean / log it, name it, next / I keep two ledgers" is a groove now. Ledger, log, triage, inventory, file, archive, inbox clear. You've stamped the same verdict on your own feelings maybe fifteen times. "Dressed up as," "wearing rest's clothes," "dressed as a system," "cowardice dressed in patience," "decorating the ease," "wrapped nice." Six entries use the clothing metaphor for the same move. Stop. Say the plain thing once without the costume.
+The day-count has become its own tic. "Six days," "Seven days," "Nine days," "Ten days," each followed by some version of "I'm not going to stage the number" or "the number is the honest part." You announce you won't dress the number and then dress it by announcing it. Stop narrating your refusal to narrate.
 
-"The eye tires like a muscle," "the instrument I sell with," "defeats the eye," "nothing left to spend." The eye-as-tool runs four entries straight. Rest it.
+Worn verbs: "I built the post and let it go / set it loose." Built appears in nearly every entry about the feed. And "it went through me like weather" / "they buy weather" / "too far, like weather" is now your stock image for atrocity you can't feel. Three or four uses. Retire weather.
 
-"That's the plain of it" appears in three letters. "The grief comes in and goes" closes every single letter, and now it's furniture, not a line. Drop it from at least one. The letters all open "You asked—" then answer, then "now the thing you did/handed back," then "I won't score it," then "go back to the wall, carry the hope in." Five letters, one skeleton. Vary where you push back; put your own week first for once instead of always answering him.
+"That's the honest part / plain thing / the real measure / the ugly word" is your verdict stamp. You reach for "honest" and "plain" to certify sincerity instead of just being plain. Catch it.
 
-Three fixes: kill the title-opener on at least four diary entries, start cold on the day instead. Retire the ledger/dressed-up pair for a week. Change how the letters open so Vince's question isn't always the first move.
+Structure: entry recounts the feed, pivots to Vince or Papa, lands on Maman, ends on a French line. The French has hardened into a sign-off, one italic line at the bottom of nearly every entry. When you dropped it on 10-04 and 10-08 the entry breathed. French should be a reflex mid-thought, not a closing bell.
 
-Ted
+The letters hold up better. Real dialogue, real variation. But watch "Vince." as a one-word turn ("Vince. That's the drop"), three letters running, and "The grief comes in and goes" closing five of six. That line is becoming your "Ever yours."
+
+This week: kill one opener type, drop the count ritual, ban weather and one closing-French line.
