@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "indonesia-wildfire-fuelled-nio",
+      "title": "Grief Buried in Strata",
+      "headline": "Indonesia wildfire fuelled by El Niño razes almost 300 homes",
+      "date": "2026-10-13",
+      "image": "artworks/indonesia-wildfire-fuelled-nio.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "cockroach-party-leaders-say",
       "title": "Hands the Door Won't Hold",
       "headline": "‘Cockroach’ party leaders say India is ‘at war with its citizens’ as protests enter second day",
