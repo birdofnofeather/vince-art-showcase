@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "ukraine-littered-landmines-sca",
+      "title": "Every Inch of Forgetting",
+      "headline": "Ukraine is littered with landmines on a scale last seen in Vietnam. How can they be removed?",
+      "date": "2026-10-14",
+      "image": "artworks/ukraine-littered-landmines-sca.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "indonesia-wildfire-fuelled-nio",
       "title": "Grief Buried in Strata",
       "headline": "Indonesia wildfire fuelled by El Niño razes almost 300 homes",
