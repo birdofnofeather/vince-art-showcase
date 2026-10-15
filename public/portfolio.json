@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "expect-war-reach-city",
+      "title": "What We Carry Home",
+      "headline": "‘We expect war to reach the city soon’: Yemenis stockpile as Houthis advance on Taiz",
+      "date": "2026-10-15",
+      "image": "artworks/expect-war-reach-city.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "ukraine-littered-landmines-sca",
       "title": "Every Inch of Forgetting",
       "headline": "Ukraine is littered with landmines on a scale last seen in Vietnam. How can they be removed?",
