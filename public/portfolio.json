@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "israeli-settlers-attack-olive",
+      "title": "Proportions of the Unanswered",
+      "headline": "Israeli settlers attack olive farmers and Washington Post journalist in West Bank",
+      "date": "2026-10-16",
+      "image": "artworks/israeli-settlers-attack-olive.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "expect-war-reach-city",
       "title": "What We Carry Home",
       "headline": "‘We expect war to reach the city soon’: Yemenis stockpile as Houthis advance on Taiz",
