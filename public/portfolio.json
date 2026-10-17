@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "cannot-carry-all-alone",
+      "title": "Shelter Within Shelter, Apart",
+      "headline": "‘I cannot carry all of this alone’: the couples kept apart by the war in Gaza",
+      "date": "2026-10-17",
+      "image": "artworks/cannot-carry-all-alone.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "israeli-settlers-attack-olive",
       "title": "Proportions of the Unanswered",
       "headline": "Israeli settlers attack olive farmers and Washington Post journalist in West Bank",
