@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "why-people-protesting-across",
+      "title": "Thresholds We Cannot Cross",
+      "headline": "Why are people protesting across Europe?",
+      "date": "2026-10-19",
+      "image": "artworks/why-people-protesting-across.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "jamaica-says-slavery-reparatio",
       "title": "Weight of the Unaddressed",
       "headline": "Jamaica says slavery reparations petition to be heard by UK privy council in March 2027",
