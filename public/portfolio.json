@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "battle-metas-alleged-bolsonaro",
+      "title": "Whose Turn to Print",
+      "headline": "Battle over Meta’s alleged Bolsonaro bias intensifies days before Brazil presidential runoff",
+      "date": "2026-10-21",
+      "image": "artworks/battle-metas-alleged-bolsonaro.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "people-scour-strait-hormuz",
       "title": "The Algorithm Feeds First",
       "headline": "People scour strait of Hormuz for spilt cargo after Iran attacks container ships",
