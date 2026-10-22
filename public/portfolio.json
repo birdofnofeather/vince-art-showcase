@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "taiwan-charges-five-men",
+      "title": "Still Worth the Joke",
+      "headline": "Taiwan charges five men over plot to run over comedian for his Xi Jinping jokes",
+      "date": "2026-10-22",
+      "image": "artworks/taiwan-charges-five-men.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "battle-metas-alleged-bolsonaro",
       "title": "Whose Turn to Print",
       "headline": "Battle over Meta’s alleged Bolsonaro bias intensifies days before Brazil presidential runoff",
