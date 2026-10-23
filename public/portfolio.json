@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "youth-mobility-scheme-may",
+      "title": "Held Breath, Open Page",
+      "headline": "Youth mobility scheme may be delayed to ensure success of UK-EU summit",
+      "date": "2026-10-23",
+      "image": "artworks/youth-mobility-scheme-may.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "taiwan-charges-five-men",
       "title": "Still Worth the Joke",
       "headline": "Taiwan charges five men over plot to run over comedian for his Xi Jinping jokes",
