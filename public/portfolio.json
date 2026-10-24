@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "russia-bombards-kyiv-missiles",
+      "title": "Ceasefire, Mesh, Noon",
+      "headline": "Russia bombards Kyiv with missiles hours after agreeing to resume talks with Ukraine",
+      "date": "2026-10-24",
+      "image": "artworks/russia-bombards-kyiv-missiles.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "youth-mobility-scheme-may",
       "title": "Held Breath, Open Page",
       "headline": "Youth mobility scheme may be delayed to ensure success of UK-EU summit",
