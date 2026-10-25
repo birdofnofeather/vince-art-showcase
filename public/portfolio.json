@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "demand-government-action-month",
+      "title": "What Remains Uncollected",
+      "headline": "Demand for UK government action 10 months after British man’s death in Grenada",
+      "date": "2026-10-25",
+      "image": "artworks/demand-government-action-month.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "russia-bombards-kyiv-missiles",
       "title": "Ceasefire, Mesh, Noon",
       "headline": "Russia bombards Kyiv with missiles hours after agreeing to resume talks with Ukraine",
