@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "exiled-opposition-leader-mara",
+      "title": "Hands That Held the Sky",
+      "headline": "Exiled opposition leader María Corina Machado returns to rapturous reception in Venezuela",
+      "date": "2026-10-26",
+      "image": "artworks/exiled-opposition-leader-mara.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "demand-government-action-month",
       "title": "What Remains Uncollected",
       "headline": "Demand for UK government action 10 months after British man’s death in Grenada",
