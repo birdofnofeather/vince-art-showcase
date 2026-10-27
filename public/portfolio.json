@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "life-death-jaysley-beck",
+      "title": "Weight of Every Word",
+      "headline": "The life and death of Jaysley Beck: how her mother turned detective – and took on the military",
+      "date": "2026-10-27",
+      "image": "artworks/life-death-jaysley-beck.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "exiled-opposition-leader-mara",
       "title": "Hands That Held the Sky",
       "headline": "Exiled opposition leader María Corina Machado returns to rapturous reception in Venezuela",
