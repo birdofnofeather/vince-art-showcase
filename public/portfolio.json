@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "egypt-fines-prominent-editor",
+      "title": "Silence Padlocked to Current",
+      "headline": "Egypt fines prominent editor Lina Attalah and shuts independent news outlet Mada Masr",
+      "date": "2026-10-28",
+      "image": "artworks/egypt-fines-prominent-editor.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "life-death-jaysley-beck",
       "title": "Weight of Every Word",
       "headline": "The life and death of Jaysley Beck: how her mother turned detective – and took on the military",
