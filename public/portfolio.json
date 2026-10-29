@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "spain-begins-mourning-period",
+      "title": "Where the Signal Failed",
+      "headline": "Spain begins mourning period as search continues for train crash victims",
+      "date": "2026-10-29",
+      "image": "artworks/spain-begins-mourning-period.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "egypt-fines-prominent-editor",
       "title": "Silence Padlocked to Current",
       "headline": "Egypt fines prominent editor Lina Attalah and shuts independent news outlet Mada Masr",
