@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "niodriven-drought-papua-new",
+      "title": "Where the River Remembers",
+      "headline": "El Niño-driven drought in Papua New Guinea a ‘national crisis’ as rivers dry up and local farms fail",
+      "date": "2026-10-30",
+      "image": "artworks/niodriven-drought-papua-new.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "spain-begins-mourning-period",
       "title": "Where the Signal Failed",
       "headline": "Spain begins mourning period as search continues for train crash victims",
