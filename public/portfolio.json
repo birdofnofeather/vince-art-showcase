@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "plantation-tourism-court-victo",
+      "title": "Inheritance, Unlatched",
+      "headline": "‘Plantation tourism’: court victory signals hope in Jamaica’s fight to keep beaches public",
+      "date": "2026-10-31",
+      "image": "artworks/plantation-tourism-court-victo.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "niodriven-drought-papua-new",
       "title": "Where the River Remembers",
       "headline": "El Niño-driven drought in Papua New Guinea a ‘national crisis’ as rivers dry up and local farms fail",
