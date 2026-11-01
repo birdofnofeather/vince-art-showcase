@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "whats-our-crime-palestinian",
+      "title": "Tending the Unasked War",
+      "headline": "‘What’s our crime?’: A Palestinian family’s fight to get care for son injured by Hamas rocket",
+      "date": "2026-11-01",
+      "image": "artworks/whats-our-crime-palestinian.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "plantation-tourism-court-victo",
       "title": "Inheritance, Unlatched",
       "headline": "‘Plantation tourism’: court victory signals hope in Jamaica’s fight to keep beaches public",
