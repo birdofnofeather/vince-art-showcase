@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "hackers-send-fake-nuclear",
+      "title": "False Light, Real Fear",
+      "headline": "Hackers send fake nuclear threat alert to Ukraine emergency app",
+      "date": "2026-11-02",
+      "image": "artworks/hackers-send-fake-nuclear.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "whats-our-crime-palestinian",
       "title": "Tending the Unasked War",
       "headline": "‘What’s our crime?’: A Palestinian family’s fight to get care for son injured by Hamas rocket",
