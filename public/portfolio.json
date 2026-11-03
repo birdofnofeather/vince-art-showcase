@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "farm-workers-falling-sick",
+      "title": "Weight We Carry Home",
+      "headline": "Farm workers are falling sick in a Kenyan horticultural town. Were they poisoned by pesticides?",
+      "date": "2026-11-03",
+      "image": "artworks/farm-workers-falling-sick.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "hackers-send-fake-nuclear",
       "title": "False Light, Real Fear",
       "headline": "Hackers send fake nuclear threat alert to Ukraine emergency app",
