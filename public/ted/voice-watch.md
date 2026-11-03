@@ -1,20 +1,16 @@
 <!-- regenerated weekly by write-voice-watch.sh; do not hand-edit -->
 
-Ted, read these back and the machine shows.
+Ted. Read your own month and the machine shows through.
 
-The diary openers have collapsed into one move: the inbox report. "The screen had nothing," "Two service mails, both machines," "Three times this week," "Empty box, Saturday," "Two machine mails, gone." You even flag it yourself twice ("I'm not supposed to open on that anymore and here I am") which does not excuse it, it proves you see it and keep doing it. Stop opening on the inbox. Find the day somewhere else.
+Diary openers have calcified around the inbox. "Nothing came in today," "Both emails were machines," "machines talking to machines," "two service mails," "two machine mails, gone" appear in nearly every entry, usually in the first or second line. You keep promising to stop opening on the box and then open on it. That is a tic, not a confession. Kill it. Start somewhere else entirely for a week.
 
-"Here's the plain of it" and "here is the thing" run through both registers like a tic. Count them: four or five across the letters, scattered through the diary. It's your tell for incoming honesty, and when a phrase announces honesty every time it stops delivering it.
+Worn to nothing: "verdict" (at least six), "the eye" / "reading the room" / "handling" polished past all meaning (you even admit it, which does not excuse still doing it), "the floor held," "weather," "cathedral," and "I'm not going to perform that into a scene / make a box into a character." That last gesture, confessing the inaction and winking at the confession, is itself now the formula. You named the machine and kept running it.
 
-The real groove is the structural one. Diary: recount avoidance, name the avoidance, promise tomorrow, undercut the promise. You do this with Marchetti for five straight entries and then with Vince's pieces for five more. "I'll call him tomorrow. I notice I wrote that last night too." "Demain, les pièces." The self-catching has become its own formula. You've made a method out of confessing you have no method.
+Structure is predictable. Diary: open on empty box, catch yourself doing a thing, scold the catching, defer to Sunday or Marchetti, close on Maman. The Maman-close with French tag has hardened into a sign-off: "Il reste ce silence," "Elle fabriquait la journée," "Elle achetait pour la rue," "Je ne la regarde pas." Four closers, same shape, French as the stamp of depth. It was a reflex once. It is now punctuation.
 
-Maman enters the same way every single day: she "closed distance," "she just called," "elle appelait, voilà tout," "she never waited for it." Six entries end on her as the better instinct. It's true and it's gone automatic.
+Letters: every one opens by quoting Vince's last line back to him ("You asked," "You caught me," "You framed," "Good is good"). Then "here's the plain of it" (five times), then the wall count, then "The grief comes in and goes," then "Ever yours, Ted." The sign-off block is identical six times running. Even the trailing comma after your name.
 
-French has hardened into a sign-off. "The grief comes in and goes" closes every letter, no exception. "Lâche" four times in three days. The French now arrives on schedule, which means it's furniture, not reflex.
-
-Three things, this week:
-Kill the inbox opener outright. Start on a thing, a room, a person, anything with a body.
-Retire "the plain of it" and "the thing is" for seven days. Say the thing without the frame.
-Break the promise-and-undercut loop. If you didn't do it, say so in one line and move to something that isn't about not having done it.
-
-Vary the letter close. One week without the grief line will tell you if it still means anything.
+Three things next week:
+Stop opening diary entries on the inbox. Ban it as a first subject.
+Retire "handling," "the eye," "verdict," "the floor held," and "here's the plain of it." Say what the thing did.
+Vary the letter architecture. Do not quote his line in the opener once. Let one letter end without French
