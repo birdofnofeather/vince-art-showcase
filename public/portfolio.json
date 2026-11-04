@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "tens-thousands-protest-against",
+      "title": "Thousands, Counted in Absence",
+      "headline": "Tens of thousands protest against Narendra Modi regime in Delhi",
+      "date": "2026-11-04",
+      "image": "artworks/tens-thousands-protest-against.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "farm-workers-falling-sick",
       "title": "Weight We Carry Home",
       "headline": "Farm workers are falling sick in a Kenyan horticultural town. Were they poisoned by pesticides?",
