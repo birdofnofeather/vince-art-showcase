@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "condemn-cruel-second-jail",
+      "title": "Ruled Into Silence",
+      "headline": "UK and US condemn ‘cruel’ second jail term handed to Hong Kong activist Joshua Wong",
+      "date": "2026-11-05",
+      "image": "artworks/condemn-cruel-second-jail.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "tens-thousands-protest-against",
       "title": "Thousands, Counted in Absence",
       "headline": "Tens of thousands protest against Narendra Modi regime in Delhi",
