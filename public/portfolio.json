@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "russia-seek-block-plan",
+      "title": "Unsigned Into the Dark",
+      "headline": "Russia and US seek to block plan for binding rules on autonomous weapons",
+      "date": "2026-11-06",
+      "image": "artworks/russia-seek-block-plan.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "condemn-cruel-second-jail",
       "title": "Ruled Into Silence",
       "headline": "UK and US condemn ‘cruel’ second jail term handed to Hong Kong activist Joshua Wong",
