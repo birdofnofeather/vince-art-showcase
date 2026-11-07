@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "boy-six-becomes-fifth",
+      "title": "After the Sixth Breath",
+      "headline": "Boy, six, becomes fifth member of family to die after suspected arson in Ireland",
+      "date": "2026-11-07",
+      "image": "artworks/boy-six-becomes-fifth.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "russia-seek-block-plan",
       "title": "Unsigned Into the Dark",
       "headline": "Russia and US seek to block plan for binding rules on autonomous weapons",
