@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "potentially-ugly-taking-war",
+      "title": "Competing Claims, No Shade",
+      "headline": "‘Potentially ugly’: taking war on gangs to Haiti poses risks for El Salvador’s leader",
+      "date": "2026-11-08",
+      "image": "artworks/potentially-ugly-taking-war.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "boy-six-becomes-fifth",
       "title": "After the Sixth Breath",
       "headline": "Boy, six, becomes fifth member of family to die after suspected arson in Ireland",
