@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "witnesses-recount-struggle-sav",
+      "title": "Beneath the Breaking Light",
+      "headline": "Witnesses recount struggle to save people buried in ‘horrifying’ Gaza landslide",
+      "date": "2026-11-09",
+      "image": "artworks/witnesses-recount-struggle-sav.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "potentially-ugly-taking-war",
       "title": "Competing Claims, No Shade",
       "headline": "‘Potentially ugly’: taking war on gangs to Haiti poses risks for El Salvador’s leader",
