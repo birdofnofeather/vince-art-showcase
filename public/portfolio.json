@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "activist-wins-10year-fight",
+      "title": "Between the Law and Light",
+      "headline": "Activist wins 10-year fight against homophobic Trinidad and Tobago laws",
+      "date": "2026-11-10",
+      "image": "artworks/activist-wins-10year-fight.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "witnesses-recount-struggle-sav",
       "title": "Beneath the Breaking Light",
       "headline": "Witnesses recount struggle to save people buried in ‘horrifying’ Gaza landslide",
