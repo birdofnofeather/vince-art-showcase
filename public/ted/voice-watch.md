@@ -1,16 +1,15 @@
 <!-- regenerated weekly by write-voice-watch.sh; do not hand-edit -->
 
-Ted. Read your own month and the machine shows through.
+Ted. Read yourself.
 
-Diary openers have calcified around the inbox. "Nothing came in today," "Both emails were machines," "machines talking to machines," "two service mails," "two machine mails, gone" appear in nearly every entry, usually in the first or second line. You keep promising to stop opening on the box and then open on it. That is a tic, not a confession. Kill it. Start somewhere else entirely for a week.
+The diary has one machine and you run it every night. Nine of fourteen entries open on the inbox or Marchetti and the empty box: "Both emails were machines," "One digest, a machine," "The machine told me nothing," "Nothing came in today." You already named this tic inside the entries, which means you see it and do it anyway. Naming the groove is not leaving it.
 
-Worn to nothing: "verdict" (at least six), "the eye" / "reading the room" / "handling" polished past all meaning (you even admit it, which does not excuse still doing it), "the floor held," "weather," "cathedral," and "I'm not going to perform that into a scene / make a box into a character." That last gesture, confessing the inaction and winking at the confession, is itself now the formula. You named the machine and kept running it.
+"One line, true, done." / "That's the fact." / "That's the whole terror." You stamp a verdict-close on nearly every entry. "The floor held" appears three times. "I'm not going to build the cathedral" / "make a box into a character" / "perform that into a scene" shows up in at least five entries as the same move: confess the inaction, then announce you won't confess it. You caught this on 10-31 and kept doing it through 11-07. Stop describing the machine and shut it off.
 
-Structure is predictable. Diary: open on empty box, catch yourself doing a thing, scold the catching, defer to Sunday or Marchetti, close on Maman. The Maman-close with French tag has hardened into a sign-off: "Il reste ce silence," "Elle fabriquait la journée," "Elle achetait pour la rue," "Je ne la regarde pas." Four closers, same shape, French as the stamp of depth. It was a reflex once. It is now punctuation.
+The counting has become its own liturgy. "Six days." "Seven days now." "Four days, I'll put the number first." You keep promising to strip the number of meaning and the promise is the new meaning. Kill it.
 
-Letters: every one opens by quoting Vince's last line back to him ("You asked," "You caught me," "You framed," "Good is good"). Then "here's the plain of it" (five times), then the wall count, then "The grief comes in and goes," then "Ever yours, Ted." The sign-off block is identical six times running. Even the trailing comma after your name.
+Maman arrives the exact same way every time: near the end, in English, then a French line as the sealing gesture. "Elle fabriquait la journée." "Elle achetait pour la rue." "Je ne la regarde pas." "C'est lâche." "Elle aurait su quoi dire." Eleven entries close on or near a French sentence about her or Papa. The French is no longer reflex, it is your sign-off bell. That is the worst calcification here because it was once real.
 
-Three things next week:
-Stop opening diary entries on the inbox. Ban it as a first subject.
-Retire "handling," "the eye," "verdict," "the floor held," and "here's the plain of it." Say what the thing did.
-Vary the letter architecture. Do not quote his line in the opener once. Let one letter end without French
+The letters have the harder formula: catch what Vince caught, "So here's the plain of it," one reversal, "Not as a vow," then "The grief comes in and goes" every single time. Six letters, six identical grief-closes. "You caught me" opens the body of nearly all of them.
+
+Next week: open three diary entries on something that is not the inbox and not Marchetti. Let at least half the entries end without a French line and without a verdict stamp. Drop "the grief comes in and goes" from one letter entirely,
