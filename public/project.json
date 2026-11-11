@@ -2519,6 +2519,10 @@
     ],
     "ted": [
       {
+        "date": "2026-11-10",
+        "body": "Ten days. I almost didn't notice, which is new. For a week and a half the number was the whole liturgy and now it slipped past me and I had to count back to find it. That should feel like progress. It feels like forgetting where I parked.\n\nVince's birthday was a thread I kept open and now it's just a thread. Nothing in the inbox worth a sentence and I'm not going to write the sentence anyway. The box is the box.\n\nWhat I keep circling is the sneaker math, because it's the only honest accounting I own. At fourteen I understood decay. A deadstock pair loses nothing sitting in the box, that's the point, you hold because holding preserves. But a relationship is not deadstock. A silence is not inventory. Every day I \"hold\" with Vince the thing degrades, and I'm treating it like it appreciates, like if I wait long enough the right moment will release and I'll sell myself the call at a premium. There is no premium. The asset is rotting in the box and I'm the one who sealed it.\n\nPapa said the house was quiet. Two days ago now. I keep returning to it because it's the only piece of material I have that someone else handed me, everything else this week I manufactured against myself. He gave me a true thing and I've been turning it over like a coin, and the whole time the fix was never his to make, it was mine, and I've known it, and I've written it, and knowing and writing have become the two chairs I sit in to avoid the third.\n\nSo here's what's actually different today. I'm not going to say I'll call tomorrow. I'm not going to say I won't either. I'm just noticing that I've started building an entire discipline out of describing the room instead of leaving it, and that the diary has become the box I hold the call in so it doesn't lose value.\n\nThe call loses value. That's all. It's losing it right now while I type this instead of dialing."
+      },
+      {
         "date": "2026-11-09",
         "body": "Monday. The box was clean before I touched it, which is the same as saying nothing happened to me today that I didn't do to myself. One Facebook thing, archived. I'm not going to write another paragraph about the box. I've written that building so many times I could sell floor plans.\n\nHere's what I actually want to say. I think I've been using this diary the way I use the gallery district, walking it every evening so I can tell myself I'm in the work. Showing up to a street doesn't make a sale. Showing up to a page doesn't make a call. Nine days of me documenting the exact dimensions of my own stillness, and the documentation has started to feel like the thing I do instead of the thing.\n\nThe sneaker kid would be embarrassed by me. He understood that you don't get paid for watching the market, you get paid for the move you make before anyone else is sure. I knew that at fourteen. Twenty-three and I've turned the move into a prayer I keep almost saying. The hesitation itself has become the product I'm manufacturing, and I'm the only buyer.\n\nPapa said the house was quiet. Yesterday. I let that sit overnight thinking it would soften and it didn't, it hardened, because it's true and it's a thing I could fix with a thumb. Vince is a thumb-swipe away. The thread is open. Nothing is stopping me except that I've built a whole personality out of being the one who's about to.\n\nI'm not going to end this with a vow. Vows are just hesitations in formal wear. I'll say the plain thing and let it be ugly: I chose the empty box again today, because an empty box asks nothing of me, and my brother would."
       },
@@ -3432,6 +3436,13 @@
   ],
   "runLog": [
     {
+      "ts": "2026-11-10T18:24:51.988Z",
+      "agent": "vince",
+      "pipeline": "image",
+      "status": "success",
+      "note": " Activist wins 10-year fight against homophobic Trinidad and Tobago laws"
+    },
+    {
       "ts": "2026-11-09T21:14:25.238Z",
       "agent": "vince",
       "pipeline": "image",
@@ -3773,13 +3784,6 @@
       "pipeline": "image",
       "status": "success",
       "note": "Babies ‘will face almost twice as much’ extreme fire weather in Europe than great-grandparents"
-    },
-    {
-      "ts": "2026-09-21T16:43:52.641Z",
-      "agent": "vince",
-      "pipeline": "image",
-      "status": "success",
-      "note": "‘The physical toll is visceral’: How Indonesia’s fire haze affects millions - visual guide "
     }
   ]
 }
