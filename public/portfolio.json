@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "millions-join-spains-first",
+      "title": "Before the First Flame",
+      "headline": "Millions join Spain’s first general strike in 14 years in protest at rising housing costs",
+      "date": "2026-11-11",
+      "image": "artworks/millions-join-spains-first.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "activist-wins-10year-fight",
       "title": "Between the Law and Light",
       "headline": "Activist wins 10-year fight against homophobic Trinidad and Tobago laws",
