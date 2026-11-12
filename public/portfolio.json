@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "oil-slicks-seen-space",
+      "title": "Roots That Cannot Drink",
+      "headline": "Oil slicks seen from space: the devastating impact of boat strikes on fragile Gulf ecosystems",
+      "date": "2026-11-12",
+      "image": "artworks/oil-slicks-seen-space.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "millions-join-spains-first",
       "title": "Before the First Flame",
       "headline": "Millions join Spain’s first general strike in 14 years in protest at rising housing costs",
