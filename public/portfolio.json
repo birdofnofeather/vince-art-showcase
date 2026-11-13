@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "more-germanys-female-soldiers",
+      "title": "Crowding Toward the Wall",
+      "headline": "More than 60% of Germany’s female soldiers report harassment or abuse",
+      "date": "2026-11-13",
+      "image": "artworks/more-germanys-female-soldiers.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "oil-slicks-seen-space",
       "title": "Roots That Cannot Drink",
       "headline": "Oil slicks seen from space: the devastating impact of boat strikes on fragile Gulf ecosystems",
