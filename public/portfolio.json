@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "abortion-doctor-who-leads",
+      "title": "Hands That Hold the Light",
+      "headline": "The abortion doctor who leads with her faith: ‘God is forgiving’",
+      "date": "2026-11-14",
+      "image": "artworks/abortion-doctor-who-leads.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "more-germanys-female-soldiers",
       "title": "Crowding Toward the Wall",
       "headline": "More than 60% of Germany’s female soldiers report harassment or abuse",
