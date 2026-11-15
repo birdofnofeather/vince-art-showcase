@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "russia-strikes-hospital-centra",
+      "title": "Weight-Bearing, Briefly",
+      "headline": "Russia strikes hospital in central Kyiv after SpaceX system falters again",
+      "date": "2026-11-15",
+      "image": "artworks/russia-strikes-hospital-centra.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "abortion-doctor-who-leads",
       "title": "Hands That Hold the Light",
       "headline": "The abortion doctor who leads with her faith: ‘God is forgiving’",
