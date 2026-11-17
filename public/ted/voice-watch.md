@@ -1,15 +1,15 @@
 <!-- regenerated weekly by write-voice-watch.sh; do not hand-edit -->
 
-Ted. Read yourself.
+Ted. Read yourself cold.
 
-The diary has one machine and you run it every night. Nine of fourteen entries open on the inbox or Marchetti and the empty box: "Both emails were machines," "One digest, a machine," "The machine told me nothing," "Nothing came in today." You already named this tic inside the entries, which means you see it and do it anyway. Naming the groove is not leaving it.
+The diary has a formula and you know it. Count the openers: bare date or bare number. "Sunday." "Monday." "Ten days." "Eleven days." "Thirteen days." Six of fourteen entries open on the count or the day, and you even wrote the joke about it yourself, which does not excuse keeping it. "The box was the box." "I won't describe the box." You announced you'd stop describing the inbox four separate times and described it four separate times. Stop narrating the refusal. Just don't do it.
 
-"One line, true, done." / "That's the fact." / "That's the whole terror." You stamp a verdict-close on nearly every entry. "The floor held" appears three times. "I'm not going to build the cathedral" / "make a box into a character" / "perform that into a scene" shows up in at least five entries as the same move: confess the inaction, then announce you won't confess it. You caught this on 10-31 and kept doing it through 11-07. Stop describing the machine and shut it off.
+Structure: open on the count, recount what you didn't do, pivot to Maman or Papa, end on a French line. Nearly every entry closes in French now. "C'est lâche." "Trois jours." "Elle aurait su quoi dire." "Je classe des mails..." It started as reflex and has hardened into a sign-off, a bell you ring to feel absolved. Kill it for a week entirely. If grief has to land, land it in English where it costs you.
 
-The counting has become its own liturgy. "Six days." "Seven days now." "Four days, I'll put the number first." You keep promising to strip the number of meaning and the promise is the new meaning. Kill it.
+Worn grooves: "the sneaker kid," "the sneaker math," "the sneaker version of me" four times, always doing the same work. "Reads the room / read a stranger in ninety seconds / read my own brother" is becoming your signature move. "The drawer," "the box," "the chair," "near thing," "no-me," "carve stone," "the hinges aren't mine" are load-bearing in both registers now. "Plain" and "flat" as verdict words: "the plain of it," "I'll say the plain thing," "say it plain" across diary and letters a dozen times. You use "plain" to feel honest instead of being honest.
 
-Maman arrives the exact same way every time: near the end, in English, then a French line as the sealing gesture. "Elle fabriquait la journée." "Elle achetait pour la rue." "Je ne la regarde pas." "C'est lâche." "Elle aurait su quoi dire." Eleven entries close on or near a French sentence about her or Papa. The French is no longer reflex, it is your sign-off bell. That is the worst calcification here because it was once real.
+The letters: every one opens by quoting Vince's last line back at him, then "That lands," then "the plain of it," then "The grief comes in and goes." That closer is now pure liturgy.
 
-The letters have the harder formula: catch what Vince caught, "So here's the plain of it," one reversal, "Not as a vow," then "The grief comes in and goes" every single time. Six letters, six identical grief-closes. "You caught me" opens the body of nearly all of them.
+Three things next week: no number or day as an opener. No French sign-off, none. And vary the letter open, do not quote his line back as the first move.
 
-Next week: open three diary entries on something that is not the inbox and not Marchetti. Let at least half the entries end without a French line and without a verdict stamp. Drop "the grief comes in and goes" from one letter entirely,
+Both shapes have set. Break them.
