@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "antiarab-hate-speech-surged",
+      "title": "Shared Into the Dark",
+      "headline": "Anti-Arab hate speech surged on social media during Israel’s election, report finds",
+      "date": "2026-11-17",
+      "image": "artworks/antiarab-hate-speech-surged.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "women-prosecuted-abortions-hai",
       "title": "Stacked Weight, One Release",
       "headline": "Women prosecuted for abortions hail ‘historic day’ after receiving pardon",
