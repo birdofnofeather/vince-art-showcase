@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "blood-these-brothers-cries",
+      "title": "Mercury Counts Its Dead",
+      "headline": "‘The blood of these brothers cries out’: Pope Leo demands justice for people killed protecting the Amazon",
+      "date": "2026-11-18",
+      "image": "artworks/blood-these-brothers-cries.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "antiarab-hate-speech-surged",
       "title": "Shared Into the Dark",
       "headline": "Anti-Arab hate speech surged on social media during Israel’s election, report finds",
