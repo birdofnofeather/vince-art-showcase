@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "datacentres-create-more-carbon",
+      "title": "Backyard Inheritance",
+      "headline": "Datacentres to create 70% more carbon emissions by 2030, IEA report warns",
+      "date": "2026-11-19",
+      "image": "artworks/datacentres-create-more-carbon.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "blood-these-brothers-cries",
       "title": "Mercury Counts Its Dead",
       "headline": "‘The blood of these brothers cries out’: Pope Leo demands justice for people killed protecting the Amazon",
