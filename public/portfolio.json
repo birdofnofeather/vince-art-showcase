@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "young-people-across-europe",
+      "title": "Borrowed Fire, Borrowed War",
+      "headline": "Young people across Europe stage coordinated ‘fight for our future’ protests",
+      "date": "2026-11-20",
+      "image": "artworks/young-people-across-europe.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "datacentres-create-more-carbon",
       "title": "Backyard Inheritance",
       "headline": "Datacentres to create 70% more carbon emissions by 2030, IEA report warns",
