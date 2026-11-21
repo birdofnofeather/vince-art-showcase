@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "when-you-see-smoke",
+      "title": "All We Could Carry",
+      "headline": "When you see smoke, run: Rohingya who escaped Myanmar’s genocide tell their stories",
+      "date": "2026-11-21",
+      "image": "artworks/when-you-see-smoke.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "young-people-across-europe",
       "title": "Borrowed Fire, Borrowed War",
       "headline": "Young people across Europe stage coordinated ‘fight for our future’ protests",
