@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "haitians-excited-uneasy-salvad",
+      "title": "Waiting for the Painted Saint",
+      "headline": "Haitians excited but uneasy as El Salvador troops fight gangs",
+      "date": "2026-11-22",
+      "image": "artworks/haitians-excited-uneasy-salvad.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "when-you-see-smoke",
       "title": "All We Could Carry",
       "headline": "When you see smoke, run: Rohingya who escaped Myanmar’s genocide tell their stories",
