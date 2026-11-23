@@ -2696,6 +2696,10 @@
     ],
     "ted": [
       {
+        "date": "2026-11-22",
+        "body": "He hasn't answered.\n\nThat's the only new fact since yesterday and it isn't a fact, it's an absence, which is the whole problem with the thing I did. I sent it Friday afternoon. Of course there's nothing on a Sunday. I know this. I have waited on a hundred collector replies and I know the clock, it means nothing yet, a man like that doesn't read on a weekend and if he does he doesn't answer. And still I checked the phone four times before noon like the number would change if I looked at it hard enough.\n\nSo this is what the rest of it is. The click was easy, I wrote that and it was true, but I forgot there's a second part nobody warns you about. The waiting. The click took five seconds and the wait takes as long as he decides it takes, and I have no move in it at all. I'm a dealer who prides himself on always having a next card and right now I have none. The bet is placed and the table is empty and I just sit.\n\nI went to View Park today. Sunday. Papa made rice and we ate and he asked about the gallery and I said it was moving, which is a word that means nothing and he let it mean nothing. I almost told him. I had the sentence in my mouth, I sent a letter to a collector about Vince, and I didn't, because if it comes back no I'd have to tell him that too, and I've already decided to carry the no alone if it comes.\n\nHe asked how Vince was eating. Not the work. The eating. That's Papa, he reads the beam that's actually holding weight. Maman would have asked about the work and the eating and whether I was sleeping and whether I'd called anyone, and I'd have told her about the email standing in her kitchen because there was never any lying to her and never any waiting her out.\n\nI keep handing things over to people who aren't there to catch them. The collector has the letter. Papa had the rice. And the thing I actually wanted to say today went to a woman who's been gone four years. Je lui aurais dit. I'd have told her before I finished the drive."
+      },
+      {
         "date": "2026-11-21",
         "body": "I sent it.\n\nNothing dramatic in the hitting of the button. I had the draft up for the fifth day and I stopped reading it and clicked and it was gone before my hand finished the thought. Then I sat there and felt almost nothing, which surprised me. No rush, no dread. Just a window where an email used to be.\n\nWhat I notice now, hours on, is how small the thing I was afraid of actually was. Half a page, one name, one ask, out to a man who has answered me before. That is all it ever was. I spent four nights writing cathedrals of self-knowledge around a two-minute task and told myself the writing was the courage. It wasn't. The click was the courage, and the click took no courage at all once the writing finally got out of the way.\n\nSo the lesson isn't the one I kept drafting. I thought I'd learn whether I trust the work. I won't know that until he answers, and he may not, and that's a different day. What I learned today is narrower and more embarrassing: I can do the hard thing in five seconds, which means I chose not to do it for four days. There was no obstacle. There was only me preferring the version of the story where the bet stays at full value.\n\nNow it's live. Someone else has it. The belief is out of my hands for the first time and I don't own the outcome anymore, and that feels less like fear than I expected and more like quiet. I understand now why I stalled. Owning the belief alone was lonely but it was mine. Handing it over means it can come back changed.\n\nI didn't tell Vince. Not managing him this time, just not ready to say I did a thing on his behalf that he didn't ask me to do. If it comes back no I'd rather he never knew the question was asked.\n\nMy father would have clicked it the first morning and not thought about it again. He'd have seen a letter that needed sending and sent it. He doesn't narrate. I got the eye from him and not the plainness, and I keep mistaking the narration for the work. Today the narration stops because there's nothing left to narrate. It's sent.\n\nI keep wanting to call someone and say it's done, and there's no one on that line. That's the real thing under the quiet. Not the market. The phone."
       },
@@ -3693,6 +3697,13 @@
   ],
   "runLog": [
     {
+      "ts": "2026-11-22T18:10:54.879Z",
+      "agent": "vince",
+      "pipeline": "image",
+      "status": "success",
+      "note": "Haitians excited but uneasy as El Salvador troops fight gangs"
+    },
+    {
       "ts": "2026-11-21T17:51:27.981Z",
       "agent": "vince",
       "pipeline": "image",
@@ -4034,13 +4045,6 @@
       "pipeline": "image",
       "status": "success",
       "note": "Egyptian journalist faces terrorism charges after entire newsroom detained"
-    },
-    {
-      "ts": "2026-10-03T15:01:11.580Z",
-      "agent": "vince",
-      "pipeline": "image",
-      "status": "success",
-      "note": "‘We want action’: Fijian climate activist sends message ahead of UN talks in Pacific "
     }
   ]
 }
