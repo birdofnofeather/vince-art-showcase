@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "ukraine-war-briefing-race",
+      "title": "Passage Through the Dark",
+      "headline": "Ukraine war briefing: Race to find survivors after Russian attack on apartment block kills at least 11",
+      "date": "2026-11-23",
+      "image": "artworks/ukraine-war-briefing-race.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "haitians-excited-uneasy-salvad",
       "title": "Waiting for the Painted Saint",
       "headline": "Haitians excited but uneasy as El Salvador troops fight gangs",
