@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "gaza-issues-meningitis-epidemi",
+      "title": "One Cup, Two Thrists",
+      "headline": "Gaza issues meningitis epidemic alert after steep rise in cases",
+      "date": "2026-11-24",
+      "image": "artworks/gaza-issues-meningitis-epidemi.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "ukraine-war-briefing-race",
       "title": "Passage Through the Dark",
       "headline": "Ukraine war briefing: Race to find survivors after Russian attack on apartment block kills at least 11",
