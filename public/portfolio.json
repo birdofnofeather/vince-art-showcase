@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "israel-attempts-jail-palestini",
+      "title": "Sight Held Without Charge",
+      "headline": "Israel attempts to jail Palestinian student at Hebrew University without trial",
+      "date": "2026-11-25",
+      "image": "artworks/israel-attempts-jail-palestini.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "gaza-issues-meningitis-epidemi",
       "title": "One Cup, Two Thrists",
       "headline": "Gaza issues meningitis epidemic alert after steep rise in cases",
