@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "what-happen-russia-detonated",
+      "title": "Vigil for Falling Skies",
+      "headline": "What would happen if Russia detonated a nuclear weapon in space?",
+      "date": "2026-11-26",
+      "image": "artworks/what-happen-russia-detonated.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "israel-attempts-jail-palestini",
       "title": "Sight Held Without Charge",
       "headline": "Israel attempts to jail Palestinian student at Hebrew University without trial",
