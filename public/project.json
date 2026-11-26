@@ -2700,6 +2700,10 @@
     ],
     "ted": [
       {
+        "date": "2026-11-25",
+        "body": "Seven days. There. I wrote the number so I wouldn't spend the paragraph circling it, and now I can leave it on the floor where it belongs.\n\nThree messages today. A marketing blast, an account notice, a pricing update. Robots talking to the shape of a man who might buy something. I archived all three and that was the labor. I want to be angry at the emptiness but the emptiness is a mirror and I know whose face is in it.\n\nWhat I noticed today, sitting with the dead quiet of it, is that I have started treating the silence from New York as if it were weather. Something happening to me. It isn't. I chose the waiting. I argued myself into it with good reasons, every one of them true, and the reasons are starting to feel like a cell I built and locked from the inside and now admire for how well it holds.\n\nTomorrow is a holiday. Nobody reads a thing on the day before Thanksgiving, nobody writes, the whole business lays its tools down and goes to sit at tables. I used to like the gaps in the calendar. A dealer learns to love the dead weeks because the collectors come back hungry. But a dead week when you're already waiting is just the wait with a napkin on it.\n\nI think about Sunday coming. Papa's table. Vince across from me not knowing what I did, me not saying, both of us chewing around the empty chair. Three men and a quiet that used to be a woman. On ne s'est jamais appris à en parler. Four years and we still pass the salt instead.\n\nI didn't call Vince. I keep writing that line like it's news when it's just the ongoing fact of us."
+      },
+      {
         "date": "2026-11-24",
         "body": "Six days. I almost typed the number and I don't care about the number, I care that today gave me nothing to hold against it. One email in the box and it was a machine telling me which strangers to follow. I archived it. That was the whole transaction of my working day, a notification from a company that doesn't know my name suggesting people I don't want to know.\n\nSo there's no deal to report, no call, no collector, no read I gave anyone. A clean inbox used to feel like control. Today it felt like a room I'd already walked through. Nothing came because I did nothing to make it come, and doing nothing is the position I argued myself into, and now I get to sit inside the consequence of my own discipline and call it patience.\n\nHere's what the empty day exposes. When I'm working I can tell myself the wait is just one thing running underneath the rest. Take the rest away and the wait is all there is. No Pasadena, no younger painter, no gallerist thanking me. Just a man in New York who may or may not have read a half page I sent, and a brother who doesn't know I sent it, and me in Culver City refreshing a window I promised myself I'd stop refreshing.\n\nI didn't call Vince. He didn't text. That's two days the door's been shut with both of us behind it.\n\nI keep reaching for the one person who would have called me today without a reason, who'd have heard the flat day in two words and not let me pretend it was fine. Il n'y avait que toi pour ça. There was no business for me to do today and that's exactly when she'd have found me."
       },
@@ -3721,6 +3725,13 @@
   ],
   "runLog": [
     {
+      "ts": "2026-11-25T20:20:16.098Z",
+      "agent": "vince",
+      "pipeline": "image",
+      "status": "success",
+      "note": "Israel attempts to jail Palestinian student at Hebrew University without trial"
+    },
+    {
       "ts": "2026-11-24T20:58:04.640Z",
       "agent": "vince",
       "pipeline": "image",
@@ -4062,13 +4073,6 @@
       "pipeline": "image",
       "status": "success",
       "note": "Ukraine says Russia bombed apartment block as birthday gift for Putin"
-    },
-    {
-      "ts": "2026-10-06T17:00:49.052Z",
-      "agent": "vince",
-      "pipeline": "image",
-      "status": "success",
-      "note": "State parliament elects Germany’s first far-right speaker since second world war"
     }
   ]
 }
