@@ -5,6 +5,16 @@
   },
   "works": [
     {
+      "slug": "trump-crackdown-shatters-hopes",
+      "title": "Salt and No Rain",
+      "headline": "Trump crackdown shatters US hopes for Guatemalans displaced by climate crisis",
+      "date": "2026-11-28",
+      "image": "artworks/trump-crackdown-shatters-hopes.jpg",
+      "width": 1024,
+      "height": 1280,
+      "selected": true
+    },
+    {
       "slug": "detention-prodemocracy-activis",
       "title": "Days Without Witness",
       "headline": "Detention of pro-democracy activists in Vietnam amounts to a ‘transboundary abduction’, UN experts say",
